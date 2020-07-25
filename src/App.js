@@ -25,19 +25,49 @@ class App extends Component {
                 </nav>
                 <ul className='nav-links'>
                     <li>
-                        <a href='#'>Manifesto</a>
+                        <a
+                            href='https://raidguild.org/#manifesto'
+                            target='_blank'
+                            rel='noopener noreferrer'
+                        >
+                            Manifesto
+                        </a>
                     </li>
                     <li>
-                        <a href='#'>Portfolio</a>
+                        <a
+                            href='https://raidguild.org/'
+                            target='_blank'
+                            rel='noopener noreferrer'
+                        >
+                            Portfolio
+                        </a>
                     </li>
                     <li>
-                        <a href='#'>Services</a>
+                        <a
+                            href='https://raidguild.org/#services'
+                            target='_blank'
+                            rel='noopener noreferrer'
+                        >
+                            Services
+                        </a>
                     </li>
                     <li>
-                        <a href='#'>Join</a>
+                        <a
+                            href='https://raidguild.org/join'
+                            target='_blank'
+                            rel='noopener noreferrer'
+                        >
+                            Join
+                        </a>
                     </li>
                     <li>
-                        <a href='#'>Hire</a>
+                        <a
+                            href='https://raidguild.org/hire'
+                            target='_blank'
+                            rel='noopener noreferrer'
+                        >
+                            Hire
+                        </a>
                     </li>
                 </ul>
 
@@ -49,7 +79,13 @@ class App extends Component {
                         <p>Start: {"August 1, 2020"}</p>
                         <p>Planned End: {"October 31, 2020"}</p>
                         <br></br>
-                        <a href='#'>Link to details of agreement</a>
+                        <a
+                            href='https://raidguild.org/'
+                            target='_blank'
+                            rel='noopener noreferrer'
+                        >
+                            Link to details of agreement
+                        </a>
                         <p>Brief description of the project</p>
                     </div>
                     <div className='escrow'>
@@ -83,13 +119,25 @@ class App extends Component {
                     </div>
                 </div>
                 <footer>
-                    <a href='https://twitter.com/raidguild' target='_blank'>
+                    <a
+                        href='https://twitter.com/raidguild'
+                        target='_blank'
+                        rel='noopener noreferrer'
+                    >
                         <i className='fab fa-twitter fa-1x'></i>
                     </a>
-                    <a href='https://handbook.raidguild.org/' target='_blank'>
+                    <a
+                        href='https://handbook.raidguild.org/'
+                        target='_blank'
+                        rel='noopener noreferrer'
+                    >
                         <i class='fas fa-book fa-1x'></i>
                     </a>
-                    <a href='https://github.com/raid-guild' target='_blank'>
+                    <a
+                        href='https://github.com/raid-guild'
+                        target='_blank'
+                        rel='noopener noreferrer'
+                    >
                         <i className='fab fa-github fa-1x'></i>
                     </a>
                 </footer>
