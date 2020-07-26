@@ -1,0 +1,530 @@
+.home,
+.escrow {
+  height: 100%;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border: 2px solid #ff3864;
+}
+
+.home {
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+}
+
+.home img {
+  width: 500px;
+  height: auto;
+}
+
+.home .home-sub-container {
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  float: left;
+}
+
+.home .home-sub-container h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  color: #ff3864;
+}
+
+.home .home-sub-container input {
+  outline: none;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #000;
+  border: 2px solid #ff3864;
+  border-radius: 4px;
+  color: #ff3864;
+  font-family: "Mirza", cursive;
+  font-size: 1.5rem;
+}
+
+.home .home-sub-container input:hover {
+  border: 2px solid #ff3864;
+}
+
+.home .home-sub-container ::-webkit-input-placeholder {
+  color: #ff3864;
+  opacity: 1;
+}
+
+.home .home-sub-container :-ms-input-placeholder {
+  color: #ff3864;
+  opacity: 1;
+}
+
+.home .home-sub-container ::-ms-input-placeholder {
+  color: #ff3864;
+  opacity: 1;
+}
+
+.home .home-sub-container ::placeholder {
+  color: #ff3864;
+  opacity: 1;
+}
+
+.home .custom-button {
+  margin: 5px 10px 0 0;
+  border: none;
+  padding: 5px;
+  background-color: #ff3864;
+  color: #000;
+  font-family: "Mirza", cursive;
+  font-size: 1.2rem;
+  border: 2px solid #ff3864;
+  border-radius: 3px;
+}
+
+.home .custom-button:hover {
+  cursor: pointer;
+  background-color: #000;
+  color: #ff3864;
+}
+
+.escrow {
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.escrow .escrow-sub-container-one {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  color: #ff3864;
+}
+
+.escrow .escrow-sub-container-one h1 {
+  font-family: "Uncial Antiqua", cursive;
+}
+
+.escrow .escrow-sub-container-one h2 {
+  font-size: 1.7rem;
+  font-weight: normal;
+}
+
+.escrow .escrow-sub-container-one a {
+  color: #ff3864;
+  margin-bottom: 5px;
+}
+
+.escrow .escrow-sub-container-two {
+  width: 40%;
+  height: 300px;
+}
+
+.escrow .escrow-sub-container-two .card {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  background-color: #525151;
+  padding: 20px;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.escrow .escrow-sub-container-two .card p {
+  color: #fff;
+  font-size: 1.2rem;
+  margin-right: auto;
+}
+
+.escrow .escrow-sub-container-two .card span {
+  float: right;
+  font-weight: bold;
+}
+
+.escrow .escrow-sub-container-two .deposit-button {
+  float: right;
+  margin-top: 10px;
+  border: none;
+  padding: 5px;
+  background-color: #ff3864;
+  color: #000;
+  font-family: "Mirza", cursive;
+  font-size: 1.5rem;
+  border: 2px solid #ff3864;
+  border-radius: 3px;
+}
+
+.escrow .escrow-sub-container-two .deposit-button:hover {
+  cursor: pointer;
+  background-color: #000;
+  color: #ff3864;
+}
+
+.register {
+  height: 100%;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.register .register-sub-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  color: #ff3864;
+}
+
+.register .register-sub-container h1 {
+  font-size: 3rem;
+  font-family: "Uncial Antiqua", cursive;
+}
+
+.register .register-sub-container h2 {
+  font-size: 2rem;
+  font-weight: normal;
+}
+
+.register .register-sub-container a {
+  color: #ff3864;
+  margin-bottom: 5px;
+}
+
+.register .register-sub-container .custom-button {
+  margin-left: auto;
+  margin-top: 20px;
+  border: none;
+  padding: 5px;
+  background-color: #ff3864;
+  color: #000;
+  font-family: "Mirza", cursive;
+  font-size: 1.5rem;
+  border: 2px solid #ff3864;
+  border-radius: 3px;
+}
+
+.register .register-sub-container .custom-button:hover {
+  cursor: pointer;
+  background-color: #000;
+  color: #ff3864;
+}
+
+.form {
+  height: 100%;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.form .form-sub-container {
+  width: 50%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.form .form-sub-container form {
+  width: 80%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background-color: #525151;
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 30px;
+}
+
+.form .form-sub-container form label {
+  color: #ff3864;
+}
+
+.form .form-sub-container form input {
+  outline: none;
+  margin-bottom: 5px;
+  padding: 2px;
+  background-color: #000;
+  border: 2px solid #ff3864;
+  border-radius: 4px;
+  color: #7e7d7d;
+  font-family: "Mirza", cursive;
+  font-size: 1rem;
+}
+
+.form .form-sub-container form select {
+  outline: none;
+  font-family: "Mirza", cursive;
+  font-size: 1rem;
+  background-color: #000;
+  color: #fff;
+  padding: 2px;
+  border: 2px solid #ff3864;
+  border-radius: 4px;
+}
+
+.form .form-sub-container form .input-sub-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.form .form-sub-container form .input-sub-container div {
+  width: 100%;
+}
+
+@media only screen and (max-width: 1045px) {
+  .escrow .escrow-sub-container-two .card p {
+    font-size: 1rem;
+  }
+  .form .form-sub-container {
+    width: 70%;
+  }
+  .form .form-sub-container form input {
+    margin-bottom: 2px;
+    font-size: 0.8rem;
+  }
+  .form .form-sub-container form select {
+    font-size: 1rem;
+  }
+}
+
+@media only screen and (max-width: 970px) {
+  .home img {
+    width: 350px;
+  }
+  .home .home-sub-container h1 {
+    font-size: 2rem;
+  }
+  .home .home-sub-container input {
+    font-size: 1.2rem;
+  }
+  .home .custom-button {
+    font-size: 1rem;
+  }
+  .escrow {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+  }
+  .escrow .escrow-sub-container-one {
+    margin-top: 10px;
+  }
+  .escrow .escrow-sub-container-two {
+    width: 70%;
+    height: 230px;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    margin-top: 20px;
+  }
+  .escrow .escrow-sub-container-two .card p {
+    font-size: 1.2rem;
+  }
+  .escrow .escrow-sub-container-two .deposit-button {
+    font-size: 1.2rem;
+    float: none;
+  }
+  .form .form-sub-container form input {
+    margin-bottom: 2px;
+    font-size: 0.8rem;
+  }
+  .form .form-sub-container form select {
+    font-size: 1rem;
+  }
+}
+
+@media only screen and (max-width: 635px) {
+  .home {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: reverse;
+        -ms-flex-direction: column-reverse;
+            flex-direction: column-reverse;
+  }
+  .home img {
+    width: 300px;
+    margin-top: auto;
+  }
+  .home .home-sub-container {
+    height: auto;
+    margin-bottom: auto;
+  }
+  .home .home-sub-container h1 {
+    font-size: 2rem;
+  }
+  .home .home-sub-container input {
+    font-size: 1.2rem;
+  }
+  .home .custom-button {
+    font-size: 1rem;
+  }
+  .escrow .escrow-sub-container-one {
+    margin-bottom: 10px;
+  }
+  .escrow .escrow-sub-container-one h2 {
+    font-size: 1.2rem;
+  }
+  .escrow .escrow-sub-container-one h1 {
+    font-size: 1.5rem;
+  }
+  .escrow .escrow-sub-container-one p {
+    font-size: 1rem;
+  }
+  .escrow .escrow-sub-container-two {
+    width: 90%;
+    height: 220px;
+  }
+  .escrow .escrow-sub-container-two .card p {
+    font-size: 1rem;
+  }
+  .form .form-sub-container {
+    width: 90%;
+  }
+}
+
+@media only screen and (max-width: 545px) {
+  .register .register-sub-container h1 {
+    font-size: 2rem;
+  }
+  .register .register-sub-container h2 {
+    font-size: 1.5rem;
+  }
+  .register .register-sub-container .custom-button {
+    font-size: 1rem;
+  }
+  .form .form-sub-container {
+    width: 100%;
+  }
+  .form .form-sub-container form {
+    width: 90%;
+  }
+  .form .form-sub-container form input {
+    margin-bottom: 2px;
+    font-size: 0.8rem;
+  }
+  .form .form-sub-container form select {
+    font-size: 0.8rem;
+  }
+  .form .form-sub-container form label {
+    font-size: 0.8rem;
+  }
+}
+
+@media only screen and (max-width: 375px) {
+  .home img {
+    width: 250px;
+  }
+  .home .home-sub-container h1 {
+    font-size: 1.5rem;
+  }
+  .home .home-sub-container input {
+    font-size: 1rem;
+  }
+  .home .custom-button {
+    font-size: 0.8rem;
+  }
+  .escrow .escrow-sub-container-one h2 {
+    font-size: 1.2rem;
+  }
+  .escrow .escrow-sub-container-one h1 {
+    font-size: 1.2rem;
+  }
+  .escrow .escrow-sub-container-one p {
+    font-size: 0.7rem;
+  }
+  .escrow .escrow-sub-container-two {
+    height: 180px;
+  }
+  .escrow .escrow-sub-container-two .card p {
+    font-size: 0.7rem;
+  }
+  .escrow .escrow-sub-container-two .deposit-button {
+    font-size: 1rem;
+  }
+  .form .form-sub-container {
+    width: 100%;
+  }
+  .form .form-sub-container form {
+    width: 90%;
+  }
+  .form .form-sub-container form input {
+    margin-bottom: 2px;
+    font-size: 0.6rem;
+  }
+  .form .form-sub-container form select {
+    font-size: 0.6rem;
+  }
+  .form .form-sub-container form label {
+    font-size: 0.8rem;
+  }
+}
+/*# sourceMappingURL=Pages.css.map */
