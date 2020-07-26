@@ -150,6 +150,7 @@ $secondary-font: "Uncial Antiqua", cursive;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
+    border: 2px solid $primary-color;
 
     .register-sub-container {
         display: flex;
@@ -198,6 +199,7 @@ $secondary-font: "Uncial Antiqua", cursive;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    border: 2px solid $primary-color;
 
     .form-sub-container {
         width: 50%;

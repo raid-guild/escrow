@@ -198,6 +198,7 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  border: 2px solid #ff3864;
 }
 
 .register .register-sub-container {
@@ -261,6 +262,7 @@
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  border: 2px solid #ff3864;
 }
 
 .form .form-sub-container {
