@@ -1,0 +1,40 @@
+@media only screen and (max-width: 1045px) {
+  .custom-header #logo {
+    width: 150px;
+  }
+}
+
+@media only screen and (max-width: 970px) {
+  .custom-header #logo {
+    width: 150px;
+  }
+}
+
+@media only screen and (max-width: 575px) {
+  .custom-header #logo {
+    width: 120px;
+  }
+  .custom-header .hamburger {
+    margin: 30px 20px 0 0;
+  }
+  .custom-header .hamburger .fa-bars {
+    height: 25px;
+    width: auto;
+  }
+}
+
+@media only screen and (max-width: 375px) {
+  .custom-header #logo {
+    width: 70px;
+  }
+  .custom-header .hamburger {
+    margin: 25px 20px 0 0;
+  }
+  .custom-header .hamburger .fa-bars {
+    height: 20px;
+  }
+  .custom-footer {
+    margin: 0 20px 20px 0;
+  }
+}
+/*# sourceMappingURL=ResponsiveComponents.css.map */

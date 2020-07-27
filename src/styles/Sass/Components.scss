@@ -1,0 +1,85 @@
+.custom-header {
+    #logo {
+        width: 250px;
+        height: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: 30px 0 0 30px;
+    }
+    .hamburger {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 30px 30px 0 0;
+        z-index: 1;
+
+        .fa-bars {
+            color: #ff3864;
+            transition: all 1s ease-out;
+        }
+
+        .fa-bars:hover {
+            transform: rotateZ(90deg);
+            transition: all 1s ease-out;
+            cursor: pointer;
+        }
+    }
+    .nav-links {
+        position: fixed;
+        background: #000;
+        height: 100vh;
+        width: 100%;
+        flex-direction: column;
+        clip-path: circle(100px at 90% -20%);
+        -webkit-clip-path: circle(100px at 90% -20%);
+        transition: all 2s ease-out;
+        pointer-events: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+        li {
+            list-style: none;
+            opacity: 0;
+            transition: all 0.5s ease 0.4s;
+            a {
+                font-size: 25px;
+                color: #ff3864;
+                text-decoration: none;
+            }
+            a::after {
+                transition: all ease-in-out 0.2s;
+                background: none repeat scroll 0 0 #ff3864;
+                content: "";
+                display: block;
+                height: 2px;
+                width: 0;
+            }
+            a:hover::after {
+                width: 100%;
+            }
+        }
+        li.fade {
+            opacity: 1;
+        }
+    }
+    .nav-links.open {
+        clip-path: circle(2000px at 90% -10%);
+        -webkit-clip-path: circle(2000px at 90% -10%);
+        pointer-events: all;
+    }
+}
+
+.custom-footer {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 0 25px 25px 0;
+    .fa-twitter,
+    .fa-book,
+    .fa-github {
+        color: #ff3864;
+        margin-left: 10px;
+    }
+}

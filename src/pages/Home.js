@@ -3,7 +3,8 @@ import { withRouter } from "react-router-dom";
 
 import Banner from "../assets/raid__banner-img.png";
 
-import "../styles/CSS/Pages.css";
+import "../styles/css/Pages.css";
+import "../styles/css/ResponsivePages.css";
 
 class Home extends Component {
     state = {};

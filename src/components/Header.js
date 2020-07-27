@@ -2,40 +2,22 @@ import React from "react";
 
 import Logo from "../assets/raidguild__logo.png";
 
-const nav = [
-    {
-        name: "Manifesto",
-        link: "https://raidguild.org/#manifesto",
-    },
-    {
-        name: "Portfolio",
-        link: "https://raidguild.org/",
-    },
-    {
-        name: "Services",
-        link: "https://raidguild.org/#services",
-    },
-    {
-        name: "Join",
-        link: "https://raidguild.org/join",
-    },
-    {
-        name: "Hire",
-        link: "https://raidguild.org/hire",
-    },
-];
+import "../styles/css/Components.css";
+import "../styles/css/ResponsiveComponents.css";
+
+const nav_items = require("../utils/Constants");
 
 const Header = () => {
     return (
-        <>
+        <div className='custom-header'>
             <img id='logo' src={Logo} alt='logo' />
             <nav className='hamburger'>
                 <i className='fas fa-bars fa-3x'></i>
             </nav>
             <ul className='nav-links'>
-                {nav.map((item) => {
+                {nav_items.map((item, index) => {
                     return (
-                        <li>
+                        <li key={index}>
                             <a
                                 href={item.link}
                                 target='_blank'
@@ -47,7 +29,7 @@ const Header = () => {
                     );
                 })}
             </ul>
-        </>
+        </div>
     );
 };
 

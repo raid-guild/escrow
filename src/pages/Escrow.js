@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
-import "../styles/CSS/Pages.css";
+import "../styles/css/Pages.css";
+import "../styles/css/ResponsivePages.css";
 
 class Escrow extends Component {
     state = {};

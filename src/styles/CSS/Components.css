@@ -1,0 +1,108 @@
+.custom-header #logo {
+  width: 250px;
+  height: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 30px 0 0 30px;
+}
+
+.custom-header .hamburger {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 30px 30px 0 0;
+  z-index: 1;
+}
+
+.custom-header .hamburger .fa-bars {
+  color: #ff3864;
+  -webkit-transition: all 1s ease-out;
+  transition: all 1s ease-out;
+}
+
+.custom-header .hamburger .fa-bars:hover {
+  -webkit-transform: rotateZ(90deg);
+          transform: rotateZ(90deg);
+  -webkit-transition: all 1s ease-out;
+  transition: all 1s ease-out;
+  cursor: pointer;
+}
+
+.custom-header .nav-links {
+  position: fixed;
+  background: #000;
+  height: 100vh;
+  width: 100%;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  clip-path: circle(100px at 90% -20%);
+  -webkit-clip-path: circle(100px at 90% -20%);
+  -webkit-transition: all 2s ease-out;
+  transition: all 2s ease-out;
+  pointer-events: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+}
+
+.custom-header .nav-links li {
+  list-style: none;
+  opacity: 0;
+  -webkit-transition: all 0.5s ease 0.4s;
+  transition: all 0.5s ease 0.4s;
+}
+
+.custom-header .nav-links li a {
+  font-size: 25px;
+  color: #ff3864;
+  text-decoration: none;
+}
+
+.custom-header .nav-links li a::after {
+  -webkit-transition: all ease-in-out 0.2s;
+  transition: all ease-in-out 0.2s;
+  background: none repeat scroll 0 0 #ff3864;
+  content: "";
+  display: block;
+  height: 2px;
+  width: 0;
+}
+
+.custom-header .nav-links li a:hover::after {
+  width: 100%;
+}
+
+.custom-header .nav-links li.fade {
+  opacity: 1;
+}
+
+.custom-header .nav-links.open {
+  clip-path: circle(2000px at 90% -10%);
+  -webkit-clip-path: circle(2000px at 90% -10%);
+  pointer-events: all;
+}
+
+.custom-footer {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 0 25px 25px 0;
+}
+
+.custom-footer .fa-twitter,
+.custom-footer .fa-book,
+.custom-footer .fa-github {
+  color: #ff3864;
+  margin-left: 10px;
+}
+/*# sourceMappingURL=Components.css.map */

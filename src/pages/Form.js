@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import "bulma";
 
-import "../styles/CSS/Pages.css";
+import "../styles/css/Pages.css";
+import "../styles/css/ResponsivePages.css";
 
 class Form extends Component {
     state = {};

@@ -1,8 +1,11 @@
 import React from "react";
 
+import "../styles/css/Components.css";
+import "../styles/css/ResponsiveComponents.css";
+
 const Footer = () => {
     return (
-        <footer>
+        <div className='custom-footer'>
             <a
                 href='https://twitter.com/raidguild'
                 target='_blank'
@@ -15,7 +18,7 @@ const Footer = () => {
                 target='_blank'
                 rel='noopener noreferrer'
             >
-                <i class='fas fa-book fa-1x'></i>
+                <i className='fas fa-book fa-1x'></i>
             </a>
             <a
                 href='https://github.com/raid-guild'
@@ -24,7 +27,7 @@ const Footer = () => {
             >
                 <i className='fab fa-github fa-1x'></i>
             </a>
-        </footer>
+        </div>
     );
 };
 
