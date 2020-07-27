@@ -34,9 +34,7 @@ class Web3ContextProvider extends Component {
                 `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_ID}`
             )
         );
-        this.setState({ web3 }, () => {
-            console.log(web3);
-        });
+        this.setState({ web3 });
     }
 
     connectAccount = async () => {

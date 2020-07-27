@@ -49,7 +49,6 @@
 
 .home .home-sub-container input {
   outline: none;
-  margin-bottom: 20px;
   padding: 10px;
   background-color: #000;
   border: 2px solid #ff3864;
@@ -81,6 +80,10 @@
 .home .home-sub-container ::placeholder {
   color: #ff3864;
   opacity: 1;
+}
+
+.home .home-sub-container #error-message {
+  margin-bottom: 10px;
 }
 
 .home .custom-button {
@@ -225,6 +228,7 @@
 .register .register-sub-container a {
   color: #ff3864;
   margin-bottom: 5px;
+  text-decoration: underline;
 }
 
 .register .register-sub-container .custom-button {

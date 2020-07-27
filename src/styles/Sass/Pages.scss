@@ -35,7 +35,6 @@ $secondary-font: "Uncial Antiqua", cursive;
 
         input {
             outline: none;
-            margin-bottom: 20px;
             padding: 10px;
             background-color: #000;
             border: 2px solid $primary-color;
@@ -52,6 +51,10 @@ $secondary-font: "Uncial Antiqua", cursive;
         ::placeholder {
             color: $primary-color;
             opacity: 1;
+        }
+
+        #error-message {
+            margin-bottom: 10px;
         }
     }
 
@@ -170,6 +173,7 @@ $secondary-font: "Uncial Antiqua", cursive;
         a {
             color: #ff3864;
             margin-bottom: 5px;
+            text-decoration: underline;
         }
         .custom-button {
             margin-left: auto;

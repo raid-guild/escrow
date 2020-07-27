@@ -9,6 +9,7 @@ import Form from "./pages/Form";
 import Footer from "./components/Footer";
 
 import Web3ContextProvider from "./context/Web3Context";
+import AirtableContextProvider from "./context/AirtableContext";
 
 import "./App.css";
 
@@ -25,27 +26,30 @@ class App extends Component {
             });
         });
     }
+
     render() {
         return (
             <div className='main'>
                 <Header />
                 <Web3ContextProvider>
-                    <Router>
-                        <Switch>
-                            <Route path='/' exact>
-                                <Home />
-                            </Route>
-                            <Route path='/escrow' exact>
-                                <Escrow />
-                            </Route>
-                            <Route path='/register' exact>
-                                <Register />
-                            </Route>
-                            <Route path='/form' exact>
-                                <Form />
-                            </Route>
-                        </Switch>
-                    </Router>
+                    <AirtableContextProvider>
+                        <Router>
+                            <Switch>
+                                <Route path='/' exact>
+                                    <Home />
+                                </Route>
+                                <Route path='/escrow' exact>
+                                    <Escrow />
+                                </Route>
+                                <Route path='/register' exact>
+                                    <Register />
+                                </Route>
+                                <Route path='/form' exact>
+                                    <Form />
+                                </Route>
+                            </Switch>
+                        </Router>
+                    </AirtableContextProvider>
                 </Web3ContextProvider>
                 <Footer />
             </div>
