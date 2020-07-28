@@ -86,8 +86,10 @@
   margin-bottom: 10px;
 }
 
-.home .custom-button {
+.home .home-sub-container .custom-button {
   margin: 5px 10px 0 0;
+  display: block;
+  width: 100%;
   border: none;
   padding: 5px;
   background-color: #ff3864;
@@ -98,7 +100,7 @@
   border-radius: 3px;
 }
 
-.home .custom-button:hover {
+.home .home-sub-container .custom-button:hover {
   cursor: pointer;
   background-color: #000;
   color: #ff3864;

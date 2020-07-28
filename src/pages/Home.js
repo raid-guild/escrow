@@ -6,11 +6,13 @@ import Banner from "../assets/raid__banner-img.png";
 import "../styles/css/Pages.css";
 import "../styles/css/ResponsivePages.css";
 
+import { Web3Context } from "../context/Web3Context";
 import { AirtableContext } from "../context/AirtableContext";
 
 class Home extends Component {
     state = {
         ID: "",
+        validID: false,
     };
 
     static contextType = AirtableContext;
@@ -18,91 +20,151 @@ class Home extends Component {
     validateID = async () => {
         const { setAirtableState } = this.context;
 
-        let result = await fetch("https://guild-keeper.herokuapp.com/raids", {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                ID: this.state.ID,
-            }),
-        }).then((res) => res.json());
+        if (this.state.ID) {
+            let result = await fetch(
+                "https://guild-keeper.herokuapp.com/raids",
+                {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        ID: this.state.ID,
+                    }),
+                }
+            ).then((res) => res.json());
 
-        let params = {
-            raid_id: this.state.ID,
-            project_name: result["Name"] || "Not Available",
-            client_name: result["Your Name"] || "Not Available",
-            start_date: result["Date Added"] || "Not Available",
-            end_date: result["Desired date of completion"] || "Not Available",
-            link_to_details:
-                result["Relevant Link"] || "https://raidguild.org/",
-            brief_description: result["Brief Summary"] || "Not Available",
-        };
+            if (result !== "NOT_FOUND") {
+                let params = {
+                    raid_id: this.state.ID,
+                    project_name: result["Name"] || "Not Available",
+                    client_name: result["Your Name"] || "Not Available",
+                    start_date: result["Date Added"] || "Not Available",
+                    end_date:
+                        result["Desired date of completion"] || "Not Available",
+                    link_to_details:
+                        result["Relevant Link"] || "https://raidguild.org/",
+                    brief_description:
+                        result["Brief Summary"] || "Not Available",
+                };
 
-        setAirtableState(params);
+                setAirtableState(params);
 
-        return result;
+                this.setState({ validID: true });
+            } else {
+                let { error_message } = this.state;
+                error_message.style.visibility = "visible";
+                setTimeout(() => {
+                    error_message.style.visibility = "hidden";
+                }, 5000);
+            }
+        }
     };
 
     onChangeHandler = (event) => {
         this.setState({ ID: event.target.value });
     };
 
+    registerClickHandler = async () => {
+        await this.validateID();
+        if (this.state.validID) this.props.history.push("/register");
+    };
+
+    escrowClickHandler = async () => {
+        await this.validateID();
+        if (this.state.validID) this.props.history.push("/escrow");
+    };
+
     componentDidMount() {
-        let register_button = document.querySelector("#register");
-        let escrow_button = document.querySelector("#escrow");
         let error_message = document.querySelector("#error-message");
-
         error_message.style.visibility = "hidden";
-
-        register_button.addEventListener("click", async () => {
-            let result = await this.validateID();
-            if (result === "NOT_FOUND") {
-                error_message.style.visibility = "visible";
-                setTimeout(() => {
-                    error_message.style.visibility = "hidden";
-                }, 5000);
-            } else {
-                this.props.history.push("/register");
-            }
-        });
-
-        escrow_button.addEventListener("click", async () => {
-            let result = await this.validateID();
-            if (result === "NOT_FOUND") {
-                error_message.style.visibility = "visible";
-                setTimeout(() => {
-                    error_message.style.visibility = "hidden";
-                }, 5000);
-            } else {
-                this.props.history.push("/escrow");
-            }
-        });
+        this.setState({ error_message });
     }
 
     render() {
         return (
-            <div className='home'>
-                <div className='home-sub-container'>
-                    <h1>LLC Raid Escrows</h1>
-                    <input
-                        type='text'
-                        placeholder='Enter Raid ID'
-                        onChange={(event) => this.onChangeHandler(event)}
-                    ></input>
-                    <p id='error-message'>ID not found!</p>
-                    <div className='home-button-container'>
-                        <button className='custom-button' id='register'>
-                            Register Escrow
-                        </button>
-                        <button className='custom-button' id='escrow'>
-                            View Escrow
-                        </button>
-                    </div>
-                </div>
-                <img src={Banner} alt='Banner' />
-            </div>
+            <Web3Context.Consumer>
+                {(web3ctx) => {
+                    let { address, isClient, connectAccount } = web3ctx;
+                    return (
+                        <div className='home'>
+                            <div className='home-sub-container'>
+                                <h1>LLC Raid Escrows</h1>
+
+                                {this.state.validID ? null : (
+                                    <input
+                                        type='text'
+                                        placeholder='Enter Raid ID'
+                                        onChange={(event) =>
+                                            this.onChangeHandler(event)
+                                        }
+                                    ></input>
+                                )}
+
+                                <p id='error-message'>ID not found!</p>
+
+                                {this.state.validID ? (
+                                    address ? (
+                                        isClient ? (
+                                            <button
+                                                className='custom-button'
+                                                id='escrow'
+                                                onClick={
+                                                    this.escrowClickHandler
+                                                }
+                                            >
+                                                View Escrow
+                                            </button>
+                                        ) : (
+                                            <div>
+                                                <button
+                                                    className='custom-button'
+                                                    id='register'
+                                                    onClick={
+                                                        this
+                                                            .registerClickHandler
+                                                    }
+                                                >
+                                                    Register Escrow
+                                                </button>
+                                                <button
+                                                    className='custom-button'
+                                                    id='escrow'
+                                                    onClick={
+                                                        this.escrowClickHandler
+                                                    }
+                                                >
+                                                    View Escrow
+                                                </button>
+                                            </div>
+                                        )
+                                    ) : (
+                                        <button
+                                            className='custom-button'
+                                            id='connect'
+                                            style={{ margin: 0 }}
+                                            onClick={connectAccount}
+                                        >
+                                            Connect Wallet
+                                        </button>
+                                    )
+                                ) : (
+                                    <button
+                                        className='custom-button'
+                                        style={{ margin: 0 }}
+                                        onClick={this.validateID}
+                                    >
+                                        Validate ID
+                                    </button>
+                                )}
+                            </div>
+
+                            <img src={Banner} alt='Banner' />
+                        </div>
+                    );
+                }}
+            </Web3Context.Consumer>
         );
     }
 }
