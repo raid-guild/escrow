@@ -6,8 +6,7 @@ import Banner from "../assets/raid__banner-img.png";
 import "../styles/css/Pages.css";
 import "../styles/css/ResponsivePages.css";
 
-import { Web3Context } from "../context/Web3Context";
-import { AirtableContext } from "../context/AirtableContext";
+import { AppContext } from "../context/AppContext";
 
 class Home extends Component {
     state = {
@@ -15,7 +14,7 @@ class Home extends Component {
         validID: false,
     };
 
-    static contextType = AirtableContext;
+    static contextType = AppContext;
 
     validateID = async () => {
         const { setAirtableState } = this.context;
@@ -37,6 +36,7 @@ class Home extends Component {
 
             if (result !== "NOT_FOUND") {
                 let params = {
+                    escrow_index: result["Escrow Index"] || "",
                     raid_id: this.state.ID,
                     project_name: result["Name"] || "Not Available",
                     client_name: result["Your Name"] || "Not Available",
@@ -83,88 +83,73 @@ class Home extends Component {
     }
 
     render() {
+        let { address, isClient, connectAccount } = this.context;
         return (
-            <Web3Context.Consumer>
-                {(web3ctx) => {
-                    let { address, isClient, connectAccount } = web3ctx;
-                    return (
-                        <div className='home'>
-                            <div className='home-sub-container'>
-                                <h1>LLC Raid Escrows</h1>
+            <div className='home'>
+                <div className='home-sub-container'>
+                    <h1>LLC Raid Escrows</h1>
 
-                                {this.state.validID ? null : (
-                                    <input
-                                        type='text'
-                                        placeholder='Enter Raid ID'
-                                        onChange={(event) =>
-                                            this.onChangeHandler(event)
-                                        }
-                                    ></input>
-                                )}
+                    {this.state.validID ? null : (
+                        <input
+                            type='text'
+                            placeholder='Enter Raid ID'
+                            onChange={(event) => this.onChangeHandler(event)}
+                        ></input>
+                    )}
 
-                                <p id='error-message'>ID not found!</p>
+                    <p id='error-message'>ID not found!</p>
 
-                                {this.state.validID ? (
-                                    address ? (
-                                        isClient ? (
-                                            <button
-                                                className='custom-button'
-                                                id='escrow'
-                                                onClick={
-                                                    this.escrowClickHandler
-                                                }
-                                            >
-                                                View Escrow
-                                            </button>
-                                        ) : (
-                                            <div>
-                                                <button
-                                                    className='custom-button'
-                                                    id='register'
-                                                    onClick={
-                                                        this
-                                                            .registerClickHandler
-                                                    }
-                                                >
-                                                    Register Escrow
-                                                </button>
-                                                <button
-                                                    className='custom-button'
-                                                    id='escrow'
-                                                    onClick={
-                                                        this.escrowClickHandler
-                                                    }
-                                                >
-                                                    View Escrow
-                                                </button>
-                                            </div>
-                                        )
-                                    ) : (
-                                        <button
-                                            className='custom-button'
-                                            id='connect'
-                                            style={{ margin: 0 }}
-                                            onClick={connectAccount}
-                                        >
-                                            Connect Wallet
-                                        </button>
-                                    )
-                                ) : (
+                    {this.state.validID ? (
+                        address ? (
+                            isClient ? (
+                                <button
+                                    className='custom-button'
+                                    id='escrow'
+                                    onClick={this.escrowClickHandler}
+                                >
+                                    View Escrow
+                                </button>
+                            ) : (
+                                <div>
                                     <button
                                         className='custom-button'
-                                        style={{ margin: 0 }}
-                                        onClick={this.validateID}
+                                        id='register'
+                                        onClick={this.registerClickHandler}
                                     >
-                                        Validate ID
+                                        Register Escrow
                                     </button>
-                                )}
-                            </div>
+                                    <button
+                                        className='custom-button'
+                                        id='escrow'
+                                        onClick={this.escrowClickHandler}
+                                    >
+                                        View Escrow
+                                    </button>
+                                </div>
+                            )
+                        ) : (
+                            <button
+                                className='custom-button'
+                                id='connect'
+                                style={{ margin: 0 }}
+                                onClick={connectAccount}
+                            >
+                                Connect Wallet
+                            </button>
+                        )
+                    ) : (
+                        <button
+                            className='custom-button'
+                            style={{ margin: 0 }}
+                            onClick={this.validateID}
+                        >
+                            Validate ID
+                        </button>
+                    )}
+                </div>
 
-                            <img src={Banner} alt='Banner' />
-                        </div>
-                    );
-                }}
-            </Web3Context.Consumer>
+                <img src={Banner} alt='Banner' />
+            </div>
         );
     }
 }

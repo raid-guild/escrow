@@ -8,8 +8,7 @@ import Register from "./pages/Register";
 import Form from "./pages/Form";
 import Footer from "./components/Footer";
 
-import Web3ContextProvider from "./context/Web3Context";
-import AirtableContextProvider from "./context/AirtableContext";
+import AppContextProvider from "./context/AppContext";
 
 import "./App.css";
 
@@ -31,26 +30,26 @@ class App extends Component {
         return (
             <div className='main'>
                 <Header />
-                <Web3ContextProvider>
-                    <AirtableContextProvider>
-                        <Router>
-                            <Switch>
-                                <Route path='/' exact>
-                                    <Home />
-                                </Route>
-                                <Route path='/escrow' exact>
-                                    <Escrow />
-                                </Route>
-                                <Route path='/register' exact>
-                                    <Register />
-                                </Route>
-                                <Route path='/form' exact>
-                                    <Form />
-                                </Route>
-                            </Switch>
-                        </Router>
-                    </AirtableContextProvider>
-                </Web3ContextProvider>
+
+                <AppContextProvider>
+                    <Router>
+                        <Switch>
+                            <Route path='/' exact>
+                                <Home />
+                            </Route>
+                            <Route path='/escrow' exact>
+                                <Escrow />
+                            </Route>
+                            <Route path='/register' exact>
+                                <Register />
+                            </Route>
+                            <Route path='/form' exact>
+                                <Form />
+                            </Route>
+                        </Switch>
+                    </Router>
+                </AppContextProvider>
+
                 <Footer />
             </div>
         );

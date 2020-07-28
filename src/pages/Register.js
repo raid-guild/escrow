@@ -4,10 +4,10 @@ import { withRouter } from "react-router-dom";
 import "../styles/css/Pages.css";
 import "../styles/css/ResponsivePages.css";
 
-import { AirtableContext } from "../context/AirtableContext";
+import { AppContext } from "../context/AppContext";
 
 class Register extends Component {
-    static contextType = AirtableContext;
+    static contextType = AppContext;
 
     render() {
         const {
