@@ -9,7 +9,7 @@ import "../styles/css/ResponsivePages.css";
 
 import { AppContext } from "../context/AppContext";
 
-const KOVAN_DAI_ADDRESS = "0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa";
+const { contract_addresses } = require("../utils/Constants");
 
 class Form extends Component {
     state = {
@@ -133,7 +133,7 @@ class Form extends Component {
                 client_address,
                 [multisig_address, spoils_address],
                 resolver_address,
-                KOVAN_DAI_ADDRESS,
+                contract_addresses.KovanDAI,
                 [multisig_payment, spoils_payment],
                 total_payment,
                 milestones,

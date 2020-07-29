@@ -5,7 +5,7 @@ import Logo from "../assets/raidguild__logo.png";
 import "../styles/css/Components.css";
 import "../styles/css/ResponsiveComponents.css";
 
-const nav_items = require("../utils/Constants");
+const { nav_items } = require("../utils/Constants");
 
 const Header = () => {
     return (

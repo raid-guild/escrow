@@ -4,8 +4,10 @@ import Web3 from "web3";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
+const { contract_addresses } = require("../utils/Constants");
+
 let lockerABI = require("../abi/Locker.json");
-let lockerAddress = "0xd53B46aE3781904F1f61CF38Fd9d4F47A7e9242B";
+let lockerAddress = contract_addresses.Locker;
 
 const providerOptions = {
     walletconnect: {
@@ -41,9 +43,9 @@ class AppContextProvider extends Component {
         end_date: "",
         link_to_details: "",
         brief_description: "",
-        spoils_address: "0xbeb3e32355a933501c247e2dbde6e6ca2489bf3d",
+        spoils_address: contract_addresses.RaidGuild,
         spoils_percent: 10,
-        resolver_address: "0x06153608b799a3da838bf7c95fe21309d2e33b53",
+        resolver_address: contract_addresses.LexArbitration,
     };
 
     componentDidMount() {
