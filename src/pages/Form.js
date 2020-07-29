@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "bulma";
 
@@ -103,6 +104,7 @@ class Form extends Component {
             web3,
             spoils_address,
             resolver_address,
+            raid_id,
         } = this.context;
         let {
             client_address,
@@ -128,12 +130,20 @@ class Form extends Component {
         if (safety_valve_date.getDate() === new Date().getDate())
             return alert("Safety valve date cannot be today.");
 
-        let result = await locker.methods
+        let index = await locker.methods.lockerCount().call();
+        let payment_token_address = "";
+        if (payment_token === "DAI") {
+            payment_token_address = contract_addresses.KovanDAI;
+        } else if (payment_token === "wETH") {
+            payment_token_address = contract_addresses.KovanWETH;
+        }
+
+        await locker.methods
             .registerLocker(
                 client_address,
                 [multisig_address, spoils_address],
                 resolver_address,
-                contract_addresses.KovanDAI,
+                payment_token_address,
                 [multisig_payment, spoils_payment],
                 total_payment,
                 milestones,
@@ -143,16 +153,46 @@ class Form extends Component {
             .send({
                 from: address,
             })
-            .on("confirmation", (confNumber, receipt) => {
-                console.log(confNumber);
-                console.log(receipt);
-            })
-            .on("receipt", (receipt) => {
-                console.log(receipt);
+            .once("transactionHash", async (hash) => {
+                let result = await fetch(
+                    "https://guild-keeper.herokuapp.com/raids/update",
+                    {
+                        method: "POST",
+                        headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            ID: raid_id,
+                            Hash: hash,
+                            Index: parseInt(index) + 1,
+                        }),
+                    }
+                ).then((res) => res.json());
+
+                if (result === "SUCCESS") {
+                    alert(
+                        `The transaction hash is ${hash} & a locker will be created with an Index ${
+                            parseInt(index) + 1
+                        } when it confirms.`
+                    );
+                    this.setState(
+                        {
+                            client_address: "",
+                            multisig_address: "",
+                            total_payment: 0,
+                            payment_token: "",
+                            milestones: 0,
+                            payment_per_milestone: 0,
+                            safety_valve_date: new Date(),
+                            spoils_payment: 0,
+                            multisig_payment: 0,
+                        },
+                        () => this.props.history.push("/")
+                    );
+                }
             })
             .on("error", (err) => console.log(err));
-
-        console.log(result);
     };
 
     render() {
@@ -224,6 +264,7 @@ class Form extends Component {
                             />
                         </div>
                     </form>
+
                     <button
                         className='custom-button'
                         onClick={this.registerLocker}
@@ -236,4 +277,4 @@ class Form extends Component {
     }
 }
 
-export default Form;
+export default withRouter(Form);

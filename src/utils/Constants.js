@@ -26,6 +26,7 @@ const contract_addresses = {
     RaidGuild: "0xbeb3e32355a933501c247e2dbde6e6ca2489bf3d",
     LexArbitration: "0x06153608b799a3da838bf7c95fe21309d2e33b53",
     KovanDAI: "0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa",
+    KovanWETH: "0xd0a1e359811322d97991e03f863a0c30c2cf029c",
 };
 
 module.exports = { nav_items, contract_addresses };

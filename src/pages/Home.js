@@ -21,7 +21,7 @@ class Home extends Component {
 
         if (this.state.ID) {
             let result = await fetch(
-                "https://guild-keeper.herokuapp.com/raids",
+                "https://guild-keeper.herokuapp.com/raids/validate",
                 {
                     method: "POST",
                     headers: {
