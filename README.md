@@ -1,3 +1,14 @@
+# RaidGuild Escrow App
+
+An app to register escrow lockers for raids.
+
+![app](https://raw.githubusercontent.com/manolingam/escrow/master/src/assets/home_screen_snapshot.png)
+
+## Configuration
+- Create a `.env` file in the root directory & include a variable called `REACT_APP_INFURA_ID` with your own infura ID.
+
+-------------------
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
