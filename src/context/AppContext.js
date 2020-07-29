@@ -5,7 +5,7 @@ import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
 let lockerABI = require("../abi/Locker.json");
-let lockerAddress = "0xCc272737466870f46832D1eC637Add05121bbbAD";
+let lockerAddress = "0xd53B46aE3781904F1f61CF38Fd9d4F47A7e9242B";
 
 const providerOptions = {
     walletconnect: {
@@ -29,6 +29,7 @@ class AppContextProvider extends Component {
         address: "",
         provider: "",
         web3: "",
+        chainID: "",
         locker: "",
         client_address: "",
         isClient: false,
@@ -88,14 +89,27 @@ class AppContextProvider extends Component {
         const provider = await web3Modal.connect();
         const web3 = new Web3(provider);
         const accounts = await web3.eth.getAccounts();
+        const locker = new web3.eth.Contract(lockerABI, lockerAddress);
+        let chainID = await web3.eth.net.getId();
 
         let isClient = false;
+
+        provider.on("chainChanged", (chainId) => {
+            this.setState({ chainID: chainId });
+        });
 
         if (accounts[0] === this.state.client_address) {
             isClient = true;
         }
 
-        this.setState({ address: accounts[0], provider, web3, isClient });
+        this.setState({
+            address: accounts[0],
+            provider,
+            web3,
+            isClient,
+            locker,
+            chainID,
+        });
     };
 
     render() {

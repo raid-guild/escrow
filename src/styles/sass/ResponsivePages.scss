@@ -9,9 +9,7 @@
         }
     }
     .form {
-        .form-sub-container {
-            width: 70%;
-
+        .form-sub-container-two {
             form {
                 input {
                     margin-bottom: 2px;
@@ -72,7 +70,13 @@
         }
     }
     .form {
-        .form-sub-container {
+        .form-sub-container-one {
+            p {
+                font-size: 1.2rem;
+            }
+        }
+        .form-sub-container-two {
+            width: 60%;
             form {
                 input {
                     margin-bottom: 2px;
@@ -83,6 +87,22 @@
                     font-size: 1rem;
                 }
             }
+        }
+    }
+}
+
+@media only screen and (max-width: 770px) {
+    .form {
+        flex-direction: column;
+        justify-content: center;
+
+        .form-sub-container-one {
+            p {
+                font-size: 1rem;
+            }
+        }
+        .form-sub-container-two {
+            height: auto;
         }
     }
 }
@@ -151,8 +171,13 @@
         }
     }
     .form {
-        .form-sub-container {
+        .form-sub-container-two {
             width: 90%;
+        }
+        .form-sub-container-two {
+            .custom-button {
+                font-size: 1rem;
+            }
         }
     }
 }
@@ -181,7 +206,7 @@
         }
     }
     .form {
-        .form-sub-container {
+        .form-sub-container-two {
             width: 100%;
             form {
                 width: 90%;
@@ -250,7 +275,7 @@
         }
     }
     .form {
-        .form-sub-container {
+        .form-sub-container-two {
             width: 100%;
             form {
                 width: 90%;

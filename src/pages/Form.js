@@ -9,6 +9,8 @@ import "../styles/css/ResponsivePages.css";
 
 import { AppContext } from "../context/AppContext";
 
+const KOVAN_DAI_ADDRESS = "0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa";
+
 class Form extends Component {
     state = {
         client_address: "",
@@ -18,11 +20,15 @@ class Form extends Component {
         milestones: 0,
         payment_per_milestone: 0,
         safety_valve_date: new Date(),
+        spoils_payment: 0,
+        multisig_payment: 0,
     };
 
     static contextType = AppContext;
 
     componentDidMount() {
+        let { spoils_percent } = this.context;
+
         let client_address_input = document.getElementById("client_address");
         let multisig_address_input = document.getElementById(
             "multisig_address"
@@ -34,6 +40,8 @@ class Form extends Component {
         let total_payment = 1;
         let milestones = 1;
         let payment_per_milestone = 0;
+        let spoils_payment = 1;
+        let multisig_payment = 1;
 
         client_address_input.addEventListener("change", (event) => {
             this.setState({ client_address: event.target.value });
@@ -45,11 +53,18 @@ class Form extends Component {
 
         total_payment_input.addEventListener("change", (event) => {
             total_payment = event.target.value;
-            payment_per_milestone = total_payment / milestones;
-
+            payment_per_milestone = (total_payment / milestones).toFixed(0);
+            spoils_payment = (payment_per_milestone / spoils_percent).toFixed(
+                0
+            );
+            multisig_payment = (payment_per_milestone - spoils_payment).toFixed(
+                0
+            );
             this.setState({
                 total_payment: event.target.value,
                 payment_per_milestone,
+                spoils_payment,
+                multisig_payment,
             });
         });
 
@@ -59,32 +74,44 @@ class Form extends Component {
 
         milestones_input.addEventListener("change", (event) => {
             milestones = event.target.value;
-            payment_per_milestone = total_payment / milestones;
-
+            payment_per_milestone = (total_payment / milestones).toFixed(0);
+            spoils_payment = (payment_per_milestone / spoils_percent).toFixed(
+                0
+            );
+            multisig_payment = (payment_per_milestone - spoils_payment).toFixed(
+                0
+            );
             this.setState({
                 milestones: event.target.value,
                 payment_per_milestone,
+                spoils_payment,
+                multisig_payment,
             });
         });
     }
 
     dateHandler = (date) => {
-        console.log(date);
-        var ts = date.getTime();
-
         this.setState({
             safety_valve_date: date,
         });
     };
 
     registerLocker = async () => {
-        let { locker, web3 } = this.context;
+        let {
+            address,
+            locker,
+            web3,
+            spoils_address,
+            resolver_address,
+        } = this.context;
         let {
             client_address,
             multisig_address,
             total_payment,
             payment_token,
             milestones,
+            multisig_payment,
+            spoils_payment,
             safety_valve_date,
         } = this.state;
 
@@ -100,20 +127,67 @@ class Form extends Component {
             return alert("Number of Milestones must be greater than 0.");
         if (safety_valve_date.getDate() === new Date().getDate())
             return alert("Safety valve date cannot be today.");
+
+        let result = await locker.methods
+            .registerLocker(
+                client_address,
+                [multisig_address, spoils_address],
+                resolver_address,
+                KOVAN_DAI_ADDRESS,
+                [multisig_payment, spoils_payment],
+                total_payment,
+                milestones,
+                safety_valve_date.getTime(),
+                "0x0"
+            )
+            .send({
+                from: address,
+            })
+            .on("confirmation", (confNumber, receipt) => {
+                console.log(confNumber);
+                console.log(receipt);
+            })
+            .on("receipt", (receipt) => {
+                console.log(receipt);
+            })
+            .on("error", (err) => console.log(err));
+
+        console.log(result);
     };
 
     render() {
+        let { spoils_percent } = this.context;
         return (
             <div className='form'>
-                <div className='form-sub-container'>
+                <div className='form-sub-container-one'>
+                    <div>
+                        <p>
+                            Payment per milestone -{" "}
+                            <span>
+                                {this.state.payment_per_milestone}{" "}
+                                {this.state.payment_token}
+                            </span>
+                        </p>
+                        <p>
+                            Guild spoils ({spoils_percent}%) per milestone -{" "}
+                            <span>
+                                {this.state.spoils_payment}{" "}
+                                {this.state.payment_token}
+                            </span>
+                        </p>
+                        <p>
+                            Multisig Payment per milestone -{" "}
+                            <span>
+                                {this.state.multisig_payment}
+                                {this.state.payment_token}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div className='form-sub-container-two'>
                     <form>
                         <label>Client Address</label>
                         <input type='text' id='client_address' />
-
-                        {/* <label>
-                            Client proposal or agreement (link to document)
-                        </label>
-                        <input type='text' /> */}
 
                         <label>
                             Raid Party Multisig (eg. Gnosis safe) Address
@@ -137,20 +211,9 @@ class Form extends Component {
                             </div>
                         </div>
 
-                        <div className='milestone'>
-                            <div>
-                                <label>Number of Milestones</label>
-                                <input type='number' id='milestones' />
-                            </div>
+                        <label>Number of Milestones</label>
+                        <input type='number' id='milestones' />
 
-                            <div>
-                                <label>Payment per Milestone</label>
-                                <p>
-                                    {this.state.payment_per_milestone}{" "}
-                                    {this.state.payment_token}
-                                </p>
-                            </div>
-                        </div>
                         <div id='date-picker'>
                             <label>Client Safety Valve Withdrawal Date</label>
                             <DatePicker

@@ -140,9 +140,9 @@
             },
             {
                 "indexed": true,
-                "internalType": "uint256",
+                "internalType": "uint256[]",
                 "name": "providerAward",
-                "type": "uint256"
+                "type": "uint256[]"
             },
             {
                 "indexed": false,
@@ -314,9 +314,9 @@
                 "type": "uint256"
             },
             {
-                "internalType": "uint256",
+                "internalType": "uint256[]",
                 "name": "providerAward",
-                "type": "uint256"
+                "type": "uint256[]"
             },
             { "internalType": "bytes32", "name": "details", "type": "bytes32" }
         ],

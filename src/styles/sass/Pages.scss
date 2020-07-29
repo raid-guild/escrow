@@ -208,12 +208,27 @@ $secondary-font: "Uncial Antiqua", cursive;
     height: 100%;
     width: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     border: 2px solid $primary-color;
 
-    .form-sub-container {
+    .form-sub-container-one {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        p {
+            color: $primary-color;
+            font-size: 1.5rem;
+        }
+        span {
+            color: #fff;
+        }
+    }
+
+    .form-sub-container-two {
         width: 50%;
         height: 100%;
         display: flex;

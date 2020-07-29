@@ -268,20 +268,45 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  border: 2px solid #ff3864;
+}
+
+.form .form-sub-container-one {
+  width: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  border: 2px solid #ff3864;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
-.form .form-sub-container {
+.form .form-sub-container-one p {
+  color: #ff3864;
+  font-size: 1.5rem;
+}
+
+.form .form-sub-container-one span {
+  color: #fff;
+}
+
+.form .form-sub-container-two {
   width: 50%;
   height: 100%;
   display: -webkit-box;
@@ -299,7 +324,7 @@
           justify-content: center;
 }
 
-.form .form-sub-container form {
+.form .form-sub-container-two form {
   width: 80%;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -314,11 +339,11 @@
   margin-top: 30px;
 }
 
-.form .form-sub-container form label {
+.form .form-sub-container-two form label {
   color: #ff3864;
 }
 
-.form .form-sub-container form input {
+.form .form-sub-container-two form input {
   outline: none;
   margin-bottom: 5px;
   padding: 2px;
@@ -330,7 +355,7 @@
   font-size: 1rem;
 }
 
-.form .form-sub-container form select {
+.form .form-sub-container-two form select {
   outline: none;
   font-family: "Mirza", cursive;
   font-size: 1rem;
@@ -341,7 +366,7 @@
   border-radius: 4px;
 }
 
-.form .form-sub-container form .input-sub-container {
+.form .form-sub-container-two form .input-sub-container {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -351,24 +376,24 @@
           flex-direction: row;
 }
 
-.form .form-sub-container form .input-sub-container div {
+.form .form-sub-container-two form .input-sub-container div {
   width: 100%;
 }
 
-.form .form-sub-container form .milestone {
+.form .form-sub-container-two form .milestone {
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: 1fr 1fr;
       grid-template-columns: 1fr 1fr;
 }
 
-.form .form-sub-container form .milestone p {
+.form .form-sub-container-two form .milestone p {
   color: #fff;
   font-weight: bold;
   font-size: 1.1rem;
 }
 
-.form .form-sub-container form #date-picker {
+.form .form-sub-container-two form #date-picker {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -382,11 +407,11 @@
   margin-top: 10px;
 }
 
-.form .form-sub-container form #date-picker input {
+.form .form-sub-container-two form #date-picker input {
   width: 100%;
 }
 
-.form .form-sub-container .custom-button {
+.form .form-sub-container-two .custom-button {
   margin-top: 20px;
   border: none;
   padding: 5px;
@@ -398,7 +423,7 @@
   border-radius: 3px;
 }
 
-.form .form-sub-container .custom-button:hover {
+.form .form-sub-container-two .custom-button:hover {
   cursor: pointer;
   background-color: #000;
   color: #ff3864;
