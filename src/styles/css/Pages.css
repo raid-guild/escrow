@@ -215,25 +215,35 @@
       -ms-flex-direction: column;
           flex-direction: column;
   color: #ff3864;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
-.register .register-sub-container h1 {
+.register .register-sub-container .contents {
+  margin: 50px;
+}
+
+.register .register-sub-container .contents h1 {
   font-size: 3rem;
   font-family: "Uncial Antiqua", cursive;
 }
 
-.register .register-sub-container h2 {
+.register .register-sub-container .contents h2 {
   font-size: 2rem;
   font-weight: normal;
 }
 
-.register .register-sub-container a {
+.register .register-sub-container .contents a {
   color: #ff3864;
   margin-bottom: 5px;
   text-decoration: underline;
 }
 
-.register .register-sub-container .custom-button {
+.register .register-sub-container .contents .custom-button {
   margin-left: auto;
   margin-top: 20px;
   border: none;
@@ -246,7 +256,7 @@
   border-radius: 3px;
 }
 
-.register .register-sub-container .custom-button:hover {
+.register .register-sub-container .contents .custom-button:hover {
   cursor: pointer;
   background-color: #000;
   color: #ff3864;
@@ -298,7 +308,7 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  background-color: #525151;
+  background-color: #3f3e3e;
   padding: 15px;
   border-radius: 5px;
   margin-top: 30px;
@@ -315,7 +325,7 @@
   background-color: #000;
   border: 2px solid #ff3864;
   border-radius: 4px;
-  color: #7e7d7d;
+  color: #aaa9a9;
   font-family: "Mirza", cursive;
   font-size: 1rem;
 }
@@ -343,5 +353,54 @@
 
 .form .form-sub-container form .input-sub-container div {
   width: 100%;
+}
+
+.form .form-sub-container form .milestone {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+}
+
+.form .form-sub-container form .milestone p {
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.form .form-sub-container form #date-picker {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-top: 10px;
+}
+
+.form .form-sub-container form #date-picker input {
+  width: 100%;
+}
+
+.form .form-sub-container .custom-button {
+  margin-top: 20px;
+  border: none;
+  padding: 5px;
+  background-color: #ff3864;
+  color: #000;
+  font-family: "Mirza", cursive;
+  font-size: 1.5rem;
+  border: 2px solid #ff3864;
+  border-radius: 3px;
+}
+
+.form .form-sub-container .custom-button:hover {
+  cursor: pointer;
+  background-color: #000;
+  color: #ff3864;
 }
 /*# sourceMappingURL=Pages.css.map */

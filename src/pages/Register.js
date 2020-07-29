@@ -17,31 +17,44 @@ class Register extends Component {
             end_date,
             link_to_details,
             brief_description,
+            spoils_address,
+            spoils_percent,
+            resolver_address,
         } = this.context;
 
         return (
             <div className='register'>
                 <div className='register-sub-container'>
-                    <h2>{client_name}</h2>
-                    <h1>{project_name}</h1>
-                    <br></br>
-                    <p>Start: {start_date}</p>
-                    <p>Planned End: {end_date}</p>
-                    <br></br>
-                    <a
-                        href={link_to_details}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                    >
-                        Link to details of agreement
-                    </a>
-                    <p>{brief_description}</p>
-                    <button
-                        className='custom-button'
-                        onClick={() => this.props.history.push("/form")}
-                    >
-                        Next
-                    </button>
+                    <div className='contents'>
+                        <h2>{client_name}</h2>
+                        <h1>{project_name}</h1>
+                        <br></br>
+                        <p>Start: {start_date.split("T")[0]}</p>
+                        <p>Planned End: {end_date}</p>
+                        <br></br>
+                        <p>{brief_description}</p>
+                        <a
+                            href={link_to_details}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                        >
+                            Link to details of agreement
+                        </a>
+                        <br></br>
+                        <br></br>
+                        <p>Spoils Address ({spoils_address})</p>
+                        <p>
+                            Spoils ( {spoils_percent}% of payment sent to Raid
+                            Guild)
+                        </p>
+                        <p>Resolver Address ({resolver_address})</p>
+                        <button
+                            className='custom-button'
+                            onClick={() => this.props.history.push("/form")}
+                        >
+                            Next
+                        </button>
+                    </div>
                 </div>
             </div>
         );
