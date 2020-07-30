@@ -28,7 +28,15 @@ class Form extends Component {
     static contextType = AppContext;
 
     componentDidMount() {
-        let { spoils_percent } = this.context;
+        let { spoils_percent, end_date, raid_id } = this.context;
+
+        if (raid_id === "") {
+            return this.props.history.push("/");
+        }
+
+        if (end_date !== "") {
+            this.setState({ safety_valve_date: new Date(end_date) });
+        }
 
         let client_address_input = document.getElementById("client_address");
         let multisig_address_input = document.getElementById(
@@ -54,13 +62,9 @@ class Form extends Component {
 
         total_payment_input.addEventListener("change", (event) => {
             total_payment = event.target.value;
-            payment_per_milestone = (total_payment / milestones).toFixed(0);
-            spoils_payment = (payment_per_milestone / spoils_percent).toFixed(
-                0
-            );
-            multisig_payment = (payment_per_milestone - spoils_payment).toFixed(
-                0
-            );
+            payment_per_milestone = total_payment / milestones;
+            spoils_payment = payment_per_milestone / spoils_percent;
+            multisig_payment = payment_per_milestone - spoils_payment;
             this.setState({
                 total_payment: event.target.value,
                 payment_per_milestone,
@@ -75,13 +79,9 @@ class Form extends Component {
 
         milestones_input.addEventListener("change", (event) => {
             milestones = event.target.value;
-            payment_per_milestone = (total_payment / milestones).toFixed(0);
-            spoils_payment = (payment_per_milestone / spoils_percent).toFixed(
-                0
-            );
-            multisig_payment = (payment_per_milestone - spoils_payment).toFixed(
-                0
-            );
+            payment_per_milestone = total_payment / milestones;
+            spoils_payment = payment_per_milestone / spoils_percent;
+            multisig_payment = payment_per_milestone - spoils_payment;
             this.setState({
                 milestones: event.target.value,
                 payment_per_milestone,
@@ -105,6 +105,7 @@ class Form extends Component {
             spoils_address,
             resolver_address,
             raid_id,
+            connectAccount,
         } = this.context;
         let {
             client_address,
@@ -123,7 +124,10 @@ class Form extends Component {
             return alert("Multisig address is not valid!");
         if (total_payment === 0)
             return alert("Total Payment must be greater than 0.");
-        if (payment_token === "")
+        if (
+            payment_token === "" ||
+            payment_token === "Select whitelisted token"
+        )
             return alert("Please select a payment token.");
         if (milestones === 0)
             return alert("Number of Milestones must be greater than 0.");
@@ -138,87 +142,94 @@ class Form extends Component {
             payment_token_address = contract_addresses.KovanWETH;
         }
 
-        await locker.methods
-            .registerLocker(
-                client_address,
-                [multisig_address, spoils_address],
-                resolver_address,
-                payment_token_address,
-                [multisig_payment, spoils_payment],
-                total_payment,
-                milestones,
-                safety_valve_date.getTime(),
-                "0x0"
-            )
-            .send({
-                from: address,
-            })
-            .once("transactionHash", async (hash) => {
-                let result = await fetch(
-                    "https://guild-keeper.herokuapp.com/raids/update",
-                    {
-                        method: "POST",
-                        headers: {
-                            Accept: "application/json",
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                            ID: raid_id,
-                            Hash: hash,
-                            Index: parseInt(index) + 1,
-                        }),
-                    }
-                ).then((res) => res.json());
-
-                if (result === "SUCCESS") {
-                    alert(
-                        `The transaction hash is ${hash} & a locker will be created with an Index ${
-                            parseInt(index) + 1
-                        } when it confirms.`
-                    );
-                    this.setState(
+        if (address === "") {
+            connectAccount();
+        } else {
+            await locker.methods
+                .registerLocker(
+                    client_address,
+                    [multisig_address, spoils_address],
+                    resolver_address,
+                    payment_token_address,
+                    [
+                        web3.utils.toWei(multisig_payment.toString()),
+                        web3.utils.toWei(spoils_payment.toString()),
+                    ],
+                    web3.utils.toWei(total_payment.toString()),
+                    milestones,
+                    safety_valve_date.getTime(),
+                    "0x0"
+                )
+                .send({
+                    from: address,
+                })
+                .once("transactionHash", async (hash) => {
+                    let result = await fetch(
+                        "https://guild-keeper.herokuapp.com/raids/update",
                         {
-                            client_address: "",
-                            multisig_address: "",
-                            total_payment: 0,
-                            payment_token: "",
-                            milestones: 0,
-                            payment_per_milestone: 0,
-                            safety_valve_date: new Date(),
-                            spoils_payment: 0,
-                            multisig_payment: 0,
-                        },
-                        () => this.props.history.push("/")
-                    );
-                }
-            })
-            .on("error", (err) => console.log(err));
+                            method: "POST",
+                            headers: {
+                                Accept: "application/json",
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                ID: raid_id,
+                                Hash: hash,
+                                Index: parseInt(index) + 1,
+                            }),
+                        }
+                    ).then((res) => res.json());
+
+                    if (result === "SUCCESS") {
+                        alert(
+                            `The transaction hash is ${hash} & a locker will be created with an Index ${
+                                parseInt(index) + 1
+                            } when it confirms.`
+                        );
+                        this.setState(
+                            {
+                                client_address: "",
+                                multisig_address: "",
+                                total_payment: 0,
+                                payment_token: "",
+                                milestones: 0,
+                                payment_per_milestone: 0,
+                                safety_valve_date: new Date(),
+                                spoils_payment: 0,
+                                multisig_payment: 0,
+                            },
+                            () => this.props.history.push("/")
+                        );
+                    }
+                })
+                .on("error", (err) => console.log(err));
+        }
     };
 
     render() {
-        let { spoils_percent } = this.context;
+        let { spoils_percent, end_date } = this.context;
         return (
             <div className='form'>
                 <div className='form-sub-container-one'>
                     <div>
                         <p>
-                            Payment per milestone -{" "}
+                            Payment per milestone ~{" "}
                             <span>
-                                {this.state.payment_per_milestone}{" "}
+                                {this.state.payment_per_milestone.toFixed(1)}{" "}
                                 {this.state.payment_token}
                             </span>
                         </p>
                         <p>
-                            Guild spoils ({spoils_percent}%) per milestone -{" "}
+                            Guild spoils ({spoils_percent}%) per milestone ~{" "}
                             <span>
-                                {this.state.spoils_payment}{" "}
+                                {this.state.spoils_payment.toFixed(1)}{" "}
                                 {this.state.payment_token}
                             </span>
                         </p>
                         <p>
-                            Multisig Payment per milestone -{" "}
+                            Multisig Payment per milestone ~{" "}
                             <span>
-                                {this.state.multisig_payment}
+                                {this.state.multisig_payment.toFixed(1)}
                                 {this.state.payment_token}
                             </span>
                         </p>
@@ -257,7 +268,11 @@ class Form extends Component {
                         <div id='date-picker'>
                             <label>Client Safety Valve Withdrawal Date</label>
                             <DatePicker
-                                minDate={this.state.safety_valve_date}
+                                minDate={
+                                    end_date
+                                        ? new Date(end_date)
+                                        : this.state.safety_valve_date
+                                }
                                 dateFormat='yyyy/MM/dd'
                                 selected={this.state.safety_valve_date}
                                 onChange={this.dateHandler}
