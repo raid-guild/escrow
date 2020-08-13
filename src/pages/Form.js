@@ -12,6 +12,9 @@ import { AppContext } from "../context/AppContext";
 
 const { contract_addresses } = require("../utils/Constants");
 
+const BN = require('bignumber.js');
+BN.config({ DECIMAL_PLACES: 18});
+
 const milestone_payments_calculation = (
     total_payment,
     milestones,
@@ -20,17 +23,17 @@ const milestone_payments_calculation = (
     let milestone_payment = 0;
     let milestone_spoils_payment = 1;
     let milestone_multisig_payment = 1;
+    let _total_payment = new BN(total_payment);
 
-    const spoils_to_multisig_multiple = (1 - spoils_percent) / spoils_percent;
-    const total_spoils_payment = total_payment * 10 ** 18 * spoils_percent;
-    milestone_spoils_payment = Math.round(
-        total_spoils_payment / milestones
-    );
-    milestone_multisig_payment =
-        milestone_spoils_payment * spoils_to_multisig_multiple;
-    milestone_payment =
-        milestone_spoils_payment + milestone_multisig_payment;
-    const total_payment_final = milestone_payment * milestones;
+    let multisig_percent = 1 - spoils_percent;
+    let total_spoils_payment = _total_payment.times(spoils_percent);
+    let total_multisig_payment = _total_payment.times(multisig_percent)
+
+    milestone_spoils_payment = total_spoils_payment.div(milestones);
+    milestone_multisig_payment = total_multisig_payment.div(milestones);
+    milestone_payment = milestone_spoils_payment.plus(milestone_multisig_payment);
+
+    let total_payment_final = milestone_payment.times(milestones);
     return [
         total_payment_final,
         milestone_payment,
@@ -43,16 +46,13 @@ class Form extends Component {
     state = {
         client_address: "",
         multisig_address: "",
-        total_payment: 0,
-        milestone_payment: 0,
+        total_payment: 1,
         payment_token: "DAI",
-        milestones: 0,
+        milestone_payment: 0,
+        milestones: 1,
         milestone_spoils_payment: 1,
         milestone_multisig_payment: 1,
-        payment_per_milestone: 0,
         safety_valve_date: new Date(),
-        spoils_payment: 0,
-        multisig_payment: 0,
     };
 
     static contextType = AppContext;
@@ -97,7 +97,7 @@ class Form extends Component {
 
             this.setState({
                 total_payment: payments[0],
-                miletone_payment: payments[1],
+                milestone_payment: payments[1],
                 milestone_spoils_payment: payments[2],
                 milestone_multisig_payment: payments[3],
             });
@@ -117,7 +117,7 @@ class Form extends Component {
             this.setState({
                 milestones: event.target.value,
                 total_payment: payments[0],
-                miletone_payment: payments[1],
+                milestone_payment: payments[1],
                 milestone_spoils_payment: payments[2],
                 milestone_multisig_payment: payments[3],
             });
@@ -188,7 +188,7 @@ class Form extends Component {
                         web3.utils.toWei(milestone_multisig_payment.toString()),
                         web3.utils.toWei(milestone_spoils_payment.toString()),
                     ],
-                    total_payment.toString(),
+                    web3.utils.toWei(total_payment.toString()),
                     milestones,
                     safety_valve_date.getTime(),
                     "0x0"
@@ -248,21 +248,21 @@ class Form extends Component {
                         <p>
                             Payment per milestone ~{" "}
                             <span>
-                                {((this.state.milestone_spoils_payment + this.state.milestone_multisig_payment) / 10 ** 18).toFixed(1)}{" "}
+                                {this.state.milestone_payment.toFixed(1)}{" "}
                                 {this.state.payment_token}
                             </span>
                         </p>
                         <p>
                             Guild spoils ({spoils_percent * 100}%) per milestone ~{" "}
                             <span>
-                                {(this.state.milestone_spoils_payment / 10 ** 18).toFixed(1)}{" "}
+                                {this.state.milestone_spoils_payment.toFixed(1)}{" "}
                                 {this.state.payment_token}
                             </span>
                         </p>
                         <p>
                             Multisig Payment per milestone ~{" "}
                             <span>
-                                {(this.state.milestone_multisig_payment / 10 ** 18).toFixed(1)}{" "}
+                                {this.state.milestone_multisig_payment.toFixed(1)}{" "}
                                 {this.state.payment_token}
                             </span>
                         </p>
