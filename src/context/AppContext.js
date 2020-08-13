@@ -44,7 +44,7 @@ class AppContextProvider extends Component {
         link_to_details: "",
         brief_description: "",
         spoils_address: contract_addresses.RaidGuild,
-        spoils_percent: 10,
+        spoils_percent: 0.1,
         resolver_address: contract_addresses.LexArbitration,
     };
 
