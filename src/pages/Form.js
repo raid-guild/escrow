@@ -12,20 +12,47 @@ import { AppContext } from "../context/AppContext";
 
 const { contract_addresses } = require("../utils/Constants");
 
+const milestone_payments_calculation = (
+    total_payment,
+    milestones,
+    spoils_percent
+) => {
+    let milestone_payment = 0;
+    let milestone_spoils_payment = 1;
+    let milestone_multisig_payment = 1;
+
+    const spoils_to_multisig_multiple = (1 - spoils_percent) / spoils_percent;
+    const total_spoils_payment = total_payment * 10 ** 18 * spoils_percent;
+    milestone_spoils_payment = Math.round(
+        total_spoils_payment / milestones
+    );
+    milestone_multisig_payment =
+        milestone_spoils_payment * spoils_to_multisig_multiple;
+    milestone_payment =
+        milestone_spoils_payment + milestone_multisig_payment;
+    const total_payment_final = milestone_payment * milestones;
+    return [
+        total_payment_final,
+        milestone_payment,
+        milestone_spoils_payment,
+        milestone_multisig_payment,
+    ];
+};
+
 class Form extends Component {
     state = {
         client_address: "",
         multisig_address: "",
         total_payment: 0,
-        payment_token: "",
+        milestone_payment: 0,
+        payment_token: "DAI",
         milestones: 0,
+        milestone_spoils_payment: 1,
+        milestone_multisig_payment: 1,
         payment_per_milestone: 0,
         safety_valve_date: new Date(),
         spoils_payment: 0,
         multisig_payment: 0,
-        milestone_payment: 0,
-        milestone_spoils_payment: 0,
-        milestone_multisig_payment: 0,
     };
 
     static contextType = AppContext;
@@ -62,7 +89,7 @@ class Form extends Component {
 
         total_payment_input.addEventListener("change", (event) => {
             total_payment = event.target.value;
-            const payments = this.milestone_payments_calculation(
+            const payments = milestone_payments_calculation(
                 total_payment,
                 milestones,
                 spoils_percent
@@ -82,7 +109,7 @@ class Form extends Component {
 
         milestones_input.addEventListener("change", (event) => {
             milestones = event.target.value;
-            const payments = this.milestone_payments_calculation(
+            const payments = milestone_payments_calculation(
                 total_payment,
                 milestones,
                 spoils_percent
@@ -96,32 +123,6 @@ class Form extends Component {
             });
         });
     }
-
-    milestone_payments_calculation = (
-        total_payment,
-        milestones,
-        spoils_percent
-    ) => {
-        let milestone_payment = 0;
-        let milestone_spoils_payment = 1;
-        let milestone_multisig_payment = 1;
-        let spoils_to_multisig_multiple = (1 - spoils_percent) / spoils_percent;
-        let total_spoils_payment = total_payment * 10 ** 18 * spoils_percent;
-        milestone_spoils_payment = Math.round(
-            total_spoils_payment / milestones
-        );
-        milestone_multisig_payment =
-            milestone_spoils_payment * spoils_to_multisig_multiple;
-        milestone_payment =
-            milestone_spoils_payment + milestone_multisig_payment;
-        let total_payment_final = milestone_payment * milestones;
-        return [
-            total_payment_final,
-            milestone_payment,
-            milestone_spoils_payment,
-            milestone_multisig_payment,
-        ];
-    };
 
     dateHandler = (date) => {
         this.setState({
@@ -184,8 +185,8 @@ class Form extends Component {
                     resolver_address,
                     payment_token_address,
                     [
-                        milestone_multisig_payment.toString(),
-                        milestone_spoils_payment.toString(),
+                        web3.utils.toWei(milestone_multisig_payment.toString()),
+                        web3.utils.toWei(milestone_spoils_payment.toString()),
                     ],
                     total_payment.toString(),
                     milestones,
@@ -241,65 +242,62 @@ class Form extends Component {
     render() {
         let { spoils_percent, end_date } = this.context;
         return (
-            <div className='form'>
-                <div className='form-sub-container-one'>
+            <div className="form">
+                <div className="form-sub-container-one">
                     <div>
                         <p>
                             Payment per milestone ~{" "}
                             <span>
-                                {this.state.milestone_payment.toFixed(1)}{" "}
+                                {((this.state.milestone_spoils_payment + this.state.milestone_multisig_payment) / 10 ** 18).toFixed(1)}{" "}
                                 {this.state.payment_token}
                             </span>
                         </p>
                         <p>
-                            Guild spoils ({spoils_percent}%) per milestone ~{" "}
+                            Guild spoils ({spoils_percent * 100}%) per milestone ~{" "}
                             <span>
-                                {this.state.milestone_spoils_payment.toFixed(1)}{" "}
+                                {(this.state.milestone_spoils_payment / 10 ** 18).toFixed(1)}{" "}
                                 {this.state.payment_token}
                             </span>
                         </p>
                         <p>
                             Multisig Payment per milestone ~{" "}
                             <span>
-                                {this.state.milestone_multisig_payment.toFixed(
-                                    1
-                                )}
+                                {(this.state.milestone_multisig_payment / 10 ** 18).toFixed(1)}{" "}
                                 {this.state.payment_token}
                             </span>
                         </p>
                     </div>
                 </div>
-                <div className='form-sub-container-two'>
+                <div className="form-sub-container-two">
                     <form>
                         <label>Client Address</label>
-                        <input type='text' id='client_address' />
+						<input type="text" id="client_address" />
 
                         <label>
                             Raid Party Multisig (eg. Gnosis safe) Address
                         </label>
-                        <input type='text' id='multisig_address' />
+                        <input type="text" id="multisig_address" />
 
-                        <div className='input-sub-container'>
+                        <div className="input-sub-container">
                             <div>
                                 <label>Total Raid Payment</label>
                                 <br />
-                                <input type='number' id='total_payment' />
+                                <input type="number" id="total_payment" />
                             </div>
                             <div>
                                 <label>Payment Token</label>
                                 <br />
-                                <select id='token'>
-                                    <option>Select whitelisted token</option>
-                                    <option>wETH</option>
+                                <select id="token">
                                     <option>DAI</option>
+                                    <option>wETH</option>
                                 </select>
                             </div>
                         </div>
 
                         <label>Number of Milestones</label>
-                        <input type='number' id='milestones' />
+                        <input type="number" id="milestones" />
 
-                        <div id='date-picker'>
+                        <div id="date-picker">
                             <label>Client Safety Valve Withdrawal Date</label>
                             <DatePicker
                                 minDate={
@@ -307,7 +305,7 @@ class Form extends Component {
                                         ? new Date(end_date)
                                         : this.state.safety_valve_date
                                 }
-                                dateFormat='yyyy/MM/dd'
+                                dateFormat="yyyy/MM/dd"
                                 selected={this.state.safety_valve_date}
                                 onChange={this.dateHandler}
                             />
@@ -315,7 +313,7 @@ class Form extends Component {
                     </form>
 
                     <button
-                        className='custom-button'
+                        className="custom-button"
                         onClick={this.registerLocker}
                     >
                         Register
