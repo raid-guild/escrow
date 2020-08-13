@@ -12,17 +12,47 @@ import { AppContext } from "../context/AppContext";
 
 const { contract_addresses } = require("../utils/Constants");
 
+const BN = require('bignumber.js');
+BN.config({ DECIMAL_PLACES: 18});
+
+const milestone_payments_calculation = (
+    total_payment,
+    milestones,
+    spoils_percent
+) => {
+    let milestone_payment = 0;
+    let milestone_spoils_payment = 1;
+    let milestone_multisig_payment = 1;
+    let _total_payment = new BN(total_payment);
+
+    let multisig_percent = 1 - spoils_percent;
+    let total_spoils_payment = _total_payment.times(spoils_percent);
+    let total_multisig_payment = _total_payment.times(multisig_percent)
+
+    milestone_spoils_payment = total_spoils_payment.div(milestones);
+    milestone_multisig_payment = total_multisig_payment.div(milestones);
+    milestone_payment = milestone_spoils_payment.plus(milestone_multisig_payment);
+
+    let total_payment_final = milestone_payment.times(milestones);
+    return [
+        total_payment_final,
+        milestone_payment,
+        milestone_spoils_payment,
+        milestone_multisig_payment,
+    ];
+};
+
 class Form extends Component {
     state = {
         client_address: "",
         multisig_address: "",
-        total_payment: 0,
-        payment_token: "",
-        milestones: 0,
-        payment_per_milestone: 0,
+        total_payment: 1,
+        payment_token: "DAI",
+        milestone_payment: 0,
+        milestones: 1,
+        milestone_spoils_payment: 1,
+        milestone_multisig_payment: 1,
         safety_valve_date: new Date(),
-        spoils_payment: 0,
-        multisig_payment: 0,
     };
 
     static contextType = AppContext;
@@ -48,9 +78,6 @@ class Form extends Component {
 
         let total_payment = 1;
         let milestones = 1;
-        let payment_per_milestone = 0;
-        let spoils_payment = 1;
-        let multisig_payment = 1;
 
         client_address_input.addEventListener("change", (event) => {
             this.setState({ client_address: event.target.value });
@@ -62,14 +89,17 @@ class Form extends Component {
 
         total_payment_input.addEventListener("change", (event) => {
             total_payment = event.target.value;
-            payment_per_milestone = total_payment / milestones;
-            spoils_payment = payment_per_milestone / spoils_percent;
-            multisig_payment = payment_per_milestone - spoils_payment;
+            const payments = milestone_payments_calculation(
+                total_payment,
+                milestones,
+                spoils_percent
+            );
+
             this.setState({
-                total_payment: event.target.value,
-                payment_per_milestone,
-                spoils_payment,
-                multisig_payment,
+                total_payment: payments[0],
+                milestone_payment: payments[1],
+                milestone_spoils_payment: payments[2],
+                milestone_multisig_payment: payments[3],
             });
         });
 
@@ -79,14 +109,17 @@ class Form extends Component {
 
         milestones_input.addEventListener("change", (event) => {
             milestones = event.target.value;
-            payment_per_milestone = total_payment / milestones;
-            spoils_payment = payment_per_milestone / spoils_percent;
-            multisig_payment = payment_per_milestone - spoils_payment;
+            const payments = milestone_payments_calculation(
+                total_payment,
+                milestones,
+                spoils_percent
+            );
             this.setState({
                 milestones: event.target.value,
-                payment_per_milestone,
-                spoils_payment,
-                multisig_payment,
+                total_payment: payments[0],
+                milestone_payment: payments[1],
+                milestone_spoils_payment: payments[2],
+                milestone_multisig_payment: payments[3],
             });
         });
     }
@@ -113,8 +146,8 @@ class Form extends Component {
             total_payment,
             payment_token,
             milestones,
-            multisig_payment,
-            spoils_payment,
+            milestone_multisig_payment,
+            milestone_spoils_payment,
             safety_valve_date,
         } = this.state;
 
@@ -152,8 +185,8 @@ class Form extends Component {
                     resolver_address,
                     payment_token_address,
                     [
-                        web3.utils.toWei(multisig_payment.toString()),
-                        web3.utils.toWei(spoils_payment.toString()),
+                        web3.utils.toWei(milestone_multisig_payment.toString()),
+                        web3.utils.toWei(milestone_spoils_payment.toString()),
                     ],
                     web3.utils.toWei(total_payment.toString()),
                     milestones,
@@ -193,10 +226,10 @@ class Form extends Component {
                                 total_payment: 0,
                                 payment_token: "",
                                 milestones: 0,
-                                payment_per_milestone: 0,
+                                milestone_payment: 0,
                                 safety_valve_date: new Date(),
-                                spoils_payment: 0,
-                                multisig_payment: 0,
+                                milestone_spoils_payment: 0,
+                                milestone_multisig_payment: 0,
                             },
                             () => this.props.history.push("/")
                         );
@@ -209,63 +242,62 @@ class Form extends Component {
     render() {
         let { spoils_percent, end_date } = this.context;
         return (
-            <div className='form'>
-                <div className='form-sub-container-one'>
+            <div className="form">
+                <div className="form-sub-container-one">
                     <div>
                         <p>
                             Payment per milestone ~{" "}
                             <span>
-                                {this.state.payment_per_milestone.toFixed(1)}{" "}
+                                {this.state.milestone_payment.toFixed(1)}{" "}
                                 {this.state.payment_token}
                             </span>
                         </p>
                         <p>
-                            Guild spoils ({spoils_percent}%) per milestone ~{" "}
+                            Guild spoils ({spoils_percent * 100}%) per milestone ~{" "}
                             <span>
-                                {this.state.spoils_payment.toFixed(1)}{" "}
+                                {this.state.milestone_spoils_payment.toFixed(1)}{" "}
                                 {this.state.payment_token}
                             </span>
                         </p>
                         <p>
                             Multisig Payment per milestone ~{" "}
                             <span>
-                                {this.state.multisig_payment.toFixed(1)}
+                                {this.state.milestone_multisig_payment.toFixed(1)}{" "}
                                 {this.state.payment_token}
                             </span>
                         </p>
                     </div>
                 </div>
-                <div className='form-sub-container-two'>
+                <div className="form-sub-container-two">
                     <form>
                         <label>Client Address</label>
-                        <input type='text' id='client_address' />
+						<input type="text" id="client_address" />
 
                         <label>
                             Raid Party Multisig (eg. Gnosis safe) Address
                         </label>
-                        <input type='text' id='multisig_address' />
+                        <input type="text" id="multisig_address" />
 
-                        <div className='input-sub-container'>
+                        <div className="input-sub-container">
                             <div>
                                 <label>Total Raid Payment</label>
                                 <br />
-                                <input type='number' id='total_payment' />
+                                <input type="number" id="total_payment" />
                             </div>
                             <div>
                                 <label>Payment Token</label>
                                 <br />
-                                <select id='token'>
-                                    <option>Select whitelisted token</option>
-                                    <option>wETH</option>
+                                <select id="token">
                                     <option>DAI</option>
+                                    <option>wETH</option>
                                 </select>
                             </div>
                         </div>
 
                         <label>Number of Milestones</label>
-                        <input type='number' id='milestones' />
+                        <input type="number" id="milestones" />
 
-                        <div id='date-picker'>
+                        <div id="date-picker">
                             <label>Client Safety Valve Withdrawal Date</label>
                             <DatePicker
                                 minDate={
@@ -273,7 +305,7 @@ class Form extends Component {
                                         ? new Date(end_date)
                                         : this.state.safety_valve_date
                                 }
-                                dateFormat='yyyy/MM/dd'
+                                dateFormat="yyyy/MM/dd"
                                 selected={this.state.safety_valve_date}
                                 onChange={this.dateHandler}
                             />
@@ -281,7 +313,7 @@ class Form extends Component {
                     </form>
 
                     <button
-                        className='custom-button'
+                        className="custom-button"
                         onClick={this.registerLocker}
                     >
                         Register
