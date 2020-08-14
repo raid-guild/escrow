@@ -7,6 +7,7 @@ import "../styles/css/ResponsivePages.css";
 import { AppContext } from "../context/AppContext";
 
 const {
+    Locker,
     KovanDAI,
     KovanWETH,
 } = require("../utils/Constants").contract_addresses;
@@ -14,76 +15,146 @@ const {
 const Escrow = (props) => {
     const context = useContext(AppContext);
     const [state, setState] = useState({});
+    const [transaction, setTransaction] = useState(false);
 
     const onDepositHandler = async () => {
-        let { address, cap, tokenType } = state;
+        let { address, cap, tokenType, wETHBalance } = state;
         let { web3, locker, DAI, wETH, escrow_index } = context;
         let contract = tokenType === "DAI" ? DAI : wETH;
+        cap = web3.utils.toWei(cap);
 
-        await locker.methods.depositLocker(escrow_index).send({
-            from: address,
-            data: contract.methods.transfer(
-                "0xd53B46aE3781904F1f61CF38Fd9d4F47A7e9242B",
-                web3.utils.toWei(cap)
-            ),
+        try {
+            setTransaction((prevState) => !prevState);
+            if (tokenType === "DAI") {
+                await contract.methods
+                    .approve(Locker, cap)
+                    .send({ from: address });
+                await locker.methods.depositLocker(escrow_index).send({
+                    from: address,
+                });
+            } else if (tokenType === "wETH") {
+                if (wETHBalance >= cap) {
+                    await contract.methods
+                        .approve(Locker, cap)
+                        .send({ from: address });
+
+                    await locker.methods.depositLocker(escrow_index).send({
+                        from: address,
+                    });
+                } else {
+                    await locker.methods.depositLocker(escrow_index).send({
+                        from: address,
+                        value: cap,
+                    });
+                }
+            }
+            props.history.push("/");
+        } catch (err) {
+            setTransaction((prevState) => !prevState);
+        }
+    };
+
+    const onReleaseHandler = async () => {
+        try {
+            setTransaction((prevState) => !prevState);
+            let { address } = state;
+            let { locker, escrow_index } = context;
+            await locker.methods.release(escrow_index).send({ from: address });
+
+            props.history.push("/");
+        } catch (err) {
+            setTransaction((prevState) => !prevState);
+        }
+    };
+
+    const onLockHandler = async () => {
+        try {
+            setTransaction((prevState) => !prevState);
+            let { address } = state;
+            let { locker, escrow_index } = context;
+            await locker.methods
+                .lock(escrow_index, "0x0")
+                .send({ from: address });
+
+            props.history.push("/");
+        } catch (err) {
+            setTransaction((prevState) => !prevState);
+        }
+    };
+
+    const onWithdrawHandler = async () => {
+        try {
+            setTransaction((prevState) => !prevState);
+            let { address } = state;
+            let { locker, escrow_index } = context;
+            await locker.methods.withdraw(escrow_index).send({ from: address });
+
+            props.history.push("/");
+        } catch (err) {
+            setTransaction((prevState) => !prevState);
+        }
+    };
+
+    const initData = async () => {
+        let {
+            web3,
+            wETH,
+            address,
+            locker,
+            escrow_index,
+            client_name,
+            project_name,
+            start_date,
+            end_date,
+            link_to_details,
+            brief_description,
+            isClient,
+        } = context;
+
+        if (locker === "") return props.history.push("/");
+
+        let result = await locker.methods.lockers(escrow_index).call();
+        let {
+            cap,
+            confirmed,
+            locked,
+            released,
+            resolver,
+            token,
+            termination,
+        } = result;
+
+        cap = web3.utils.fromWei(cap, "ether");
+        released = web3.utils.fromWei(released, "ether");
+
+        let tokenType = "";
+        if (token === KovanDAI) tokenType = "DAI";
+        if (token === KovanWETH) tokenType = "wETH";
+
+        let wETHBalance = await wETH.methods.balanceOf(address).call();
+
+        setState({
+            address,
+            cap,
+            confirmed,
+            locked,
+            released,
+            resolver,
+            token,
+            tokenType,
+            termination,
+            client_name,
+            project_name,
+            start_date,
+            end_date,
+            link_to_details,
+            brief_description,
+            isClient,
+            wETHBalance,
         });
     };
 
     useEffect(() => {
-        const initData = async () => {
-            let {
-                web3,
-                address,
-                locker,
-                escrow_index,
-                client_name,
-                project_name,
-                start_date,
-                end_date,
-                link_to_details,
-                brief_description,
-                isClient,
-            } = context;
-            if (locker === "") return props.history.push("/");
-
-            let result = await locker.methods.lockers(escrow_index).call();
-            let {
-                cap,
-                confirmed,
-                locked,
-                released,
-                resolver,
-                token,
-                termination,
-            } = result;
-            cap = web3.utils.fromWei(cap, "ether");
-            locked = web3.utils.fromWei(locked, "ether");
-            released = web3.utils.fromWei(released, "ether");
-            termination = new Date(Number(termination)).toDateString();
-
-            let tokenType = "";
-            if (token === KovanDAI) tokenType = "DAI";
-            if (token === KovanWETH) tokenType = "wETH";
-
-            setState({
-                address,
-                cap,
-                confirmed,
-                locked,
-                released,
-                resolver,
-                token,
-                tokenType,
-                termination,
-                client_name,
-                project_name,
-                start_date,
-                end_date,
-                link_to_details,
-                brief_description,
-                isClient,
-            });
-        };
         initData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -117,7 +188,11 @@ const Escrow = (props) => {
                         </p>
                         <p>
                             Safety Valve Withdrawal Date
-                            <span>{state.termination}</span>
+                            <span>
+                                {new Date(
+                                    Number(state.termination)
+                                ).toDateString()}
+                            </span>
                         </p>
                         <p>
                             Arbitration Provider<span>{"LexDAO"}</span>
@@ -125,12 +200,13 @@ const Escrow = (props) => {
                         <p>
                             Total Released to Date
                             <span>
-                                {state.released} {state.tokenType}
+                                {Number(state.released).toFixed(2)}{" "}
+                                {state.tokenType}
                             </span>
                         </p>
                     </div>
                     <div>
-                        <p>Next Milestone</p>
+                        {/* <p>Next Milestone</p> */}
                         {state.confirmed === "0" ? (
                             <p style={{ color: "#ff3864" }}>
                                 Total Due to Escrow Today
@@ -140,15 +216,24 @@ const Escrow = (props) => {
                             </p>
                         ) : (
                             <p style={{ color: "#ff3864" }}>
-                                Next Amount to Release/Withdraw
-                                <span>
+                                {state.locked === "1"
+                                    ? "Funds Locked"
+                                    : state.termination < new Date().getTime()
+                                    ? "Safety valve date due"
+                                    : state.cap === state.released
+                                    ? "All funds released"
+                                    : "Release Milestone funds"}
+
+                                {/* <span>
                                     {state.locked} {state.tokenType}
-                                </span>
+                                </span> */}
                             </p>
                         )}
                     </div>
                 </div>
-                {!state.isClient ? (
+                {state.cap === state.released ? null : transaction ? (
+                    <p>Transaction under progress</p>
+                ) : !state.isClient ? (
                     <button className='deposit-button'>Lock</button>
                 ) : state.confirmed === "0" ? (
                     <button
@@ -157,25 +242,30 @@ const Escrow = (props) => {
                     >
                         Deposit
                     </button>
+                ) : state.locked === "1" ? null : state.termination <
+                  new Date().getTime() ? (
+                    <button
+                        style={{ margin: "3px" }}
+                        className='deposit-button'
+                        onClick={onWithdrawHandler}
+                    >
+                        Withdraw
+                    </button>
                 ) : (
                     <div>
                         <button
                             style={{ margin: "3px" }}
                             className='deposit-button'
+                            onClick={onReleaseHandler}
                         >
                             Release
                         </button>
                         <button
                             style={{ margin: "3px" }}
                             className='deposit-button'
+                            onClick={onLockHandler}
                         >
                             Lock
-                        </button>
-                        <button
-                            style={{ margin: "3px" }}
-                            className='deposit-button'
-                        >
-                            Withdraw
                         </button>
                     </div>
                 )}
