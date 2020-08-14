@@ -83,7 +83,7 @@ class Home extends Component {
     }
 
     render() {
-        let { address, isClient, connectAccount } = this.context;
+        let { address, escrow_index, connectAccount } = this.context;
         return (
             <div className='home'>
                 <div className='home-sub-container'>
@@ -101,7 +101,7 @@ class Home extends Component {
 
                     {this.state.validID ? (
                         address ? (
-                            isClient ? (
+                            escrow_index !== "" ? (
                                 <button
                                     className='custom-button'
                                     id='escrow'
@@ -110,22 +110,13 @@ class Home extends Component {
                                     View Escrow
                                 </button>
                             ) : (
-                                <div>
-                                    <button
-                                        className='custom-button'
-                                        id='register'
-                                        onClick={this.registerClickHandler}
-                                    >
-                                        Register Escrow
-                                    </button>
-                                    <button
-                                        className='custom-button'
-                                        id='escrow'
-                                        onClick={this.escrowClickHandler}
-                                    >
-                                        View Escrow
-                                    </button>
-                                </div>
+                                <button
+                                    className='custom-button'
+                                    id='register'
+                                    onClick={this.registerClickHandler}
+                                >
+                                    Register Escrow
+                                </button>
                             )
                         ) : (
                             <button

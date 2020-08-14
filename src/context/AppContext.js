@@ -4,10 +4,16 @@ import Web3 from "web3";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
-const { contract_addresses } = require("../utils/Constants");
-
-let lockerABI = require("../abi/Locker.json");
-let lockerAddress = contract_addresses.Locker;
+const lockerABI = require("../abi/Locker.json");
+const DAI_ABI = require("../abi/DaiAbi.json");
+const wETH_ABI = require("../abi/wETHAbi.json");
+const {
+    Locker,
+    KovanDAI,
+    KovanWETH,
+    RaidGuild,
+    LexArbitration,
+} = require("../utils/Constants").contract_addresses;
 
 const providerOptions = {
     walletconnect: {
@@ -43,9 +49,9 @@ class AppContextProvider extends Component {
         end_date: "",
         link_to_details: "",
         brief_description: "",
-        spoils_address: contract_addresses.RaidGuild,
+        spoils_address: RaidGuild,
         spoils_percent: 0.1,
-        resolver_address: contract_addresses.LexArbitration,
+        resolver_address: LexArbitration,
     };
 
     componentDidMount() {
@@ -54,9 +60,11 @@ class AppContextProvider extends Component {
                 `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_ID}`
             )
         );
-        const locker = new web3.eth.Contract(lockerABI, lockerAddress);
+        const locker = new web3.eth.Contract(lockerABI, Locker);
+        const DAI = new web3.eth.Contract(DAI_ABI, KovanDAI);
+        const wETH = new web3.eth.Contract(wETH_ABI, KovanWETH);
 
-        this.setState({ web3, locker });
+        this.setState({ web3, locker, DAI, wETH });
     }
 
     setAirtableState = (params) => {
@@ -91,7 +99,9 @@ class AppContextProvider extends Component {
         const provider = await web3Modal.connect();
         const web3 = new Web3(provider);
         const accounts = await web3.eth.getAccounts();
-        const locker = new web3.eth.Contract(lockerABI, lockerAddress);
+        const locker = new web3.eth.Contract(lockerABI, Locker);
+        const DAI = new web3.eth.Contract(DAI_ABI, KovanDAI);
+        const wETH = new web3.eth.Contract(wETH_ABI, KovanWETH);
         let chainID = await web3.eth.net.getId();
 
         let isClient = false;
@@ -110,6 +120,8 @@ class AppContextProvider extends Component {
             web3,
             isClient,
             locker,
+            DAI,
+            wETH,
             chainID,
         });
     };
