@@ -95,15 +95,72 @@ class Home extends Component {
             address,
             isMember,
             isClient,
+            chainID,
             escrow_index,
             isLoading,
             connectAccount,
         } = this.context;
+        let component;
+
+        if (isLoading) {
+            component = <Loading />;
+        } else if (this.state.validID) {
+            if (isClient || isMember) {
+                if (chainID.toString() !== "42") {
+                    component = <p>Switch to Kovan</p>;
+                } else if (escrow_index !== "") {
+                    component = (
+                        <button
+                            className='custom-button'
+                            id='escrow'
+                            onClick={this.escrowClickHandler}
+                        >
+                            View Escrow
+                        </button>
+                    );
+                } else {
+                    component = (
+                        <button
+                            className='custom-button'
+                            id='register'
+                            onClick={this.registerClickHandler}
+                        >
+                            Register Escrow
+                        </button>
+                    );
+                }
+            } else {
+                if (!address) {
+                    component = (
+                        <button
+                            className='custom-button'
+                            id='connect'
+                            style={{ margin: 0 }}
+                            onClick={connectAccount}
+                        >
+                            Connect Wallet
+                        </button>
+                    );
+                } else {
+                    component = <p>Neither a Member nor a Client</p>;
+                }
+            }
+        } else {
+            component = (
+                <button
+                    className='custom-button'
+                    style={{ margin: 0 }}
+                    onClick={this.validateID}
+                >
+                    Validate ID
+                </button>
+            );
+        }
+
         return (
             <div className='home'>
                 <div className='home-sub-container'>
                     <h1>LLC Raid Escrows</h1>
-
                     {this.state.validID ? null : (
                         <input
                             type='text'
@@ -111,53 +168,9 @@ class Home extends Component {
                             onChange={(event) => this.onChangeHandler(event)}
                         ></input>
                     )}
-
                     <p id='error-message'>ID not found!</p>
-
-                    {isLoading ? (
-                        <Loading />
-                    ) : this.state.validID ? (
-                        isClient || isMember ? (
-                            escrow_index !== "" ? (
-                                <button
-                                    className='custom-button'
-                                    id='escrow'
-                                    onClick={this.escrowClickHandler}
-                                >
-                                    View Escrow
-                                </button>
-                            ) : (
-                                <button
-                                    className='custom-button'
-                                    id='register'
-                                    onClick={this.registerClickHandler}
-                                >
-                                    Register Escrow
-                                </button>
-                            )
-                        ) : !address ? (
-                            <button
-                                className='custom-button'
-                                id='connect'
-                                style={{ margin: 0 }}
-                                onClick={connectAccount}
-                            >
-                                Connect Wallet
-                            </button>
-                        ) : (
-                            <p>Neither a Member nor a Client</p>
-                        )
-                    ) : (
-                        <button
-                            className='custom-button'
-                            style={{ margin: 0 }}
-                            onClick={this.validateID}
-                        >
-                            Validate ID
-                        </button>
-                    )}
+                    {component}
                 </div>
-
                 <img src={Banner} alt='Banner' />
             </div>
         );

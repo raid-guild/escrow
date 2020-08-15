@@ -198,6 +198,48 @@ const Escrow = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    let component;
+    if (state.cap === state.released || state.locked === "1") {
+        component = null;
+    } else if (state.confirmed === "0") {
+        component = (
+            <button className='deposit-button' onClick={onDepositHandler}>
+                Deposit
+            </button>
+        );
+    } else if (state.termination < new Date().getTime()) {
+        component = (
+            <button
+                style={{ margin: "3px" }}
+                className='deposit-button'
+                onClick={onWithdrawHandler}
+            >
+                Withdraw
+            </button>
+        );
+    } else if (context.isLoading) {
+        component = <Loading />;
+    } else {
+        component = (
+            <div>
+                <button
+                    style={{ margin: "3px" }}
+                    className='deposit-button'
+                    onClick={onReleaseHandler}
+                >
+                    Release
+                </button>
+                <button
+                    style={{ margin: "3px" }}
+                    className='deposit-button'
+                    onClick={onLockHandler}
+                >
+                    Lock
+                </button>
+            </div>
+        );
+    }
+
     return hash !== "" ? (
         <div className='success'>
             <h3>Transaction Received!</h3>
@@ -289,44 +331,7 @@ const Escrow = (props) => {
                             )}
                         </div>
                     </div>
-                    {state.cap === state.released ? null : context.isLoading ? (
-                        <Loading />
-                    ) : !state.isClient ? (
-                        <button className='deposit-button'>Lock</button>
-                    ) : state.confirmed === "0" ? (
-                        <button
-                            className='deposit-button'
-                            onClick={onDepositHandler}
-                        >
-                            Deposit
-                        </button>
-                    ) : state.locked === "1" ? null : state.termination <
-                      new Date().getTime() ? (
-                        <button
-                            style={{ margin: "3px" }}
-                            className='deposit-button'
-                            onClick={onWithdrawHandler}
-                        >
-                            Withdraw
-                        </button>
-                    ) : (
-                        <div>
-                            <button
-                                style={{ margin: "3px" }}
-                                className='deposit-button'
-                                onClick={onReleaseHandler}
-                            >
-                                Release
-                            </button>
-                            <button
-                                style={{ margin: "3px" }}
-                                className='deposit-button'
-                                onClick={onLockHandler}
-                            >
-                                Lock
-                            </button>
-                        </div>
-                    )}
+                    {component}
                 </div>
             )}
         </div>

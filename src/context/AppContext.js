@@ -126,7 +126,7 @@ class AppContextProvider extends Component {
             });
 
             provider.on("accountsChanged", (accounts) => {
-                this.connectAccount();
+                window.location.href = "/";
             });
 
             this.setState(
