@@ -169,7 +169,7 @@
   font-weight: bold;
 }
 
-.escrow .escrow-sub-container-two .deposit-button {
+.escrow .escrow-sub-container-two .custom-button {
   float: right;
   margin-top: 10px;
   border: none;
@@ -182,7 +182,7 @@
   border-radius: 3px;
 }
 
-.escrow .escrow-sub-container-two .deposit-button:hover {
+.escrow .escrow-sub-container-two .custom-button:hover {
   cursor: pointer;
   background-color: #000;
   color: #ff3864;

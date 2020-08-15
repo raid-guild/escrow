@@ -48,7 +48,7 @@
   .escrow .escrow-sub-container-two .card p {
     font-size: 1.2rem;
   }
-  .escrow .escrow-sub-container-two .deposit-button {
+  .escrow .escrow-sub-container-two .custom-button {
     font-size: 1.2rem;
     float: none;
   }
@@ -213,7 +213,7 @@
   .escrow .escrow-sub-container-two .card p {
     font-size: 0.7rem;
   }
-  .escrow .escrow-sub-container-two .deposit-button {
+  .escrow .escrow-sub-container-two .custom-button {
     font-size: 1rem;
   }
   .form .form-sub-container-two {

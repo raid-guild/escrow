@@ -199,11 +199,13 @@ const Escrow = (props) => {
     }, []);
 
     let component;
-    if (state.cap === state.released || state.locked === "1") {
+    if (context.isLoading) {
+        component = <Loading />;
+    } else if (state.cap === state.released || state.locked === "1") {
         component = null;
     } else if (state.confirmed === "0") {
         component = (
-            <button className='deposit-button' onClick={onDepositHandler}>
+            <button className='custom-button' onClick={onDepositHandler}>
                 Deposit
             </button>
         );
@@ -211,27 +213,25 @@ const Escrow = (props) => {
         component = (
             <button
                 style={{ margin: "3px" }}
-                className='deposit-button'
+                className='custom-button'
                 onClick={onWithdrawHandler}
             >
                 Withdraw
             </button>
         );
-    } else if (context.isLoading) {
-        component = <Loading />;
     } else {
         component = (
             <div>
                 <button
                     style={{ margin: "3px" }}
-                    className='deposit-button'
+                    className='custom-button'
                     onClick={onReleaseHandler}
                 >
                     Release
                 </button>
                 <button
                     style={{ margin: "3px" }}
-                    className='deposit-button'
+                    className='custom-button'
                     onClick={onLockHandler}
                 >
                     Lock

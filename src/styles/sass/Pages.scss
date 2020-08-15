@@ -127,7 +127,7 @@ $secondary-font: "Uncial Antiqua", cursive;
             }
         }
 
-        .deposit-button {
+        .custom-button {
             float: right;
             margin-top: 10px;
             border: none;
@@ -140,7 +140,7 @@ $secondary-font: "Uncial Antiqua", cursive;
             border-radius: 3px;
         }
 
-        .deposit-button:hover {
+        .custom-button:hover {
             cursor: pointer;
             background-color: #000;
             color: $primary-color;
