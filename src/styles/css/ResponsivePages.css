@@ -83,6 +83,9 @@
   .form .form-sub-container-two {
     height: auto;
   }
+  .success h3 {
+    font-size: 2rem;
+  }
 }
 
 @media only screen and (max-width: 635px) {
@@ -174,6 +177,12 @@
   .form .form-sub-container-two form label {
     font-size: 0.8rem;
   }
+  .success h3 {
+    font-size: 1.5rem;
+  }
+  .success .custom-button {
+    font-size: 1rem;
+  }
 }
 
 @media only screen and (max-width: 375px) {
@@ -222,6 +231,10 @@
   }
   .form .form-sub-container-two form label {
     font-size: 0.8rem;
+  }
+  .success p {
+    max-width: 70%;
+    text-align: center;
   }
 }
 /*# sourceMappingURL=ResponsivePages.css.map */

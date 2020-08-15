@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 
 import "../styles/css/Pages.css";
@@ -19,7 +19,13 @@ const Register = (props) => {
         spoils_address,
         spoils_percent,
         resolver_address,
+        address,
     } = context;
+
+    useEffect(() => {
+        if (address === "") return props.history.push("/");
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div className='register'>

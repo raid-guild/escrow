@@ -34,14 +34,17 @@ export const AppContext = createContext();
 
 class AppContextProvider extends Component {
     state = {
+        //web needs
         address: "",
         provider: "",
         web3: "",
         chainID: "",
         locker: "",
         client_address: "",
-        isClient: false,
+        resolver_address: LexArbitration,
+        spoils_address: RaidGuild,
         escrow_index: "",
+        //raid needs
         raid_id: "",
         project_name: "",
         client_name: "",
@@ -49,9 +52,11 @@ class AppContextProvider extends Component {
         end_date: "",
         link_to_details: "",
         brief_description: "",
-        spoils_address: RaidGuild,
+        //math needs
         spoils_percent: 0.1,
-        resolver_address: LexArbitration,
+        //checks
+        isClient: false,
+        isLoading: false,
     };
 
     componentDidMount() {
@@ -78,6 +83,7 @@ class AppContextProvider extends Component {
                 end_date: params.end_date,
                 link_to_details: params.link_to_details,
                 brief_description: params.brief_description,
+                internal_member: params.internal_member,
             },
             () => this.fetchLockerInfo()
         );
@@ -94,36 +100,56 @@ class AppContextProvider extends Component {
     };
 
     connectAccount = async () => {
-        web3Modal.clearCachedProvider();
+        try {
+            this.updateLoadingState();
+            web3Modal.clearCachedProvider();
 
-        const provider = await web3Modal.connect();
-        const web3 = new Web3(provider);
-        const accounts = await web3.eth.getAccounts();
-        const locker = new web3.eth.Contract(lockerABI, Locker);
-        const DAI = new web3.eth.Contract(DAI_ABI, KovanDAI);
-        const wETH = new web3.eth.Contract(wETH_ABI, KovanWETH);
-        let chainID = await web3.eth.net.getId();
+            const provider = await web3Modal.connect();
+            const web3 = new Web3(provider);
+            const accounts = await web3.eth.getAccounts();
+            const locker = new web3.eth.Contract(lockerABI, Locker);
+            const DAI = new web3.eth.Contract(DAI_ABI, KovanDAI);
+            const wETH = new web3.eth.Contract(wETH_ABI, KovanWETH);
+            let chainID = await web3.eth.net.getId();
 
-        let isClient = false;
+            let isClient = false;
+            let isMember = false;
 
-        provider.on("chainChanged", (chainId) => {
-            this.setState({ chainID: chainId });
-        });
+            if (accounts[0] === this.state.client_address) {
+                isClient = true;
+            } else if (accounts[0] === this.state.internal_member) {
+                isMember = true;
+            }
 
-        if (accounts[0] === this.state.client_address) {
-            isClient = true;
+            provider.on("chainChanged", (chainId) => {
+                this.setState({ chainID: chainId });
+            });
+
+            provider.on("accountsChanged", (accounts) => {
+                this.connectAccount();
+            });
+
+            this.setState(
+                {
+                    address: accounts[0],
+                    provider,
+                    web3,
+                    isClient,
+                    locker,
+                    DAI,
+                    wETH,
+                    chainID,
+                    isMember,
+                },
+                () => this.updateLoadingState()
+            );
+        } catch (err) {
+            this.updateLoadingState();
         }
+    };
 
-        this.setState({
-            address: accounts[0],
-            provider,
-            web3,
-            isClient,
-            locker,
-            DAI,
-            wETH,
-            chainID,
-        });
+    updateLoadingState = () => {
+        this.setState({ isLoading: !this.state.isLoading });
     };
 
     render() {
@@ -133,6 +159,7 @@ class AppContextProvider extends Component {
                     ...this.state,
                     setAirtableState: this.setAirtableState,
                     connectAccount: this.connectAccount,
+                    updateLoadingState: this.updateLoadingState,
                 }}
             >
                 {this.props.children}

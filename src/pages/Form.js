@@ -5,12 +5,17 @@ import "bulma";
 
 import "react-datepicker/dist/react-datepicker.css";
 
+import Loading from "../components/Loading";
+
 import "../styles/css/Pages.css";
 import "../styles/css/ResponsivePages.css";
 
 import { AppContext } from "../context/AppContext";
 
-const { contract_addresses } = require("../utils/Constants");
+const {
+    KovanDAI,
+    KovanWETH,
+} = require("../utils/Constants").contract_addresses;
 
 const BN = require("bignumber.js");
 BN.config({ DECIMAL_PLACES: 18 });
@@ -55,6 +60,7 @@ class Form extends Component {
         milestone_spoils_payment: 1,
         milestone_multisig_payment: 1,
         safety_valve_date: new Date(),
+        hash: "",
     };
 
     static contextType = AppContext;
@@ -141,6 +147,7 @@ class Form extends Component {
             resolver_address,
             raid_id,
             connectAccount,
+            updateLoadingState,
         } = this.context;
         let {
             client_address,
@@ -152,6 +159,9 @@ class Form extends Component {
             milestone_spoils_payment,
             safety_valve_date,
         } = this.state;
+        let payment_token_address = "";
+
+        if (address === "") return connectAccount();
 
         if (!web3.utils.isAddress(client_address))
             return alert("Client address is not valid!");
@@ -169,17 +179,15 @@ class Form extends Component {
         if (safety_valve_date.getDate() === new Date().getDate())
             return alert("Safety valve date cannot be today.");
 
-        let index = await locker.methods.lockerCount().call();
-        let payment_token_address = "";
         if (payment_token === "DAI") {
-            payment_token_address = contract_addresses.KovanDAI;
+            payment_token_address = KovanDAI;
         } else if (payment_token === "wETH") {
-            payment_token_address = contract_addresses.KovanWETH;
+            payment_token_address = KovanWETH;
         }
 
-        if (address === "") {
-            connectAccount();
-        } else {
+        let index = await locker.methods.lockerCount().call();
+        try {
+            updateLoadingState();
             await locker.methods
                 .registerLocker(
                     client_address,
@@ -216,34 +224,48 @@ class Form extends Component {
                     ).then((res) => res.json());
 
                     if (result === "SUCCESS") {
-                        alert(
-                            `The transaction hash is ${hash} & a locker will be created with an Index ${
-                                parseInt(index) + 1
-                            } when it confirms.`
-                        );
-                        this.setState(
-                            {
-                                client_address: "",
-                                multisig_address: "",
-                                total_payment: 0,
-                                payment_token: "",
-                                milestones: 0,
-                                milestone_payment: 0,
-                                safety_valve_date: new Date(),
-                                milestone_spoils_payment: 0,
-                                milestone_multisig_payment: 0,
-                            },
-                            () => this.props.history.push("/")
-                        );
+                        updateLoadingState();
+                        this.setState({
+                            client_address: "",
+                            multisig_address: "",
+                            total_payment: 0,
+                            payment_token: "",
+                            milestones: 0,
+                            milestone_payment: 0,
+                            safety_valve_date: new Date(),
+                            milestone_spoils_payment: 0,
+                            milestone_multisig_payment: 0,
+                            hash: hash,
+                        });
                     }
                 })
                 .on("error", (err) => console.log(err));
+        } catch (err) {
+            updateLoadingState();
         }
     };
 
     render() {
-        let { spoils_percent, end_date } = this.context;
-        return (
+        let { spoils_percent, end_date, isLoading } = this.context;
+        return this.state.hash !== "" ? (
+            <div className='success'>
+                <h3>Transaction Received!</h3>
+                <p>
+                    You can check the progress of your transaction{" "}
+                    <a
+                        href={`https://kovan.etherscan.io/tx/${this.state.hash}`}
+                    >
+                        here.
+                    </a>
+                </p>
+                <button
+                    className='custom-button'
+                    onClick={() => this.props.history.push("/")}
+                >
+                    Home
+                </button>
+            </div>
+        ) : (
             <div className='form'>
                 <div className='form-sub-container-one'>
                     <div>
@@ -316,13 +338,16 @@ class Form extends Component {
                             />
                         </div>
                     </form>
-
-                    <button
-                        className='custom-button'
-                        onClick={this.registerLocker}
-                    >
-                        Register
-                    </button>
+                    {isLoading ? (
+                        <Loading />
+                    ) : (
+                        <button
+                            className='custom-button'
+                            onClick={this.registerLocker}
+                        >
+                            Register
+                        </button>
+                    )}
                 </div>
             </div>
         );

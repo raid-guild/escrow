@@ -262,6 +262,48 @@
   color: #ff3864;
 }
 
+.success {
+  height: 100%;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border: 2px solid #ff3864;
+}
+
+.success h3 {
+  font-size: 3rem;
+  font-family: "Uncial Antiqua", cursive;
+}
+
+.success .custom-button {
+  margin-top: 20px;
+  border: none;
+  padding: 5px;
+  background-color: #ff3864;
+  color: #000;
+  font-family: "Mirza", cursive;
+  font-size: 1.5rem;
+  border: 2px solid #ff3864;
+  border-radius: 3px;
+}
+
+.success .custom-button:hover {
+  cursor: pointer;
+  background-color: #000;
+  color: #ff3864;
+}
+
 .form {
   height: 100%;
   width: 100%;

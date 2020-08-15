@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 
+import Loading from "../components/Loading";
+
 import Banner from "../assets/raid__banner-img.png";
 
 import "../styles/css/Pages.css";
@@ -17,7 +19,9 @@ class Home extends Component {
     static contextType = AppContext;
 
     validateID = async () => {
-        const { setAirtableState } = this.context;
+        const { setAirtableState, updateLoadingState } = this.context;
+
+        updateLoadingState();
 
         if (this.state.ID) {
             let result = await fetch(
@@ -47,6 +51,8 @@ class Home extends Component {
                         result["Relevant Link"] || "https://raidguild.org/",
                     brief_description:
                         result["Brief Summary"] || "Not Available",
+                    internal_member:
+                        result["Internal Member"] || "Not Available",
                 };
 
                 setAirtableState(params);
@@ -60,6 +66,8 @@ class Home extends Component {
                 }, 5000);
             }
         }
+
+        updateLoadingState();
     };
 
     onChangeHandler = (event) => {
@@ -83,7 +91,14 @@ class Home extends Component {
     }
 
     render() {
-        let { address, escrow_index, connectAccount } = this.context;
+        let {
+            address,
+            isMember,
+            isClient,
+            escrow_index,
+            isLoading,
+            connectAccount,
+        } = this.context;
         return (
             <div className='home'>
                 <div className='home-sub-container'>
@@ -99,8 +114,10 @@ class Home extends Component {
 
                     <p id='error-message'>ID not found!</p>
 
-                    {this.state.validID ? (
-                        address ? (
+                    {isLoading ? (
+                        <Loading />
+                    ) : this.state.validID ? (
+                        isClient || isMember ? (
                             escrow_index !== "" ? (
                                 <button
                                     className='custom-button'
@@ -118,7 +135,7 @@ class Home extends Component {
                                     Register Escrow
                                 </button>
                             )
-                        ) : (
+                        ) : !address ? (
                             <button
                                 className='custom-button'
                                 id='connect'
@@ -127,6 +144,8 @@ class Home extends Component {
                             >
                                 Connect Wallet
                             </button>
+                        ) : (
+                            <p>Neither a Member nor a Client</p>
                         )
                     ) : (
                         <button

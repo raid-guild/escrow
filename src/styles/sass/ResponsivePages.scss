@@ -105,6 +105,11 @@
             height: auto;
         }
     }
+    .success {
+        h3 {
+            font-size: 2rem;
+        }
+    }
 }
 
 @media only screen and (max-width: 635px) {
@@ -225,6 +230,14 @@
             }
         }
     }
+    .success {
+        h3 {
+            font-size: 1.5rem;
+        }
+        .custom-button {
+            font-size: 1rem;
+        }
+    }
 }
 
 @media only screen and (max-width: 375px) {
@@ -292,6 +305,12 @@
                     font-size: 0.8rem;
                 }
             }
+        }
+    }
+    .success {
+        p {
+            max-width: 70%;
+            text-align: center;
         }
     }
 }

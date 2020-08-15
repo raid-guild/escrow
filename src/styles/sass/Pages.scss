@@ -204,6 +204,37 @@ $secondary-font: "Uncial Antiqua", cursive;
     }
 }
 
+.success {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid $primary-color;
+    h3 {
+        font-size: 3rem;
+        font-family: "Uncial Antiqua", cursive;
+    }
+    .custom-button {
+        margin-top: 20px;
+        border: none;
+        padding: 5px;
+        background-color: $primary-color;
+        color: #000;
+        font-family: $primary-font;
+        font-size: 1.5rem;
+        border: 2px solid $primary-color;
+        border-radius: 3px;
+    }
+
+    .custom-button:hover {
+        cursor: pointer;
+        background-color: #000;
+        color: $primary-color;
+    }
+}
+
 .form {
     height: 100%;
     width: 100%;
