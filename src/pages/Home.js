@@ -21,53 +21,47 @@ class Home extends Component {
     validateID = async () => {
         const { setAirtableState, updateLoadingState } = this.context;
 
+        if (this.state.ID === "") return alert("ID cannot be empty!");
+
         updateLoadingState();
 
-        if (this.state.ID) {
-            let result = await fetch(
-                "https://guild-keeper.herokuapp.com/raids/validate",
-                {
-                    method: "POST",
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        ID: this.state.ID,
-                    }),
-                }
-            ).then((res) => res.json());
-
-            if (result !== "NOT_FOUND") {
-                let params = {
-                    escrow_index: result["Escrow Index"] || "",
-                    raid_id: this.state.ID,
-                    project_name: result["Name"] || "Not Available",
-                    client_name: result["Your Name"] || "Not Available",
-                    start_date: result["Date Added"] || "Not Available",
-                    end_date:
-                        result["Desired date of completion"] || "Not Available",
-                    link_to_details:
-                        result["Relevant Link"] || "https://raidguild.org/",
-                    brief_description:
-                        result["Brief Summary"] || "Not Available",
-                    internal_member:
-                        result["Internal Member"] || "Not Available",
-                };
-
-                setAirtableState(params);
-
-                this.setState({ validID: true });
-            } else {
-                let { error_message } = this.state;
-                error_message.style.visibility = "visible";
-                setTimeout(() => {
-                    error_message.style.visibility = "hidden";
-                }, 5000);
+        let result = await fetch(
+            "https://guild-keeper.herokuapp.com/raids/validate",
+            {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    ID: this.state.ID,
+                }),
             }
-        }
+        ).then((res) => res.json());
 
         updateLoadingState();
+
+        if (result !== "NOT_FOUND") {
+            let params = {
+                escrow_index: result["Escrow Index"] || "",
+                raid_id: this.state.ID,
+                project_name: result["Name"] || "Not Available",
+                client_name: result["Your Name"] || "Not Available",
+                start_date: result["Date Added"] || "Not Available",
+                end_date:
+                    result["Desired date of completion"] || "Not Available",
+                link_to_details:
+                    result["Relevant Link"] || "https://raidguild.org/",
+                brief_description: result["Brief Summary"] || "Not Available",
+                internal_member: result["Internal Member"] || "Not Available",
+            };
+
+            setAirtableState(params);
+
+            this.setState({ validID: true });
+        } else {
+            alert("ID not found!");
+        }
     };
 
     onChangeHandler = (event) => {
@@ -83,12 +77,6 @@ class Home extends Component {
         await this.validateID();
         if (this.state.validID) this.props.history.push("/escrow");
     };
-
-    componentDidMount() {
-        let error_message = document.querySelector("#error-message");
-        error_message.style.visibility = "hidden";
-        this.setState({ error_message });
-    }
 
     render() {
         let {
@@ -168,7 +156,6 @@ class Home extends Component {
                             onChange={(event) => this.onChangeHandler(event)}
                         ></input>
                     )}
-                    <p id='error-message'>ID not found!</p>
                     {component}
                 </div>
                 <img src={Banner} alt='Banner' />

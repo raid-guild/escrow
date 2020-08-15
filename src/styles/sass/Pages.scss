@@ -42,6 +42,7 @@ $secondary-font: "Uncial Antiqua", cursive;
             color: $primary-color;
             font-family: $primary-font;
             font-size: 1.5rem;
+            margin-bottom: 15px;
         }
 
         input:hover {
@@ -51,10 +52,6 @@ $secondary-font: "Uncial Antiqua", cursive;
         ::placeholder {
             color: $primary-color;
             opacity: 1;
-        }
-
-        #error-message {
-            margin-bottom: 10px;
         }
 
         .custom-button {
