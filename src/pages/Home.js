@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
+import "bulma";
 
 import Loading from "../components/Loading";
 
@@ -53,7 +54,6 @@ class Home extends Component {
                 link_to_details:
                     result["Relevant Link"] || "https://raidguild.org/",
                 brief_description: result["Brief Summary"] || "Not Available",
-                internal_member: result["Internal Member"] || "Not Available",
             };
 
             setAirtableState(params);
@@ -81,8 +81,6 @@ class Home extends Component {
     render() {
         let {
             address,
-            isMember,
-            isClient,
             chainID,
             escrow_index,
             isLoading,
@@ -93,10 +91,10 @@ class Home extends Component {
         if (isLoading) {
             component = <Loading />;
         } else if (this.state.validID) {
-            if (isClient || isMember) {
-                if (chainID.toString() !== "42") {
-                    component = <p>Switch to Kovan</p>;
-                } else if (escrow_index !== "") {
+            if (chainID.toString() !== "42") {
+                component = <p>Switch to Kovan</p>;
+            } else if (address) {
+                if (escrow_index !== "") {
                     component = (
                         <button
                             className='custom-button'
@@ -118,20 +116,16 @@ class Home extends Component {
                     );
                 }
             } else {
-                if (!address) {
-                    component = (
-                        <button
-                            className='custom-button'
-                            id='connect'
-                            style={{ margin: 0 }}
-                            onClick={connectAccount}
-                        >
-                            Connect Wallet
-                        </button>
-                    );
-                } else {
-                    component = <p>Neither a Member nor a Client</p>;
-                }
+                component = (
+                    <button
+                        className='custom-button'
+                        id='connect'
+                        style={{ margin: 0 }}
+                        onClick={connectAccount}
+                    >
+                        Connect Wallet
+                    </button>
+                );
             }
         } else {
             component = (

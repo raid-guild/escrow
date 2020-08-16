@@ -19,6 +19,7 @@ const Escrow = (props) => {
     const [state, setState] = useState({});
     const [isData, setData] = useState(false);
     const [hash, setHash] = useState("");
+    const [modal, setModal] = useState(false);
 
     const onDepositHandler = async () => {
         let { address, cap, tokenType, wETHBalance } = state;
@@ -219,7 +220,7 @@ const Escrow = (props) => {
                 Withdraw
             </button>
         );
-    } else {
+    } else if (context.isClient) {
         component = (
             <div>
                 <button
@@ -237,6 +238,16 @@ const Escrow = (props) => {
                     Lock
                 </button>
             </div>
+        );
+    } else {
+        component = (
+            <button
+                style={{ margin: "3px" }}
+                className='custom-button'
+                onClick={() => setModal(true)}
+            >
+                Lock
+            </button>
         );
     }
 
@@ -334,6 +345,32 @@ const Escrow = (props) => {
                     {component}
                 </div>
             )}
+            <div className={`modal ${modal ? "is-active" : null}`}>
+                <div className='modal-background'></div>
+                <div className='modal-content'>
+                    <p>
+                        Initiate a transaction{" "}
+                        <a
+                            href={`https://kovan.etherscan.io/address/${Locker}`}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                        >
+                            here
+                        </a>{" "}
+                        to lock funds.
+                    </p>
+                    <div className='points'>
+                        <li>Point one</li>
+                        <li>Point two</li>
+                        <li>Point three</li>
+                    </div>
+                </div>
+                <button
+                    className='modal-close is-large'
+                    aria-label='close'
+                    onClick={() => setModal(false)}
+                ></button>
+            </div>
         </div>
     );
 };

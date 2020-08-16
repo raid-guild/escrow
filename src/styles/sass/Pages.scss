@@ -79,6 +79,22 @@ $secondary-font: "Uncial Antiqua", cursive;
 .escrow {
     justify-content: space-around;
 
+    .modal {
+        .modal-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            color: $primary-color;
+
+            p {
+                max-width: 80%;
+                text-align: center;
+            }
+        }
+    }
+
     .escrow-sub-container-one {
         display: flex;
         flex-direction: column;

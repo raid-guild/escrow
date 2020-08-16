@@ -59,7 +59,7 @@ class AppContextProvider extends Component {
         isLoading: false,
     };
 
-    componentDidMount() {
+    async componentDidMount() {
         const web3 = new Web3(
             new Web3.providers.HttpProvider(
                 `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_ID}`
@@ -68,8 +68,9 @@ class AppContextProvider extends Component {
         const locker = new web3.eth.Contract(lockerABI, Locker);
         const DAI = new web3.eth.Contract(DAI_ABI, KovanDAI);
         const wETH = new web3.eth.Contract(wETH_ABI, KovanWETH);
+        const chainID = await web3.eth.net.getId();
 
-        this.setState({ web3, locker, DAI, wETH });
+        this.setState({ web3, locker, DAI, wETH, chainID });
     }
 
     setAirtableState = (params) => {
@@ -83,7 +84,6 @@ class AppContextProvider extends Component {
                 end_date: params.end_date,
                 link_to_details: params.link_to_details,
                 brief_description: params.brief_description,
-                internal_member: params.internal_member,
             },
             () => this.fetchLockerInfo()
         );
@@ -113,12 +113,9 @@ class AppContextProvider extends Component {
             let chainID = await web3.eth.net.getId();
 
             let isClient = false;
-            let isMember = false;
 
             if (accounts[0] === this.state.client_address) {
                 isClient = true;
-            } else if (accounts[0] === this.state.internal_member) {
-                isMember = true;
             }
 
             provider.on("chainChanged", (chainId) => {
@@ -139,7 +136,6 @@ class AppContextProvider extends Component {
                     DAI,
                     wETH,
                     chainID,
-                    isMember,
                 },
                 () => this.updateLoadingState()
             );
