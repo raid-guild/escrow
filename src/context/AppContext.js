@@ -34,17 +34,26 @@ export const AppContext = createContext();
 
 class AppContextProvider extends Component {
     state = {
-        //web needs
+        //web3 needs
         address: "",
         provider: "",
         web3: "",
         chainID: "",
+        //contracts & address
         locker: "",
         client_address: "",
         resolver_address: LexArbitration,
         spoils_address: RaidGuild,
+        //locker info
+        cap: "",
+        confirmed: "",
+        locked: "",
+        released: "",
+        token: "",
+        termination: "",
+        client: "",
+        //airtable info
         escrow_index: "",
-        //raid needs
         raid_id: "",
         project_name: "",
         client_name: "",
@@ -91,11 +100,26 @@ class AppContextProvider extends Component {
 
     fetchLockerInfo = async () => {
         if (this.state.escrow_index !== "") {
-            let result = await this.state.locker.methods
+            let {
+                cap,
+                confirmed,
+                locked,
+                released,
+                token,
+                termination,
+                client,
+            } = await this.state.locker.methods
                 .lockers(this.state.escrow_index)
                 .call();
-            this.setState({ client_address: result.client });
-            // console.log(result);
+            this.setState({
+                cap,
+                confirmed,
+                locked,
+                released,
+                token,
+                termination,
+                client,
+            });
         }
     };
 
@@ -114,7 +138,7 @@ class AppContextProvider extends Component {
 
             let isClient = false;
 
-            if (accounts[0] === this.state.client_address) {
+            if (accounts[0] === this.state.client) {
                 isClient = true;
             }
 

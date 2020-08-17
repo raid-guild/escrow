@@ -14,6 +14,8 @@ const {
     KovanWETH,
 } = require("../utils/Constants").contract_addresses;
 
+const { lock_instructions } = require("../utils/Constants");
+
 const Escrow = (props) => {
     const context = useContext(AppContext);
     const [state, setState] = useState({});
@@ -22,74 +24,74 @@ const Escrow = (props) => {
     const [modal, setModal] = useState(false);
 
     const onDepositHandler = async () => {
-        let { address, cap, tokenType, wETHBalance } = state;
-        let {
-            web3,
-            locker,
-            DAI,
-            wETH,
-            escrow_index,
-            updateLoadingState,
-        } = context;
-        let contract = tokenType === "DAI" ? DAI : wETH;
-        cap = web3.utils.toWei(cap);
+        let contract = state.tokenType === "DAI" ? context.DAI : context.wETH;
+
+        if (state.DAIBalance < context.cap && state.tokenType === "DAI")
+            return alert(
+                "Insufficient funds! Please add more DAI to you wallet."
+            );
+
+        let allowance = await contract.methods
+            .allowance(context.address, Locker)
+            .call();
 
         try {
-            updateLoadingState();
-            if (tokenType === "DAI") {
-                await contract.methods
-                    .approve(Locker, cap)
-                    .send({ from: address });
-                await locker.methods
-                    .depositLocker(escrow_index)
+            context.updateLoadingState();
+            if (state.tokenType === "DAI") {
+                if (allowance < context.cap) {
+                    await contract.methods
+                        .approve(Locker, context.cap)
+                        .send({ from: context.address });
+                }
+                await context.locker.methods
+                    .depositLocker(context.escrow_index)
                     .send({
-                        from: address,
+                        from: context.address,
                     })
                     .once("transactionHash", (txHash) => {
-                        updateLoadingState();
+                        context.updateLoadingState();
                         setHash(txHash);
                     });
-            } else if (tokenType === "wETH") {
-                if (wETHBalance >= cap) {
-                    await contract.methods
-                        .approve(Locker, cap)
-                        .send({ from: address });
-
-                    await locker.methods
-                        .depositLocker(escrow_index)
+            } else if (state.tokenType === "wETH") {
+                if (state.wETHBalance >= context.cap) {
+                    if (allowance < context.cap) {
+                        await contract.methods
+                            .approve(Locker, context.cap)
+                            .send({ from: context.address });
+                    }
+                    await context.locker.methods
+                        .depositLocker(context.escrow_index)
                         .send({
-                            from: address,
+                            from: context.address,
                         })
                         .once("transactionHash", (txHash) => {
-                            updateLoadingState();
+                            context.updateLoadingState();
                             setHash(txHash);
                         });
                 } else {
-                    await locker.methods
-                        .depositLocker(escrow_index)
+                    await context.locker.methods
+                        .depositLocker(context.escrow_index)
                         .send({
-                            from: address,
-                            value: cap,
+                            from: context.address,
+                            value: context.cap,
                         })
                         .once("transactionHash", (txHash) => {
-                            updateLoadingState();
+                            context.updateLoadingState();
                             setHash(txHash);
                         });
                 }
             }
         } catch (err) {
-            updateLoadingState();
+            context.updateLoadingState();
         }
     };
 
     const onReleaseHandler = async () => {
         try {
             context.updateLoadingState();
-            let { address } = state;
-            let { locker, escrow_index } = context;
-            await locker.methods
-                .release(escrow_index)
-                .send({ from: address })
+            await context.locker.methods
+                .release(context.escrow_index)
+                .send({ from: context.address })
                 .once("transactionHash", (hash) => {
                     context.updateLoadingState();
                     setHash(hash);
@@ -102,11 +104,9 @@ const Escrow = (props) => {
     const onLockHandler = async () => {
         try {
             context.updateLoadingState();
-            let { address } = state;
-            let { locker, escrow_index } = context;
-            await locker.methods
-                .lock(escrow_index, "0x0")
-                .send({ from: address })
+            await context.locker.methods
+                .lock(context.escrow_index, "0x0")
+                .send({ from: context.address })
                 .once("transactionHash", (hash) => {
                     context.updateLoadingState();
                     setHash(hash);
@@ -119,11 +119,9 @@ const Escrow = (props) => {
     const onWithdrawHandler = async () => {
         try {
             context.updateLoadingState();
-            let { address } = state;
-            let { locker, escrow_index } = context;
-            await locker.methods
-                .withdraw(escrow_index)
-                .send({ from: address })
+            await context.locker.methods
+                .withdraw(context.escrow_index)
+                .send({ from: context.address })
                 .once("transactionHash", (hash) => {
                     context.updateLoadingState();
                     setHash(hash);
@@ -134,61 +132,33 @@ const Escrow = (props) => {
     };
 
     const initData = async () => {
-        let {
-            web3,
-            wETH,
-            address,
-            locker,
-            escrow_index,
-            client_name,
-            project_name,
-            start_date,
-            end_date,
-            link_to_details,
-            brief_description,
-            isClient,
-        } = context;
+        if (context.locker === "") return props.history.push("/");
 
-        if (locker === "") return props.history.push("/");
-
-        let result = await locker.methods.lockers(escrow_index).call();
-        let {
-            cap,
-            confirmed,
-            locked,
-            released,
-            resolver,
-            token,
-            termination,
-        } = result;
-
-        cap = web3.utils.fromWei(cap, "ether");
-        released = web3.utils.fromWei(released, "ether");
+        let frontend_cap = context.web3.utils.fromWei(context.cap, "ether");
+        let frontend_released = context.web3.utils.fromWei(
+            context.released,
+            "ether"
+        );
 
         let tokenType = "";
-        if (token === KovanDAI) tokenType = "DAI";
-        if (token === KovanWETH) tokenType = "wETH";
+        if (context.token.toLowerCase() === KovanDAI.toLowerCase())
+            tokenType = "DAI";
+        if (context.token.toLowerCase() === KovanWETH.toLowerCase())
+            tokenType = "wETH";
 
-        let wETHBalance = await wETH.methods.balanceOf(address).call();
+        let wETHBalance = await context.wETH.methods
+            .balanceOf(context.address)
+            .call();
+        let DAIBalance = await context.DAI.methods
+            .balanceOf(context.address)
+            .call();
 
         setState({
-            address,
-            cap,
-            confirmed,
-            locked,
-            released,
-            resolver,
-            token,
             tokenType,
-            termination,
-            client_name,
-            project_name,
-            start_date,
-            end_date,
-            link_to_details,
-            brief_description,
-            isClient,
+            DAIBalance,
             wETHBalance,
+            frontend_cap,
+            frontend_released,
         });
 
         setData(true);
@@ -202,43 +172,45 @@ const Escrow = (props) => {
     let component;
     if (context.isLoading) {
         component = <Loading />;
-    } else if (state.cap === state.released || state.locked === "1") {
+    } else if (context.cap === context.released || context.locked === "1") {
         component = null;
-    } else if (state.confirmed === "0") {
-        component = (
-            <button className='custom-button' onClick={onDepositHandler}>
-                Deposit
-            </button>
-        );
-    } else if (state.termination < new Date().getTime()) {
-        component = (
-            <button
-                style={{ margin: "3px" }}
-                className='custom-button'
-                onClick={onWithdrawHandler}
-            >
-                Withdraw
-            </button>
-        );
     } else if (context.isClient) {
-        component = (
-            <div>
+        if (context.confirmed === "0") {
+            component = (
+                <button className='custom-button' onClick={onDepositHandler}>
+                    Deposit
+                </button>
+            );
+        } else if (context.termination < new Date().getTime()) {
+            component = (
                 <button
                     style={{ margin: "3px" }}
                     className='custom-button'
-                    onClick={onReleaseHandler}
+                    onClick={onWithdrawHandler}
                 >
-                    Release
+                    Withdraw
                 </button>
-                <button
-                    style={{ margin: "3px" }}
-                    className='custom-button'
-                    onClick={onLockHandler}
-                >
-                    Lock
-                </button>
-            </div>
-        );
+            );
+        } else {
+            component = (
+                <div>
+                    <button
+                        style={{ margin: "3px" }}
+                        className='custom-button'
+                        onClick={onReleaseHandler}
+                    >
+                        Release
+                    </button>
+                    <button
+                        style={{ margin: "3px" }}
+                        className='custom-button'
+                        onClick={onLockHandler}
+                    >
+                        Lock
+                    </button>
+                </div>
+            );
+        }
     } else {
         component = (
             <button
@@ -268,20 +240,20 @@ const Escrow = (props) => {
     ) : (
         <div className='escrow'>
             <div className='escrow-sub-container-one'>
-                <h2>{state.client_name}</h2>
-                <h1>{state.project_name}</h1>
+                <h2>{context.client_name}</h2>
+                <h1>{context.project_name}</h1>
                 <br></br>
-                <p>Start: {state.start_date}</p>
-                <p>Planned End: {state.end_date}</p>
+                <p>Start: {context.start_date}</p>
+                <p>Planned End: {context.end_date}</p>
                 <br></br>
                 <a
-                    href={state.link_to_details}
+                    href={context.link_to_details}
                     target='_blank'
                     rel='noopener noreferrer'
                 >
                     Link to details of agreement
                 </a>
-                <p>{state.brief_description}</p>
+                <p>{context.brief_description}</p>
             </div>
             {!isData ? (
                 Loading
@@ -292,14 +264,15 @@ const Escrow = (props) => {
                             <p>
                                 Total Project Payment
                                 <span>
-                                    {Math.round(state.cap)} {state.tokenType}
+                                    {Number(state.frontend_cap).toFixed(2)}{" "}
+                                    {state.tokenType}
                                 </span>
                             </p>
                             <p>
                                 Safety Valve Withdrawal Date
                                 <span>
                                     {new Date(
-                                        Number(state.termination)
+                                        Number(context.termination)
                                     ).toDateString()}
                                 </span>
                             </p>
@@ -309,29 +282,29 @@ const Escrow = (props) => {
                             <p>
                                 Total Released to Date
                                 <span>
-                                    {Number(state.released).toFixed(2)}{" "}
+                                    {Number(state.frontend_released).toFixed(2)}{" "}
                                     {state.tokenType}
                                 </span>
                             </p>
                         </div>
                         <div>
                             {/* <p>Next Milestone</p> */}
-                            {state.confirmed === "0" ? (
+                            {context.confirmed === "0" ? (
                                 <p style={{ color: "#ff3864" }}>
                                     Total Due to Escrow Today
                                     <span>
-                                        {Math.round(state.cap)}{" "}
+                                        {Number(state.frontend_cap).toFixed(2)}{" "}
                                         {state.tokenType}
                                     </span>
                                 </p>
                             ) : (
                                 <p style={{ color: "#ff3864" }}>
-                                    {state.locked === "1"
+                                    {context.locked === "1"
                                         ? "Funds Locked"
-                                        : state.termination <
+                                        : context.termination <
                                           new Date().getTime()
                                         ? "Safety valve date due"
-                                        : state.cap === state.released
+                                        : context.cap === context.released
                                         ? "All funds released"
                                         : "Release Milestone funds"}
 
@@ -360,9 +333,9 @@ const Escrow = (props) => {
                         to lock funds.
                     </p>
                     <div className='points'>
-                        <li>Point one</li>
-                        <li>Point two</li>
-                        <li>Point three</li>
+                        {lock_instructions.map((instruction, index) => {
+                            return <li key={index}>{instruction}</li>;
+                        })}
                     </div>
                 </div>
                 <button

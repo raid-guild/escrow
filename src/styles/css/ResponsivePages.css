@@ -86,6 +86,9 @@
   .success h3 {
     font-size: 2rem;
   }
+  .escrow .modal .modal-content {
+    max-width: 80%;
+  }
 }
 
 @media only screen and (max-width: 635px) {
@@ -110,6 +113,9 @@
     font-size: 1.2rem;
   }
   .home .custom-button {
+    font-size: 1rem;
+  }
+  .escrow .modal .modal-content {
     font-size: 1rem;
   }
   .escrow .escrow-sub-container-one {
@@ -182,6 +188,9 @@
   }
   .success .custom-button {
     font-size: 1rem;
+  }
+  .escrow .modal .modal-content {
+    font-size: 0.8rem;
   }
 }
 

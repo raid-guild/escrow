@@ -72,7 +72,7 @@ class Form extends Component {
             return this.props.history.push("/");
         }
 
-        if (end_date !== "") {
+        if (end_date !== "Not Available") {
             this.setState({ safety_valve_date: new Date(end_date) });
         }
 

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useContext } from "react";
 import { withRouter } from "react-router-dom";
 import "bulma";
 
@@ -11,20 +11,15 @@ import "../styles/css/ResponsivePages.css";
 
 import { AppContext } from "../context/AppContext";
 
-class Home extends Component {
-    state = {
-        ID: "",
-        validID: false,
-    };
+const Home = (props) => {
+    const context = useContext(AppContext);
+    const [ID, setID] = useState("");
+    const [validID, updateValidID] = useState(false);
 
-    static contextType = AppContext;
+    const validateID = async () => {
+        if (ID === "") return alert("ID cannot be empty!");
 
-    validateID = async () => {
-        const { setAirtableState, updateLoadingState } = this.context;
-
-        if (this.state.ID === "") return alert("ID cannot be empty!");
-
-        updateLoadingState();
+        context.updateLoadingState();
 
         let result = await fetch(
             "https://guild-keeper.herokuapp.com/raids/validate",
@@ -35,17 +30,17 @@ class Home extends Component {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    ID: this.state.ID,
+                    ID: ID,
                 }),
             }
         ).then((res) => res.json());
 
-        updateLoadingState();
+        context.updateLoadingState();
 
         if (result !== "NOT_FOUND") {
             let params = {
                 escrow_index: result["Escrow Index"] || "",
-                raid_id: this.state.ID,
+                raid_id: ID,
                 project_name: result["Name"] || "Not Available",
                 client_name: result["Your Name"] || "Not Available",
                 start_date: result["Date Added"] || "Not Available",
@@ -56,74 +51,49 @@ class Home extends Component {
                 brief_description: result["Brief Summary"] || "Not Available",
             };
 
-            setAirtableState(params);
+            context.setAirtableState(params);
 
-            this.setState({ validID: true });
+            updateValidID(true);
         } else {
             alert("ID not found!");
         }
     };
 
-    onChangeHandler = (event) => {
-        this.setState({ ID: event.target.value });
+    const registerClickHandler = async () => {
+        await validateID();
+        if (validID) props.history.push("/register");
     };
 
-    registerClickHandler = async () => {
-        await this.validateID();
-        if (this.state.validID) this.props.history.push("/register");
+    const escrowClickHandler = async () => {
+        await validateID();
+        if (validID) props.history.push("/escrow");
     };
 
-    escrowClickHandler = async () => {
-        await this.validateID();
-        if (this.state.validID) this.props.history.push("/escrow");
-    };
-
-    render() {
-        let {
-            address,
-            chainID,
-            escrow_index,
-            isLoading,
-            connectAccount,
-        } = this.context;
-        let component;
-
-        if (isLoading) {
-            component = <Loading />;
-        } else if (this.state.validID) {
-            if (chainID.toString() !== "42") {
-                component = <p>Switch to Kovan</p>;
-            } else if (address) {
-                if (escrow_index !== "") {
-                    component = (
-                        <button
-                            className='custom-button'
-                            id='escrow'
-                            onClick={this.escrowClickHandler}
-                        >
-                            View Escrow
-                        </button>
-                    );
-                } else {
-                    component = (
-                        <button
-                            className='custom-button'
-                            id='register'
-                            onClick={this.registerClickHandler}
-                        >
-                            Register Escrow
-                        </button>
-                    );
-                }
+    let component;
+    if (context.isLoading) {
+        component = <Loading />;
+    } else if (validID) {
+        if (context.chainID.toString() !== "42") {
+            component = <p>Switch to Kovan</p>;
+        } else if (context.address) {
+            if (context.escrow_index !== "") {
+                component = (
+                    <button
+                        className='custom-button'
+                        id='escrow'
+                        onClick={escrowClickHandler}
+                    >
+                        View Escrow
+                    </button>
+                );
             } else {
                 component = (
                     <button
                         className='custom-button'
-                        id='connect'
-                        style={{ margin: 0 }}
-                        onClick={connectAccount}
+                        id='register'
+                        onClick={registerClickHandler}
                     >
-                        Connect Wallet
+                        Register Escrow
                     </button>
                 );
             }
@@ -131,31 +101,42 @@ class Home extends Component {
             component = (
                 <button
                     className='custom-button'
+                    id='connect'
                     style={{ margin: 0 }}
-                    onClick={this.validateID}
+                    onClick={context.connectAccount}
                 >
-                    Validate ID
+                    Connect Wallet
                 </button>
             );
         }
-
-        return (
-            <div className='home'>
-                <div className='home-sub-container'>
-                    <h1>LLC Raid Escrows</h1>
-                    {this.state.validID ? null : (
-                        <input
-                            type='text'
-                            placeholder='Enter Raid ID'
-                            onChange={(event) => this.onChangeHandler(event)}
-                        ></input>
-                    )}
-                    {component}
-                </div>
-                <img src={Banner} alt='Banner' />
-            </div>
+    } else {
+        component = (
+            <button
+                className='custom-button'
+                style={{ margin: 0 }}
+                onClick={validateID}
+            >
+                Validate ID
+            </button>
         );
     }
-}
+
+    return (
+        <div className='home'>
+            <div className='home-sub-container'>
+                <h1>LLC Raid Escrows</h1>
+                {validID ? null : (
+                    <input
+                        type='text'
+                        placeholder='Enter Raid ID'
+                        onChange={(event) => setID(event.target.value)}
+                    ></input>
+                )}
+                {component}
+            </div>
+            <img src={Banner} alt='Banner' />
+        </div>
+    );
+};
 
 export default withRouter(Home);

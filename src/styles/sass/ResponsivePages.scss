@@ -110,6 +110,13 @@
             font-size: 2rem;
         }
     }
+    .escrow {
+        .modal {
+            .modal-content {
+                max-width: 80%;
+            }
+        }
+    }
 }
 
 @media only screen and (max-width: 635px) {
@@ -137,6 +144,11 @@
         }
     }
     .escrow {
+        .modal {
+            .modal-content {
+                font-size: 1rem;
+            }
+        }
         .escrow-sub-container-one {
             margin-bottom: 10px;
 
@@ -236,6 +248,13 @@
         }
         .custom-button {
             font-size: 1rem;
+        }
+    }
+    .escrow {
+        .modal {
+            .modal-content {
+                font-size: 0.8rem;
+            }
         }
     }
 }
