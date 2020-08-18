@@ -63,7 +63,9 @@
                 }
             }
 
-            .custom-button {
+            .custom-button,
+            .lock-button,
+            .withdraw-button {
                 font-size: 1.2rem;
                 float: none;
             }
@@ -113,6 +115,7 @@
     .escrow {
         .modal {
             .modal-content {
+                font-size: 1rem;
                 max-width: 80%;
             }
         }
@@ -147,6 +150,9 @@
         .modal {
             .modal-content {
                 font-size: 1rem;
+                p {
+                    font-size: 1.1rem;
+                }
             }
         }
         .escrow-sub-container-one {
@@ -254,6 +260,7 @@
         .modal {
             .modal-content {
                 font-size: 0.8rem;
+                max-width: 90%;
             }
         }
     }
@@ -280,6 +287,15 @@
         }
     }
     .escrow {
+        .modal {
+            .modal-content {
+                font-size: 0.7rem;
+                p {
+                    font-size: 1rem;
+                }
+            }
+        }
+
         .escrow-sub-container-one {
             h2 {
                 font-size: 1.2rem;
@@ -301,7 +317,9 @@
                 }
             }
 
-            .custom-button {
+            .custom-button,
+            .lock-button,
+            .withdraw-button {
                 font-size: 1rem;
             }
         }

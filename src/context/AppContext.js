@@ -1,6 +1,7 @@
 import React, { Component, createContext } from "react";
 
 import Web3 from "web3";
+import ethers from "ethers";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
@@ -136,6 +137,15 @@ class AppContextProvider extends Component {
             const wETH = new web3.eth.Contract(wETH_ABI, KovanWETH);
             let chainID = await web3.eth.net.getId();
 
+            let ethers_locker = new ethers.Contract(
+                Locker,
+                lockerABI,
+                new ethers.providers.InfuraProvider(
+                    "kovan",
+                    process.env.REACT_APP_INFURA_ID
+                )
+            );
+
             let isClient = false;
 
             if (accounts[0] === this.state.client) {
@@ -160,6 +170,7 @@ class AppContextProvider extends Component {
                     DAI,
                     wETH,
                     chainID,
+                    ethers_locker,
                 },
                 () => this.updateLoadingState()
             );

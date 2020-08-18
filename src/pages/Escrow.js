@@ -14,8 +14,6 @@ const {
     KovanWETH,
 } = require("../utils/Constants").contract_addresses;
 
-const { lock_instructions } = require("../utils/Constants");
-
 const Escrow = (props) => {
     const context = useContext(AppContext);
     const [state, setState] = useState({});
@@ -153,12 +151,47 @@ const Escrow = (props) => {
             .balanceOf(context.address)
             .call();
 
+        let milestone_payment = "";
+        let next_milestone = "";
+        if (context.confirmed === "1") {
+            let event_info;
+
+            try {
+                let events = await context.ethers_locker.queryFilter(
+                    "RegisterLocker"
+                );
+                event_info = events.filter(
+                    (event) =>
+                        parseInt(event.args.index._hex) ===
+                        parseInt(context.escrow_index)
+                );
+            } catch (err) {
+                console.log(err);
+            }
+
+            milestone_payment = parseInt(event_info[0].args.amount[0]._hex);
+            let total_milestones = parseInt(context.cap) / milestone_payment;
+            let milestones_left =
+                (parseInt(context.cap) - parseInt(context.released)) /
+                milestone_payment;
+            let current_milestone = total_milestones - milestones_left;
+            total_milestones = Math.round(total_milestones);
+            milestones_left = Math.round(milestones_left);
+            next_milestone = Math.round(current_milestone) + 1;
+
+            milestone_payment = context.web3.utils.fromWei(
+                milestone_payment.toString()
+            );
+        }
+
         setState({
             tokenType,
             DAIBalance,
             wETHBalance,
             frontend_cap,
             frontend_released,
+            milestone_payment,
+            next_milestone,
         });
 
         setData(true);
@@ -185,7 +218,7 @@ const Escrow = (props) => {
             component = (
                 <button
                     style={{ margin: "3px" }}
-                    className='custom-button'
+                    className='withdraw-button'
                     onClick={onWithdrawHandler}
                 >
                     Withdraw
@@ -203,7 +236,7 @@ const Escrow = (props) => {
                     </button>
                     <button
                         style={{ margin: "3px" }}
-                        className='custom-button'
+                        className='lock-button'
                         onClick={onLockHandler}
                     >
                         Lock
@@ -215,7 +248,7 @@ const Escrow = (props) => {
         component = (
             <button
                 style={{ margin: "3px" }}
-                className='custom-button'
+                className='lock-button'
                 onClick={() => setModal(true)}
             >
                 Lock
@@ -288,7 +321,17 @@ const Escrow = (props) => {
                             </p>
                         </div>
                         <div>
-                            {/* <p>Next Milestone</p> */}
+                            {context.confirmed !== 0 &&
+                            context.locked !== "1" &&
+                            context.termination > new Date().getTime() ? (
+                                <p>
+                                    Next Milestone
+                                    <span>
+                                        Milestone #{state.next_milestone}
+                                    </span>
+                                </p>
+                            ) : null}
+
                             {context.confirmed === "0" ? (
                                 <p style={{ color: "#ff3864" }}>
                                     Total Due to Escrow Today
@@ -306,11 +349,16 @@ const Escrow = (props) => {
                                         ? "Safety valve date due"
                                         : context.cap === context.released
                                         ? "All funds released"
-                                        : "Release Milestone funds"}
-
-                                    {/* <span>
-                                    {state.locked} {state.tokenType}
-                                </span> */}
+                                        : "Next amount to release"}
+                                    {context.confirmed !== 0 &&
+                                    context.locked !== "1" &&
+                                    context.termination >
+                                        new Date().getTime() ? (
+                                        <span>
+                                            {state.milestone_payment}{" "}
+                                            {state.tokenType}
+                                        </span>
+                                    ) : null}
                                 </p>
                             )}
                         </div>
@@ -322,21 +370,58 @@ const Escrow = (props) => {
                 <div className='modal-background'></div>
                 <div className='modal-content'>
                     <p>
-                        Initiate a transaction{" "}
-                        <a
-                            href={`https://kovan.etherscan.io/address/${Locker}`}
-                            target='_blank'
-                            rel='noopener noreferrer'
-                        >
-                            here
-                        </a>{" "}
-                        to lock funds.
+                        To lock funds. To Lock funds from the Raid Party’s
+                        Gnosis Safe, follow these steps:
                     </p>
-                    <div className='points'>
-                        {lock_instructions.map((instruction, index) => {
-                            return <li key={index}>{instruction}</li>;
-                        })}
-                    </div>
+                    <ol>
+                        <li>Go to the Gnosis Safe for the raid</li>
+                        <li>Click "Send" and then "Contract Interaction</li>
+                        <li>
+                            In the "Recipient" field, paste{" "}
+                            <span>{Locker}</span> -- the address of the
+                            LexGuildLocker contract
+                        </li>
+                        <li>
+                            The ABI from the contract should load into the 'ABI'
+                            field. If it doesn't, go copy it from Etherscan and
+                            paste it in manually
+                        </li>
+                        <li>
+                            Select the `lock` function from the dropdown menu
+                        </li>
+                        <li>
+                            In the 'index' parameter field, input{" "}
+                            <span>{context.escrow_index}</span> -- the index for
+                            this escrow
+                        </li>
+                        <li>
+                            If you have an explanation or other details related
+                            to the Lock, paste a bytes32 compatible form (e.g. a
+                            hash) into the 'details' parameter field. If you
+                            don't have anything, type "0x"
+                        </li>
+                        <li>
+                            Click 'Review', and if everything looks good, click
+                            'Submit'
+                        </li>
+                        <li>
+                            Have a quorum of your Gnosis Safe owners sign the
+                            transaction, then execute it
+                        </li>
+                        <li>
+                            You can check that the status is now 'locked' by
+                            looking up index <span>{context.escrow_index}</span>{" "}
+                            in the{" "}
+                            <a
+                                href={`https://kovan.etherscan.io/address/${Locker}`}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                            >
+                                LexGuildLocker Contract
+                            </a>{" "}
+                            on Etherscan
+                        </li>
+                    </ol>
                 </div>
                 <button
                     className='modal-close is-large'
