@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { withRouter } from "react-router-dom";
 
 import Loading from "../components/Loading";
+import Success from "../components/Success";
+import Instructions from "../components/Instructions";
 
 import "../styles/css/Pages.css";
 import "../styles/css/ResponsivePages.css";
@@ -151,7 +153,7 @@ const Escrow = (props) => {
             .balanceOf(context.address)
             .call();
 
-        let milestone_payment = "";
+        let total_milestone_payment = "";
         let next_milestone = "";
         if (context.confirmed === "1") {
             let event_info;
@@ -169,18 +171,21 @@ const Escrow = (props) => {
                 console.log(err);
             }
 
-            milestone_payment = parseInt(event_info[0].args.amount[0]._hex);
-            let total_milestones = parseInt(context.cap) / milestone_payment;
+            total_milestone_payment =
+                parseInt(event_info[0].args.amount[0]._hex) +
+                parseInt(event_info[0].args.amount[1]._hex);
+            let total_milestones =
+                parseInt(context.cap) / total_milestone_payment;
             let milestones_left =
                 (parseInt(context.cap) - parseInt(context.released)) /
-                milestone_payment;
+                total_milestone_payment;
             let current_milestone = total_milestones - milestones_left;
             total_milestones = Math.round(total_milestones);
             milestones_left = Math.round(milestones_left);
             next_milestone = Math.round(current_milestone) + 1;
 
-            milestone_payment = context.web3.utils.fromWei(
-                milestone_payment.toString()
+            total_milestone_payment = context.web3.utils.fromWei(
+                total_milestone_payment.toString()
             );
         }
 
@@ -190,7 +195,7 @@ const Escrow = (props) => {
             wETHBalance,
             frontend_cap,
             frontend_released,
-            milestone_payment,
+            total_milestone_payment,
             next_milestone,
         });
 
@@ -216,11 +221,7 @@ const Escrow = (props) => {
             );
         } else if (context.termination < new Date().getTime()) {
             component = (
-                <button
-                    style={{ margin: "3px" }}
-                    className='withdraw-button'
-                    onClick={onWithdrawHandler}
-                >
+                <button className='withdraw-button' onClick={onWithdrawHandler}>
                     Withdraw
                 </button>
             );
@@ -228,17 +229,12 @@ const Escrow = (props) => {
             component = (
                 <div>
                     <button
-                        style={{ margin: "3px" }}
                         className='custom-button'
                         onClick={onReleaseHandler}
                     >
                         Release
                     </button>
-                    <button
-                        style={{ margin: "3px" }}
-                        className='lock-button'
-                        onClick={onLockHandler}
-                    >
+                    <button className='lock-button' onClick={onLockHandler}>
                         Lock
                     </button>
                 </div>
@@ -246,30 +242,14 @@ const Escrow = (props) => {
         }
     } else {
         component = (
-            <button
-                style={{ margin: "3px" }}
-                className='lock-button'
-                onClick={() => setModal(true)}
-            >
+            <button className='lock-button' onClick={() => setModal(true)}>
                 Lock
             </button>
         );
     }
 
     return hash !== "" ? (
-        <div className='success'>
-            <h3>Transaction Received!</h3>
-            <p>
-                You can check the progress of your transaction{" "}
-                <a href={`https://kovan.etherscan.io/tx/${hash}`}>here.</a>
-            </p>
-            <button
-                className='custom-button'
-                onClick={() => props.history.push("/")}
-            >
-                Home
-            </button>
-        </div>
+        <Success hash={hash} />
     ) : (
         <div className='escrow'>
             <div className='escrow-sub-container-one'>
@@ -321,9 +301,10 @@ const Escrow = (props) => {
                             </p>
                         </div>
                         <div>
-                            {context.confirmed !== 0 &&
+                            {context.confirmed !== "0" &&
                             context.locked !== "1" &&
-                            context.termination > new Date().getTime() ? (
+                            context.termination > new Date().getTime() &&
+                            context.cap !== context.released ? (
                                 <p>
                                     Next Milestone
                                     <span>
@@ -349,13 +330,18 @@ const Escrow = (props) => {
                                         ? "Safety valve date due"
                                         : context.cap === context.released
                                         ? "All funds released"
-                                        : "Next amount to release"}
-                                    {context.confirmed !== 0 &&
+                                        : context.isClient
+                                        ? "Next Amount to Release"
+                                        : "Next Amount to be Released"}
+                                    {context.confirmed !== "0" &&
                                     context.locked !== "1" &&
                                     context.termination >
-                                        new Date().getTime() ? (
+                                        new Date().getTime() &&
+                                    context.cap !== context.released ? (
                                         <span>
-                                            {state.milestone_payment}{" "}
+                                            {Number(
+                                                state.total_milestone_payment
+                                            ).toFixed(2)}{" "}
                                             {state.tokenType}
                                         </span>
                                     ) : null}
@@ -368,61 +354,10 @@ const Escrow = (props) => {
             )}
             <div className={`modal ${modal ? "is-active" : null}`}>
                 <div className='modal-background'></div>
-                <div className='modal-content'>
-                    <p>
-                        To lock funds. To Lock funds from the Raid Party’s
-                        Gnosis Safe, follow these steps:
-                    </p>
-                    <ol>
-                        <li>Go to the Gnosis Safe for the raid</li>
-                        <li>Click "Send" and then "Contract Interaction</li>
-                        <li>
-                            In the "Recipient" field, paste{" "}
-                            <span>{Locker}</span> -- the address of the
-                            LexGuildLocker contract
-                        </li>
-                        <li>
-                            The ABI from the contract should load into the 'ABI'
-                            field. If it doesn't, go copy it from Etherscan and
-                            paste it in manually
-                        </li>
-                        <li>
-                            Select the `lock` function from the dropdown menu
-                        </li>
-                        <li>
-                            In the 'index' parameter field, input{" "}
-                            <span>{context.escrow_index}</span> -- the index for
-                            this escrow
-                        </li>
-                        <li>
-                            If you have an explanation or other details related
-                            to the Lock, paste a bytes32 compatible form (e.g. a
-                            hash) into the 'details' parameter field. If you
-                            don't have anything, type "0x"
-                        </li>
-                        <li>
-                            Click 'Review', and if everything looks good, click
-                            'Submit'
-                        </li>
-                        <li>
-                            Have a quorum of your Gnosis Safe owners sign the
-                            transaction, then execute it
-                        </li>
-                        <li>
-                            You can check that the status is now 'locked' by
-                            looking up index <span>{context.escrow_index}</span>{" "}
-                            in the{" "}
-                            <a
-                                href={`https://kovan.etherscan.io/address/${Locker}`}
-                                target='_blank'
-                                rel='noopener noreferrer'
-                            >
-                                LexGuildLocker Contract
-                            </a>{" "}
-                            on Etherscan
-                        </li>
-                    </ol>
-                </div>
+                <Instructions
+                    escrow_index={context.escrow_index}
+                    locker_address={Locker}
+                />
                 <button
                     className='modal-close is-large'
                     aria-label='close'

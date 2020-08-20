@@ -202,6 +202,7 @@
 .escrow .escrow-sub-container-two .custom-button {
   float: right;
   margin-top: 10px;
+  margin-left: 5px;
   border: none;
   padding: 5px;
   background-color: #ff3864;
@@ -222,6 +223,7 @@
 .escrow .escrow-sub-container-two .withdraw-button {
   float: right;
   margin-top: 10px;
+  margin-left: 5px;
   border: none;
   padding: 5px;
   background-color: #000;

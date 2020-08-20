@@ -6,6 +6,7 @@ import "bulma";
 import "react-datepicker/dist/react-datepicker.css";
 
 import Loading from "../components/Loading";
+import Success from "../components/Success";
 
 import "../styles/css/Pages.css";
 import "../styles/css/ResponsivePages.css";
@@ -248,23 +249,7 @@ class Form extends Component {
     render() {
         let { spoils_percent, end_date, isLoading } = this.context;
         return this.state.hash !== "" ? (
-            <div className='success'>
-                <h3>Transaction Received!</h3>
-                <p>
-                    You can check the progress of your transaction{" "}
-                    <a
-                        href={`https://kovan.etherscan.io/tx/${this.state.hash}`}
-                    >
-                        here.
-                    </a>
-                </p>
-                <button
-                    className='custom-button'
-                    onClick={() => this.props.history.push("/")}
-                >
-                    Home
-                </button>
-            </div>
+            <Success hash={this.state.hash} />
         ) : (
             <div className='form'>
                 <div className='form-sub-container-one'>
@@ -328,9 +313,9 @@ class Form extends Component {
                             <label>Client Safety Valve Withdrawal Date</label>
                             <DatePicker
                                 minDate={
-                                    end_date
+                                    end_date !== "Not Available"
                                         ? new Date(end_date)
-                                        : this.state.safety_valve_date
+                                        : new Date()
                                 }
                                 dateFormat='yyyy/MM/dd'
                                 selected={this.state.safety_valve_date}
