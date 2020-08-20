@@ -250,6 +250,18 @@ const Escrow = (props) => {
 
     return hash !== "" ? (
         <Success hash={hash} />
+    ) : !isData ? (
+        <div
+            style={{
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+            }}
+        >
+            <Loading />
+        </div>
     ) : (
         <div className='escrow'>
             <div className='escrow-sub-container-one'>
@@ -268,90 +280,84 @@ const Escrow = (props) => {
                 </a>
                 <p>{context.brief_description}</p>
             </div>
-            {!isData ? (
-                Loading
-            ) : (
-                <div className='escrow-sub-container-two'>
-                    <div className='card'>
-                        <div>
+
+            <div className='escrow-sub-container-two'>
+                <div className='card'>
+                    <div>
+                        <p>
+                            Total Project Payment
+                            <span>
+                                {Number(state.frontend_cap).toFixed(2)}{" "}
+                                {state.tokenType}
+                            </span>
+                        </p>
+                        <p>
+                            Safety Valve Withdrawal Date
+                            <span>
+                                {new Date(
+                                    Number(context.termination)
+                                ).toDateString()}
+                            </span>
+                        </p>
+                        <p>
+                            Arbitration Provider<span>{"LexDAO"}</span>
+                        </p>
+                        <p>
+                            Total Released to Date
+                            <span>
+                                {Number(state.frontend_released).toFixed(2)}{" "}
+                                {state.tokenType}
+                            </span>
+                        </p>
+                    </div>
+                    <div>
+                        {context.confirmed !== "0" &&
+                        context.locked !== "1" &&
+                        context.termination > new Date().getTime() &&
+                        context.cap !== context.released ? (
                             <p>
-                                Total Project Payment
+                                Next Milestone
+                                <span>Milestone #{state.next_milestone}</span>
+                            </p>
+                        ) : null}
+
+                        {context.confirmed === "0" ? (
+                            <p style={{ color: "#ff3864" }}>
+                                Total Due to Escrow Today
                                 <span>
                                     {Number(state.frontend_cap).toFixed(2)}{" "}
                                     {state.tokenType}
                                 </span>
                             </p>
-                            <p>
-                                Safety Valve Withdrawal Date
-                                <span>
-                                    {new Date(
-                                        Number(context.termination)
-                                    ).toDateString()}
-                                </span>
-                            </p>
-                            <p>
-                                Arbitration Provider<span>{"LexDAO"}</span>
-                            </p>
-                            <p>
-                                Total Released to Date
-                                <span>
-                                    {Number(state.frontend_released).toFixed(2)}{" "}
-                                    {state.tokenType}
-                                </span>
-                            </p>
-                        </div>
-                        <div>
-                            {context.confirmed !== "0" &&
-                            context.locked !== "1" &&
-                            context.termination > new Date().getTime() &&
-                            context.cap !== context.released ? (
-                                <p>
-                                    Next Milestone
+                        ) : (
+                            <p style={{ color: "#ff3864" }}>
+                                {context.locked === "1"
+                                    ? "Funds Locked"
+                                    : context.termination < new Date().getTime()
+                                    ? "Safety valve date due"
+                                    : context.cap === context.released
+                                    ? "All funds released"
+                                    : context.isClient
+                                    ? "Next Amount to Release"
+                                    : "Next Amount to be Released"}
+                                {context.confirmed !== "0" &&
+                                context.locked !== "1" &&
+                                context.termination > new Date().getTime() &&
+                                context.cap !== context.released ? (
                                     <span>
-                                        Milestone #{state.next_milestone}
-                                    </span>
-                                </p>
-                            ) : null}
-
-                            {context.confirmed === "0" ? (
-                                <p style={{ color: "#ff3864" }}>
-                                    Total Due to Escrow Today
-                                    <span>
-                                        {Number(state.frontend_cap).toFixed(2)}{" "}
+                                        {Number(
+                                            state.total_milestone_payment
+                                        ).toFixed(2)}{" "}
                                         {state.tokenType}
                                     </span>
-                                </p>
-                            ) : (
-                                <p style={{ color: "#ff3864" }}>
-                                    {context.locked === "1"
-                                        ? "Funds Locked"
-                                        : context.termination <
-                                          new Date().getTime()
-                                        ? "Safety valve date due"
-                                        : context.cap === context.released
-                                        ? "All funds released"
-                                        : context.isClient
-                                        ? "Next Amount to Release"
-                                        : "Next Amount to be Released"}
-                                    {context.confirmed !== "0" &&
-                                    context.locked !== "1" &&
-                                    context.termination >
-                                        new Date().getTime() &&
-                                    context.cap !== context.released ? (
-                                        <span>
-                                            {Number(
-                                                state.total_milestone_payment
-                                            ).toFixed(2)}{" "}
-                                            {state.tokenType}
-                                        </span>
-                                    ) : null}
-                                </p>
-                            )}
-                        </div>
+                                ) : null}
+                            </p>
+                        )}
                     </div>
-                    {component}
                 </div>
-            )}
+                {component}
+            </div>
+
             <div className={`modal ${modal ? "is-active" : null}`}>
                 <div className='modal-background'></div>
                 <Instructions
