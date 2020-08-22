@@ -257,7 +257,7 @@ class Form extends Component {
                         <p>
                             Payment per milestone ~{" "}
                             <span>
-                                {this.state.milestone_payment.toFixed(1)}{" "}
+                                {this.state.milestone_payment.toFixed(2)}{" "}
                                 {this.state.payment_token}
                             </span>
                         </p>
@@ -265,7 +265,7 @@ class Form extends Component {
                             Guild spoils ({spoils_percent * 100}%) per milestone
                             ~{" "}
                             <span>
-                                {this.state.milestone_spoils_payment.toFixed(1)}{" "}
+                                {this.state.milestone_spoils_payment.toFixed(2)}{" "}
                                 {this.state.payment_token}
                             </span>
                         </p>
@@ -273,7 +273,7 @@ class Form extends Component {
                             Multisig Payment per milestone ~{" "}
                             <span>
                                 {this.state.milestone_multisig_payment.toFixed(
-                                    1
+                                    2
                                 )}{" "}
                                 {this.state.payment_token}
                             </span>
