@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, useParams } from "react-router-dom";
 
 import Loading from "../components/Loading";
 import Success from "../components/Success";
@@ -22,6 +22,7 @@ const Escrow = (props) => {
     const [isData, setData] = useState(false);
     const [hash, setHash] = useState("");
     const [modal, setModal] = useState(false);
+    const { id } = useParams();
 
     const onDepositHandler = async () => {
         let contract = state.tokenType === "DAI" ? context.DAI : context.wETH;
@@ -131,81 +132,133 @@ const Escrow = (props) => {
         }
     };
 
-    const initData = async () => {
-        if (context.locker === "") return props.history.push("/");
+    const calc = async () => {
+        if (context.web3 && context.address && context.escrow_index) {
+            let frontend_cap = context.web3.utils.fromWei(context.cap, "ether");
+            let frontend_released = context.web3.utils.fromWei(
+                context.released,
+                "ether"
+            );
 
-        let frontend_cap = context.web3.utils.fromWei(context.cap, "ether");
-        let frontend_released = context.web3.utils.fromWei(
-            context.released,
-            "ether"
-        );
+            let tokenType = "";
+            if (context.token.toLowerCase() === KovanDAI.toLowerCase())
+                tokenType = "DAI";
+            if (context.token.toLowerCase() === KovanWETH.toLowerCase())
+                tokenType = "wETH";
 
-        let tokenType = "";
-        if (context.token.toLowerCase() === KovanDAI.toLowerCase())
-            tokenType = "DAI";
-        if (context.token.toLowerCase() === KovanWETH.toLowerCase())
-            tokenType = "wETH";
+            let wETHBalance = await context.wETH.methods
+                .balanceOf(context.address)
+                .call();
+            let DAIBalance = await context.DAI.methods
+                .balanceOf(context.address)
+                .call();
 
-        let wETHBalance = await context.wETH.methods
-            .balanceOf(context.address)
-            .call();
-        let DAIBalance = await context.DAI.methods
-            .balanceOf(context.address)
-            .call();
+            let total_milestone_payment = "";
+            let next_milestone = "";
+            if (context.confirmed === "1") {
+                let event_info;
 
-        let total_milestone_payment = "";
-        let next_milestone = "";
-        if (context.confirmed === "1") {
-            let event_info;
+                try {
+                    let events = await context.ethers_locker.queryFilter(
+                        "RegisterLocker"
+                    );
+                    event_info = events.filter(
+                        (event) =>
+                            parseInt(event.args.index._hex) ===
+                            parseInt(context.escrow_index)
+                    );
+                } catch (err) {
+                    console.log(err);
+                }
 
-            try {
-                let events = await context.ethers_locker.queryFilter(
-                    "RegisterLocker"
+                total_milestone_payment =
+                    parseInt(event_info[0].args.amount[0]._hex) +
+                    parseInt(event_info[0].args.amount[1]._hex);
+                let total_milestones =
+                    parseInt(context.cap) / total_milestone_payment;
+                let milestones_left =
+                    (parseInt(context.cap) - parseInt(context.released)) /
+                    total_milestone_payment;
+                let current_milestone = total_milestones - milestones_left;
+                total_milestones = Math.round(total_milestones);
+                milestones_left = Math.round(milestones_left);
+                next_milestone = Math.round(current_milestone) + 1;
+
+                total_milestone_payment = context.web3.utils.fromWei(
+                    total_milestone_payment.toString()
                 );
-                event_info = events.filter(
-                    (event) =>
-                        parseInt(event.args.index._hex) ===
-                        parseInt(context.escrow_index)
-                );
-            } catch (err) {
-                console.log(err);
             }
 
-            total_milestone_payment =
-                parseInt(event_info[0].args.amount[0]._hex) +
-                parseInt(event_info[0].args.amount[1]._hex);
-            let total_milestones =
-                parseInt(context.cap) / total_milestone_payment;
-            let milestones_left =
-                (parseInt(context.cap) - parseInt(context.released)) /
-                total_milestone_payment;
-            let current_milestone = total_milestones - milestones_left;
-            total_milestones = Math.round(total_milestones);
-            milestones_left = Math.round(milestones_left);
-            next_milestone = Math.round(current_milestone) + 1;
+            setState({
+                tokenType,
+                DAIBalance,
+                wETHBalance,
+                frontend_cap,
+                frontend_released,
+                total_milestone_payment,
+                next_milestone,
+            });
 
-            total_milestone_payment = context.web3.utils.fromWei(
-                total_milestone_payment.toString()
-            );
+            setData(true);
         }
+    };
 
-        setState({
-            tokenType,
-            DAIBalance,
-            wETHBalance,
-            frontend_cap,
-            frontend_released,
-            total_milestone_payment,
-            next_milestone,
-        });
+    const initData = async () => {
+        if (id) {
+            let result = await fetch(
+                "https://guild-keeper.herokuapp.com/raids/validate",
+                {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        ID: id,
+                    }),
+                }
+            ).then((res) => res.json());
 
-        setData(true);
+            if (result !== "NOT_FOUND") {
+                let params = {
+                    escrow_index: result["Escrow Index"] || "",
+                    raid_id: id,
+                    project_name: result["Name"] || "Not Available",
+                    client_name: result["Your Name"] || "Not Available",
+                    start_date: result["Date Added"] || "Not Available",
+                    end_date:
+                        result["Desired date of completion"] || "Not Available",
+                    link_to_details:
+                        result["Relevant Link"] || "https://raidguild.org/",
+                    brief_description:
+                        result["Brief Summary"] || "Not Available",
+                };
+                if (!result["Escrow Index"]) {
+                    alert("Escrow not registered for this ID.");
+                    return props.history.push("/");
+                }
+                await context.setAirtableState(params);
+                await context.connectAccount();
+            } else {
+                alert("ID not found!");
+                return props.history.push("/");
+            }
+        } else if (context.locker === "") {
+            return props.history.push("/");
+        } else {
+            await calc();
+        }
     };
 
     useEffect(() => {
         initData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        calc();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [context]);
 
     let component;
     if (context.isLoading) {

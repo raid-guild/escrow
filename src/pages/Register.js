@@ -36,10 +36,13 @@ const Register = (props) => {
                     <br></br>
                     <p>Spoils Address ({context.spoils_address})</p>
                     <p>
-                        Spoils ( {context.spoils_percent}% of payment sent to
-                        Raid Guild)
+                        Spoils ( {context.spoils_percent * 100}% of payment sent
+                        to Raid Guild)
                     </p>
-                    <p>Resolver Address ({context.resolver_address})</p>
+                    <p>
+                        Arbitration Provider Address ({context.resolver_address}
+                        )
+                    </p>
                     <button
                         className='custom-button'
                         onClick={() => props.history.push("/form")}

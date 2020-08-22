@@ -46,6 +46,9 @@ class App extends Component {
                             <Route path='/form' exact>
                                 <Form />
                             </Route>
+                            <Route path='/escrow/:id' exact>
+                                <Escrow />
+                            </Route>
                         </Switch>
                     </Router>
                 </AppContextProvider>

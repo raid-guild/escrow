@@ -172,7 +172,9 @@ class AppContextProvider extends Component {
                     chainID,
                     ethers_locker,
                 },
-                () => this.updateLoadingState()
+                () => {
+                    this.updateLoadingState();
+                }
             );
         } catch (err) {
             this.updateLoadingState();
