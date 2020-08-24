@@ -201,7 +201,7 @@ class Form extends Component {
                     ],
                     web3.utils.toWei(total_payment.toString()),
                     milestones,
-                    safety_valve_date.getTime(),
+                    Math.round(safety_valve_date.getTime() / 1000),
                     "0x0"
                 )
                 .send({

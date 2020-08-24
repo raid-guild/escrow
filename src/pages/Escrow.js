@@ -272,7 +272,9 @@ const Escrow = (props) => {
                     Deposit
                 </button>
             );
-        } else if (context.termination < new Date().getTime()) {
+        } else if (
+            context.termination < Math.round(new Date().getTime() / 1000)
+        ) {
             component = (
                 <button className='withdraw-button' onClick={onWithdrawHandler}>
                     Withdraw
@@ -348,7 +350,7 @@ const Escrow = (props) => {
                             Safety Valve Withdrawal Date
                             <span>
                                 {new Date(
-                                    Number(context.termination)
+                                    Number(context.termination) * 1000
                                 ).toDateString()}
                             </span>
                         </p>
@@ -395,7 +397,8 @@ const Escrow = (props) => {
                                     : "Next Amount to be Released"}
                                 {context.confirmed !== "0" &&
                                 context.locked !== "1" &&
-                                context.termination > new Date().getTime() &&
+                                context.termination >
+                                    Math.round(new Date().getTime() / 1000) &&
                                 context.cap !== context.released ? (
                                     <span>
                                         {Number(
