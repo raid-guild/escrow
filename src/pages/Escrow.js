@@ -27,7 +27,10 @@ const Escrow = (props) => {
     const onDepositHandler = async () => {
         let contract = state.tokenType === "DAI" ? context.DAI : context.wETH;
 
-        if (state.DAIBalance < context.cap && state.tokenType === "DAI")
+        if (
+            Number(state.DAIBalance) < Number(context.cap) &&
+            state.tokenType === "DAI"
+        )
             return alert(
                 "Insufficient funds! Please add more DAI to you wallet."
             );
@@ -44,8 +47,9 @@ const Escrow = (props) => {
                         .approve(Locker, context.cap)
                         .send({ from: context.address });
                 }
+                console.log("sdsd");
                 await context.locker.methods
-                    .depositLocker(context.escrow_index)
+                    .confirmLocker(context.escrow_index)
                     .send({
                         from: context.address,
                     })
@@ -61,7 +65,7 @@ const Escrow = (props) => {
                             .send({ from: context.address });
                     }
                     await context.locker.methods
-                        .depositLocker(context.escrow_index)
+                        .confirmLocker(context.escrow_index)
                         .send({
                             from: context.address,
                         })
@@ -71,7 +75,7 @@ const Escrow = (props) => {
                         });
                 } else {
                     await context.locker.methods
-                        .depositLocker(context.escrow_index)
+                        .confirmLocker(context.escrow_index)
                         .send({
                             from: context.address,
                             value: context.cap,
@@ -162,6 +166,7 @@ const Escrow = (props) => {
                     let events = await context.ethers_locker.queryFilter(
                         "RegisterLocker"
                     );
+
                     event_info = events.filter(
                         (event) =>
                             parseInt(event.args.index._hex) ===
@@ -172,8 +177,8 @@ const Escrow = (props) => {
                 }
 
                 total_milestone_payment =
-                    parseInt(event_info[0].args.amount[0]._hex) +
-                    parseInt(event_info[0].args.amount[1]._hex);
+                    parseInt(event_info[0].args.batch[0]._hex) +
+                    parseInt(event_info[0].args.batch[1]._hex);
                 let total_milestones =
                     parseInt(context.cap) / total_milestone_payment;
                 let milestones_left =
@@ -368,7 +373,8 @@ const Escrow = (props) => {
                     <div>
                         {context.confirmed !== "0" &&
                         context.locked !== "1" &&
-                        context.termination > new Date().getTime() &&
+                        context.termination >
+                            Math.round(new Date().getTime() / 1000) &&
                         context.cap !== context.released ? (
                             <p>
                                 Next Milestone
@@ -388,7 +394,8 @@ const Escrow = (props) => {
                             <p style={{ color: "#ff3864" }}>
                                 {context.locked === "1"
                                     ? "Funds Locked"
-                                    : context.termination < new Date().getTime()
+                                    : context.termination <
+                                      Math.round(new Date().getTime() / 1000)
                                     ? "Safety valve date due"
                                     : context.cap === context.released
                                     ? "All funds released"
