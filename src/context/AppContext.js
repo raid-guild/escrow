@@ -105,7 +105,7 @@ class AppContextProvider extends Component {
                     raid_id: id,
                     project_name: result["Name"] || "Not Available",
                     client_name: result["Your Name"] || "Not Available",
-                    start_date: result["Date Added"] || "Not Available",
+                    start_date: result["Raid Start Date"] || "Not Available",
                     end_date:
                         result["Desired date of completion"] || "Not Available",
                     link_to_details:
