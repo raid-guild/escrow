@@ -83,24 +83,49 @@ class AppContextProvider extends Component {
         this.setState({ web3, locker, DAI, wETH, chainID });
     }
 
-    setAirtableState = (params) => {
-        this.setState(
+    setAirtableState = async (id) => {
+        let result = await fetch(
+            "https://guild-keeper.herokuapp.com/raids/validate",
             {
-                escrow_index: params.escrow_index,
-                raid_id: params.raid_id,
-                project_name: params.project_name,
-                client_name: params.client_name,
-                start_date: params.start_date,
-                end_date: params.end_date,
-                link_to_details: params.link_to_details,
-                brief_description: params.brief_description,
-            },
-            () => this.fetchLockerInfo()
-        );
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    ID: id,
+                }),
+            }
+        ).then((res) => res.json());
+
+        if (result !== "NOT_FOUND") {
+            this.setState(
+                {
+                    escrow_index: result["Escrow Index"] || "",
+                    raid_id: id,
+                    project_name: result["Name"] || "Not Available",
+                    client_name: result["Your Name"] || "Not Available",
+                    start_date: result["Date Added"] || "Not Available",
+                    end_date:
+                        result["Desired date of completion"] || "Not Available",
+                    link_to_details:
+                        result["Relevant Link"] || "https://raidguild.org/",
+                    brief_description:
+                        result["Brief Summary"] || "Not Available",
+                },
+                () => this.fetchLockerInfo()
+            );
+            return {
+                validRaidId: true,
+                escrow_index: result["Escrow Index"] || "",
+            };
+        } else {
+            return { validRaidId: false, escrow_index: "" };
+        }
     };
 
     fetchLockerInfo = async () => {
-        if (this.state.escrow_index !== "") {
+        if (this.state.escrow_index !== "" && this.state.locker) {
             let {
                 cap,
                 confirmed,
