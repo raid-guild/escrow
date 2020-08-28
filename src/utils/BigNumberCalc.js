@@ -30,4 +30,4 @@ const milestone_payments_calculation = (
     ];
 };
 
-module.exports = milestone_payments_calculation;
+export default milestone_payments_calculation;

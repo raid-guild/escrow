@@ -66,4 +66,4 @@ const EscrowCalc = async (context) => {
     };
 };
 
-module.exports = EscrowCalc;
+export default EscrowCalc;

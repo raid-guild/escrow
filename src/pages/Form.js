@@ -13,12 +13,12 @@ import "../styles/css/ResponsivePages.css";
 
 import { AppContext } from "../context/AppContext";
 
+import milestone_payments_calculation from "../utils/BigNumberCalc";
+
 const {
     KovanDAI,
     KovanWETH,
 } = require("../utils/Constants").contract_addresses;
-
-const milestone_payments_calculation = require("../utils/BigNumberCalc");
 
 class Form extends Component {
     state = {

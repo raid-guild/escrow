@@ -8,11 +8,10 @@ import Success from "../components/Success";
 import Instructions from "../components/Instructions";
 
 import EscrowButtonManager from "../utils/EscrowButtonManager";
+import EscrowCalc from "../utils/EscrowCalc";
 
 import "../styles/css/Pages.css";
 import "../styles/css/ResponsivePages.css";
-
-const EscrowCalc = require("../utils/EscrowCalc");
 
 const { Locker } = require("../utils/Constants").contract_addresses;
 
