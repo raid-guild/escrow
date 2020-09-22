@@ -179,7 +179,7 @@ class Form extends Component {
                 })
                 .once("transactionHash", async (hash) => {
                     let result = await fetch(
-                        "https://guild-keeper.herokuapp.com/raids/update",
+                        "https://guild-keeper.herokuapp.com/escrow/update",
                         {
                             method: "POST",
                             headers: {
