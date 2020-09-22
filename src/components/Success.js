@@ -7,9 +7,7 @@ const Success = (props) => {
             <h3>Transaction Received!</h3>
             <p>
                 You can check the progress of your transaction{" "}
-                <a href={`https://kovan.etherscan.io/tx/${props.hash}`}>
-                    here.
-                </a>
+                <a href={`https://etherscan.io/tx/${props.hash}`}>here.</a>
             </p>
             <button
                 className='custom-button'

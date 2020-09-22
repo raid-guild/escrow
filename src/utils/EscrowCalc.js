@@ -1,4 +1,4 @@
-const { KovanDAI, KovanWETH } = require("./Constants").contract_addresses;
+const { MainnetDAI, MainnetWETH } = require("./Constants").contract_addresses;
 
 const EscrowCalc = async (context) => {
     let frontend_cap = context.web3.utils.fromWei(context.cap, "ether");
@@ -8,9 +8,9 @@ const EscrowCalc = async (context) => {
     );
 
     let tokenType = "";
-    if (context.token.toLowerCase() === KovanDAI.toLowerCase())
+    if (context.token.toLowerCase() === MainnetDAI.toLowerCase())
         tokenType = "DAI";
-    if (context.token.toLowerCase() === KovanWETH.toLowerCase())
+    if (context.token.toLowerCase() === MainnetWETH.toLowerCase())
         tokenType = "wETH";
 
     let wETHBalance = await context.wETH.methods
