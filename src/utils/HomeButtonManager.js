@@ -12,8 +12,8 @@ const HomeButtonManager = (
     if (context.isLoading) {
         component = <Loading />;
     } else if (validId) {
-        if (context.chainID.toString() !== "42") {
-            component = <p>Switch to Kovan</p>;
+        if (context.chainID.toString() !== "1") {
+            component = <p>Switch to Mainnet</p>;
         } else if (context.address) {
             if (context.escrow_index !== "") {
                 component = (

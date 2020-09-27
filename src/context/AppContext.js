@@ -10,8 +10,8 @@ const DAI_ABI = require("../abi/DaiAbi.json");
 const wETH_ABI = require("../abi/wETHAbi.json");
 const {
     Locker,
-    KovanDAI,
-    KovanWETH,
+    MainnetDAI,
+    MainnetWETH,
     RaidGuild,
     LexArbitration,
 } = require("../utils/Constants").contract_addresses;
@@ -72,12 +72,12 @@ class AppContextProvider extends Component {
     async componentDidMount() {
         const web3 = new Web3(
             new Web3.providers.HttpProvider(
-                `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_ID}`
+                `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_ID}`
             )
         );
         const locker = new web3.eth.Contract(lockerABI, Locker);
-        const DAI = new web3.eth.Contract(DAI_ABI, KovanDAI);
-        const wETH = new web3.eth.Contract(wETH_ABI, KovanWETH);
+        const DAI = new web3.eth.Contract(DAI_ABI, MainnetDAI);
+        const wETH = new web3.eth.Contract(wETH_ABI, MainnetWETH);
         const chainID = await web3.eth.net.getId();
 
         this.setState({ web3, locker, DAI, wETH, chainID });
@@ -158,8 +158,8 @@ class AppContextProvider extends Component {
             const web3 = new Web3(provider);
             const accounts = await web3.eth.getAccounts();
             const locker = new web3.eth.Contract(lockerABI, Locker);
-            const DAI = new web3.eth.Contract(DAI_ABI, KovanDAI);
-            const wETH = new web3.eth.Contract(wETH_ABI, KovanWETH);
+            const DAI = new web3.eth.Contract(DAI_ABI, MainnetDAI);
+            const wETH = new web3.eth.Contract(wETH_ABI, MainnetWETH);
             let chainID = await web3.eth.net.getId();
 
             let ethers_locker = new ethers.Contract(
