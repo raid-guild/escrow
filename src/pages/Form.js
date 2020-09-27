@@ -37,15 +37,15 @@ class Form extends Component {
     static contextType = AppContext;
 
     componentDidMount() {
-        let { spoils_percent, end_date, raid_id } = this.context;
+        let { spoils_percent, raid_id } = this.context;
 
         if (raid_id === "") {
             return this.props.history.push("/");
         }
 
-        if (end_date !== "Not Available") {
-            this.setState({ safety_valve_date: new Date(end_date) });
-        }
+        // if (end_date !== "Not Available") {
+        //     this.setState({ safety_valve_date: new Date(end_date) });
+        // }
 
         let client_address_input = document.getElementById("client_address");
         let multisig_address_input = document.getElementById(
@@ -283,11 +283,7 @@ class Form extends Component {
                         <div id='date-picker'>
                             <label>Client Safety Valve Withdrawal Date</label>
                             <DatePicker
-                                minDate={
-                                    end_date !== "Not Available"
-                                        ? new Date(end_date)
-                                        : new Date()
-                                }
+                                minDate={new Date()}
                                 dateFormat='yyyy/MM/dd'
                                 selected={this.state.safety_valve_date}
                                 onChange={this.dateHandler}
