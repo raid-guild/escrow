@@ -179,7 +179,7 @@ class Form extends Component {
                 })
                 .once("transactionHash", async (hash) => {
                     let result = await fetch(
-                        "https://guild-keeper.herokuapp.com/raids/update",
+                        "https://guild-keeper.herokuapp.com/escrow/update",
                         {
                             method: "POST",
                             headers: {
@@ -217,7 +217,7 @@ class Form extends Component {
     };
 
     render() {
-        let { spoils_percent, end_date, isLoading } = this.context;
+        let { spoils_percent, isLoading } = this.context;
 
         return this.state.hash !== "" ? (
             <Success hash={this.state.hash} />

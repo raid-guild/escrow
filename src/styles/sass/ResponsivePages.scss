@@ -49,13 +49,13 @@
         justify-content: center;
 
         .escrow-sub-container-one {
-            margin-top: 10px;
+            max-width: 70%;
         }
         .escrow-sub-container-two {
             width: 70%;
             height: 230px;
             flex-direction: row;
-            margin-top: 20px;
+            margin-top: 10px;
 
             .card {
                 p {
@@ -156,8 +156,7 @@
             }
         }
         .escrow-sub-container-one {
-            margin-bottom: 10px;
-
+            max-width: 90%;
             h2 {
                 font-size: 1.2rem;
             }

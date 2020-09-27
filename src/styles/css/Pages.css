@@ -150,6 +150,7 @@
       -ms-flex-direction: column;
           flex-direction: column;
   color: #ff3864;
+  max-width: 50%;
 }
 
 .escrow .escrow-sub-container-one h1 {

@@ -34,7 +34,7 @@
             justify-content: center;
   }
   .escrow .escrow-sub-container-one {
-    margin-top: 10px;
+    max-width: 70%;
   }
   .escrow .escrow-sub-container-two {
     width: 70%;
@@ -43,7 +43,7 @@
     -webkit-box-direction: normal;
         -ms-flex-direction: row;
             flex-direction: row;
-    margin-top: 20px;
+    margin-top: 10px;
   }
   .escrow .escrow-sub-container-two .card p {
     font-size: 1.2rem;
@@ -125,7 +125,7 @@
     font-size: 1.1rem;
   }
   .escrow .escrow-sub-container-one {
-    margin-bottom: 10px;
+    max-width: 90%;
   }
   .escrow .escrow-sub-container-one h2 {
     font-size: 1.2rem;

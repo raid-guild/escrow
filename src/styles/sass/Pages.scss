@@ -113,6 +113,7 @@ $secondary-font: "Uncial Antiqua", cursive;
         display: flex;
         flex-direction: column;
         color: $primary-color;
+        max-width: 50%;
 
         h1 {
             font-family: "Uncial Antiqua", cursive;

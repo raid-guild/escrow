@@ -85,7 +85,7 @@ class AppContextProvider extends Component {
 
     setAirtableState = async (id) => {
         let result = await fetch(
-            "https://guild-keeper.herokuapp.com/raids/validate",
+            "https://guild-keeper.herokuapp.com/escrow/validate",
             {
                 method: "POST",
                 headers: {
@@ -109,7 +109,7 @@ class AppContextProvider extends Component {
                     end_date:
                         result["Desired date of completion"] || "Not Available",
                     link_to_details:
-                        result["Relevant Link"] || "https://raidguild.org/",
+                        result["Link to Agreement"] || "Not Available",
                     brief_description:
                         result["Brief Summary"] || "Not Available",
                 },

@@ -223,13 +223,19 @@ const Escrow = (props) => {
                 <p>Start: {context.start_date}</p>
                 <p>Planned End: {context.end_date}</p>
                 <br></br>
-                <a
-                    href={context.link_to_details}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                >
-                    Link to details of agreement
-                </a>
+                {context.link_to_details === "Not Available" ? (
+                    <p>Not Available</p>
+                ) : (
+                    <a
+                        href={context.link_to_details}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        style={{ textDecoration: "underline" }}
+                    >
+                        Link to details of agreement
+                    </a>
+                )}
+
                 <p>{context.brief_description}</p>
             </div>
 
