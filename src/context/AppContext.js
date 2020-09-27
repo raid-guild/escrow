@@ -166,7 +166,7 @@ class AppContextProvider extends Component {
                 Locker,
                 lockerABI,
                 new ethers.providers.InfuraProvider(
-                    "kovan",
+                    "mainnet",
                     process.env.REACT_APP_INFURA_ID
                 )
             );
