@@ -42,7 +42,7 @@
 }
 
 .home .home-sub-container h1 {
-  font-size: 3rem;
+  font-size: 2rem;
   margin-bottom: 10px;
   color: #ff3864;
 }
@@ -150,6 +150,7 @@
       -ms-flex-direction: column;
           flex-direction: column;
   color: #ff3864;
+  max-width: 50%;
 }
 
 .escrow .escrow-sub-container-one h1 {

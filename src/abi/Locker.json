@@ -1,5 +1,23 @@
 [
     {
+        "inputs": [
+            { "internalType": "address", "name": "_lexDAO", "type": "address" },
+            {
+                "internalType": "uint256",
+                "name": "_MAX_DURATION",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_resolutionRate",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
         "anonymous": false,
         "inputs": [
             {
@@ -15,7 +33,7 @@
                 "type": "uint256"
             }
         ],
-        "name": "DepositLocker",
+        "name": "ConfirmLocker",
         "type": "event"
     },
     {
@@ -73,7 +91,7 @@
             {
                 "indexed": false,
                 "internalType": "uint256[]",
-                "name": "amount",
+                "name": "batch",
                 "type": "uint256[]"
             },
             {
@@ -171,6 +189,37 @@
         "inputs": [
             {
                 "indexed": true,
+                "internalType": "address",
+                "name": "lexDAO",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "MAX_DURATION",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "resolutionRate",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "details",
+                "type": "bytes32"
+            }
+        ],
+        "name": "UpdateLockerSettings",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
                 "internalType": "uint256",
                 "name": "index",
                 "type": "uint256"
@@ -186,14 +235,36 @@
         "type": "event"
     },
     {
+        "constant": true,
+        "inputs": [],
+        "name": "MAX_DURATION",
+        "outputs": [
+            { "internalType": "uint256", "name": "", "type": "uint256" }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "constant": false,
         "inputs": [
             { "internalType": "uint256", "name": "index", "type": "uint256" }
         ],
-        "name": "depositLocker",
+        "name": "confirmLocker",
         "outputs": [],
         "payable": true,
         "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "lexDAO",
+        "outputs": [
+            { "internalType": "address", "name": "", "type": "address" }
+        ],
+        "payable": false,
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -269,7 +340,7 @@
             { "internalType": "address", "name": "token", "type": "address" },
             {
                 "internalType": "uint256[]",
-                "name": "amount",
+                "name": "batch",
                 "type": "uint256[]"
             },
             { "internalType": "uint256", "name": "cap", "type": "uint256" },
@@ -305,6 +376,17 @@
         "type": "function"
     },
     {
+        "constant": true,
+        "inputs": [],
+        "name": "resolutionRate",
+        "outputs": [
+            { "internalType": "uint256", "name": "", "type": "uint256" }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "constant": false,
         "inputs": [
             { "internalType": "uint256", "name": "index", "type": "uint256" },
@@ -321,6 +403,28 @@
             { "internalType": "bytes32", "name": "details", "type": "bytes32" }
         ],
         "name": "resolve",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            { "internalType": "address", "name": "_lexDAO", "type": "address" },
+            {
+                "internalType": "uint256",
+                "name": "_MAX_DURATION",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_resolutionRate",
+                "type": "uint256"
+            },
+            { "internalType": "bytes32", "name": "details", "type": "bytes32" }
+        ],
+        "name": "updateLockerSettings",
         "outputs": [],
         "payable": false,
         "stateMutability": "nonpayable",

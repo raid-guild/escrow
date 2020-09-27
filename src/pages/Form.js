@@ -13,42 +13,12 @@ import "../styles/css/ResponsivePages.css";
 
 import { AppContext } from "../context/AppContext";
 
+import milestone_payments_calculation from "../utils/BigNumberCalc";
+
 const {
-    KovanDAI,
-    KovanWETH,
+    MainnetDAI,
+    MainnetWETH,
 } = require("../utils/Constants").contract_addresses;
-
-const BN = require("bignumber.js");
-BN.config({ DECIMAL_PLACES: 18 });
-
-const milestone_payments_calculation = (
-    total_payment,
-    milestones,
-    spoils_percent
-) => {
-    let milestone_payment = 0;
-    let milestone_spoils_payment = 1;
-    let milestone_multisig_payment = 1;
-    let _total_payment = new BN(total_payment);
-
-    let multisig_percent = 1 - spoils_percent;
-    let total_spoils_payment = _total_payment.times(spoils_percent);
-    let total_multisig_payment = _total_payment.times(multisig_percent);
-
-    milestone_spoils_payment = total_spoils_payment.div(milestones);
-    milestone_multisig_payment = total_multisig_payment.div(milestones);
-    milestone_payment = milestone_spoils_payment.plus(
-        milestone_multisig_payment
-    );
-
-    let total_payment_final = milestone_payment.times(milestones);
-    return [
-        total_payment_final,
-        milestone_payment,
-        milestone_spoils_payment,
-        milestone_multisig_payment,
-    ];
-};
 
 class Form extends Component {
     state = {
@@ -67,15 +37,15 @@ class Form extends Component {
     static contextType = AppContext;
 
     componentDidMount() {
-        let { spoils_percent, end_date, raid_id } = this.context;
+        let { spoils_percent, raid_id } = this.context;
 
         if (raid_id === "") {
             return this.props.history.push("/");
         }
 
-        if (end_date !== "Not Available") {
-            this.setState({ safety_valve_date: new Date(end_date) });
-        }
+        // if (end_date !== "Not Available") {
+        //     this.setState({ safety_valve_date: new Date(end_date) });
+        // }
 
         let client_address_input = document.getElementById("client_address");
         let multisig_address_input = document.getElementById(
@@ -181,9 +151,9 @@ class Form extends Component {
             return alert("Safety valve date cannot be today.");
 
         if (payment_token === "DAI") {
-            payment_token_address = KovanDAI;
+            payment_token_address = MainnetDAI;
         } else if (payment_token === "wETH") {
-            payment_token_address = KovanWETH;
+            payment_token_address = MainnetWETH;
         }
 
         let index = await locker.methods.lockerCount().call();
@@ -201,7 +171,7 @@ class Form extends Component {
                     ],
                     web3.utils.toWei(total_payment.toString()),
                     milestones,
-                    safety_valve_date.getTime(),
+                    Math.round(safety_valve_date.getTime() / 1000),
                     "0x0"
                 )
                 .send({
@@ -209,7 +179,7 @@ class Form extends Component {
                 })
                 .once("transactionHash", async (hash) => {
                     let result = await fetch(
-                        "https://guild-keeper.herokuapp.com/raids/update",
+                        "https://guild-keeper.herokuapp.com/escrow/update",
                         {
                             method: "POST",
                             headers: {
@@ -247,7 +217,8 @@ class Form extends Component {
     };
 
     render() {
-        let { spoils_percent, end_date, isLoading } = this.context;
+        let { spoils_percent, isLoading } = this.context;
+
         return this.state.hash !== "" ? (
             <Success hash={this.state.hash} />
         ) : (
@@ -312,11 +283,7 @@ class Form extends Component {
                         <div id='date-picker'>
                             <label>Client Safety Valve Withdrawal Date</label>
                             <DatePicker
-                                minDate={
-                                    end_date !== "Not Available"
-                                        ? new Date(end_date)
-                                        : new Date()
-                                }
+                                minDate={new Date()}
                                 dateFormat='yyyy/MM/dd'
                                 selected={this.state.safety_valve_date}
                                 onChange={this.dateHandler}

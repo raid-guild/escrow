@@ -10,8 +10,8 @@ const DAI_ABI = require("../abi/DaiAbi.json");
 const wETH_ABI = require("../abi/wETHAbi.json");
 const {
     Locker,
-    KovanDAI,
-    KovanWETH,
+    MainnetDAI,
+    MainnetWETH,
     RaidGuild,
     LexArbitration,
 } = require("../utils/Constants").contract_addresses;
@@ -72,35 +72,60 @@ class AppContextProvider extends Component {
     async componentDidMount() {
         const web3 = new Web3(
             new Web3.providers.HttpProvider(
-                `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_ID}`
+                `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_ID}`
             )
         );
         const locker = new web3.eth.Contract(lockerABI, Locker);
-        const DAI = new web3.eth.Contract(DAI_ABI, KovanDAI);
-        const wETH = new web3.eth.Contract(wETH_ABI, KovanWETH);
+        const DAI = new web3.eth.Contract(DAI_ABI, MainnetDAI);
+        const wETH = new web3.eth.Contract(wETH_ABI, MainnetWETH);
         const chainID = await web3.eth.net.getId();
 
         this.setState({ web3, locker, DAI, wETH, chainID });
     }
 
-    setAirtableState = (params) => {
-        this.setState(
+    setAirtableState = async (id) => {
+        let result = await fetch(
+            "https://guild-keeper.herokuapp.com/escrow/validate",
             {
-                escrow_index: params.escrow_index,
-                raid_id: params.raid_id,
-                project_name: params.project_name,
-                client_name: params.client_name,
-                start_date: params.start_date,
-                end_date: params.end_date,
-                link_to_details: params.link_to_details,
-                brief_description: params.brief_description,
-            },
-            () => this.fetchLockerInfo()
-        );
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    ID: id,
+                }),
+            }
+        ).then((res) => res.json());
+
+        if (result !== "NOT_FOUND") {
+            this.setState(
+                {
+                    escrow_index: result["Escrow Index"] || "",
+                    raid_id: id,
+                    project_name: result["Name"] || "Not Available",
+                    client_name: result["Your Name"] || "Not Available",
+                    start_date: result["Raid Start Date"] || "Not Available",
+                    end_date:
+                        result["Desired date of completion"] || "Not Available",
+                    link_to_details:
+                        result["Link to Agreement"] || "Not Available",
+                    brief_description:
+                        result["Brief Summary"] || "Not Available",
+                },
+                () => this.fetchLockerInfo()
+            );
+            return {
+                validRaidId: true,
+                escrow_index: result["Escrow Index"] || "",
+            };
+        } else {
+            return { validRaidId: false, escrow_index: "" };
+        }
     };
 
     fetchLockerInfo = async () => {
-        if (this.state.escrow_index !== "") {
+        if (this.state.escrow_index !== "" && this.state.locker) {
             let {
                 cap,
                 confirmed,
@@ -133,15 +158,15 @@ class AppContextProvider extends Component {
             const web3 = new Web3(provider);
             const accounts = await web3.eth.getAccounts();
             const locker = new web3.eth.Contract(lockerABI, Locker);
-            const DAI = new web3.eth.Contract(DAI_ABI, KovanDAI);
-            const wETH = new web3.eth.Contract(wETH_ABI, KovanWETH);
+            const DAI = new web3.eth.Contract(DAI_ABI, MainnetDAI);
+            const wETH = new web3.eth.Contract(wETH_ABI, MainnetWETH);
             let chainID = await web3.eth.net.getId();
 
             let ethers_locker = new ethers.Contract(
                 Locker,
                 lockerABI,
                 new ethers.providers.InfuraProvider(
-                    "kovan",
+                    "mainnet",
                     process.env.REACT_APP_INFURA_ID
                 )
             );

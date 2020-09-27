@@ -28,7 +28,7 @@ $secondary-font: "Uncial Antiqua", cursive;
         float: left;
 
         h1 {
-            font-size: 3rem;
+            font-size: 2rem;
             margin-bottom: 10px;
             color: $primary-color;
         }
@@ -113,6 +113,7 @@ $secondary-font: "Uncial Antiqua", cursive;
         display: flex;
         flex-direction: column;
         color: $primary-color;
+        max-width: 50%;
 
         h1 {
             font-family: "Uncial Antiqua", cursive;
