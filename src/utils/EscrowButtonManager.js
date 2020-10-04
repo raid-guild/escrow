@@ -14,7 +14,7 @@ const EscrowButtonManager = (
         component = <Loading />;
     } else if (context.cap === context.released || context.locked === "1") {
         component = null;
-    } else if (context.isClient) {
+    } else if (context.address === context.client) {
         if (context.confirmed === "0") {
             component = (
                 <button className='custom-button' onClick={onDepositHandler}>

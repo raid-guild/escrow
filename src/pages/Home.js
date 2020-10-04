@@ -52,13 +52,13 @@ const Home = (props) => {
         <div className='home'>
             <div className='home-sub-container'>
                 <h1>RaidGuild Payment Escrow</h1>
-                {validId ? null : (
-                    <input
-                        type='text'
-                        placeholder='Enter Raid ID'
-                        onChange={(event) => setID(event.target.value)}
-                    ></input>
-                )}
+
+                <input
+                    type='text'
+                    placeholder='Enter Raid ID'
+                    onChange={(event) => setID(event.target.value)}
+                ></input>
+
                 {button_component}
             </div>
             <img src={Banner} alt='Banner' />
