@@ -29,10 +29,9 @@ class App extends Component {
     render() {
         return (
             <div className='main'>
-                <Header />
-
                 <AppContextProvider>
                     <Router>
+                        <Header />
                         <Switch>
                             <Route path='/' exact>
                                 <Home />

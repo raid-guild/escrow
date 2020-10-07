@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
 
 import Logo from "../assets/raidguild__logo.png";
 
@@ -7,10 +8,15 @@ import "../styles/css/ResponsiveComponents.css";
 
 const { nav_items } = require("../utils/Constants");
 
-const Header = () => {
+const Header = (props) => {
     return (
         <div className='custom-header'>
-            <img id='logo' src={Logo} alt='logo' />
+            <img
+                id='logo'
+                src={Logo}
+                alt='logo'
+                onClick={() => props.history.push("/")}
+            />
             <nav className='hamburger'>
                 <i className='fas fa-bars fa-3x'></i>
             </nav>
@@ -33,4 +39,4 @@ const Header = () => {
     );
 };
 
-export default Header;
+export default withRouter(Header);
