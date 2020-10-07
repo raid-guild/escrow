@@ -92,6 +92,9 @@
     font-size: 1rem;
     max-width: 80%;
   }
+  .register .register-sub-container .contents {
+    max-width: 100%;
+  }
 }
 
 @media only screen and (max-width: 635px) {
@@ -149,6 +152,9 @@
   .register .register-sub-container .contents h2 {
     font-size: 1.5rem;
   }
+  .register .register-sub-container .contents p {
+    font-size: 0.8rem;
+  }
   .form .form-sub-container-two {
     width: 90%;
   }
@@ -160,15 +166,6 @@
 @media only screen and (max-width: 545px) {
   .register .register-sub-container .contents {
     margin: 30px;
-  }
-  .register .register-sub-container .contents h1 {
-    font-size: 2rem;
-  }
-  .register .register-sub-container .contents h2 {
-    font-size: 1.5rem;
-  }
-  .register .register-sub-container .contents p {
-    font-size: 0.8rem;
   }
   .register .register-sub-container .contents .custom-button {
     font-size: 1rem;
@@ -255,6 +252,12 @@
   }
   .form .form-sub-container-two form label {
     font-size: 0.8rem;
+  }
+  .register .register-sub-container .contents h1 {
+    font-size: 1.2rem;
+  }
+  .register .register-sub-container .contents h2 {
+    font-size: 0.9rem;
   }
   .success p {
     max-width: 70%;

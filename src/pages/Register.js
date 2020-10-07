@@ -20,20 +20,20 @@ const Register = (props) => {
                 <div className='contents'>
                     <h2>{context.client_name}</h2>
                     <h1>{context.project_name}</h1>
-                    <br></br>
-                    <p>Start: {context.start_date.split("T")[0]}</p>
-                    <p>Planned End: {context.end_date}</p>
-                    <br></br>
+                    <div>
+                        <p>Start: {context.start_date.split("T")[0]}</p>
+                        <p>Planned End: {context.end_date}</p>
+                    </div>
                     <p>{context.brief_description}</p>
-                    <a
-                        href={context.link_to_details}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                    >
-                        Link to details of agreement
-                    </a>
-                    <br></br>
-                    <br></br>
+                    <div>
+                        <a
+                            href={context.link_to_details}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                        >
+                            Link to details of agreement
+                        </a>
+                    </div>
                     <p>Spoils Address ({context.spoils_address})</p>
                     <p>
                         Spoils ( {context.spoils_percent * 100}% of payment sent

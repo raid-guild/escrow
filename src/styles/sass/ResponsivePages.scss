@@ -120,6 +120,13 @@
             }
         }
     }
+    .register {
+        .register-sub-container {
+            .contents {
+                max-width: 100%;
+            }
+        }
+    }
 }
 
 @media only screen and (max-width: 635px) {
@@ -189,6 +196,9 @@
                 h2 {
                     font-size: 1.5rem;
                 }
+                p {
+                    font-size: 0.8rem;
+                }
             }
         }
     }
@@ -209,17 +219,6 @@
         .register-sub-container {
             .contents {
                 margin: 30px;
-                h1 {
-                    font-size: 2rem;
-                }
-
-                h2 {
-                    font-size: 1.5rem;
-                }
-
-                p {
-                    font-size: 0.8rem;
-                }
 
                 .custom-button {
                     font-size: 1rem;
@@ -339,6 +338,18 @@
 
                 label {
                     font-size: 0.8rem;
+                }
+            }
+        }
+    }
+    .register {
+        .register-sub-container {
+            .contents {
+                h1 {
+                    font-size: 1.2rem;
+                }
+                h2 {
+                    font-size: 0.9rem;
                 }
             }
         }
