@@ -214,18 +214,23 @@ $secondary-font: "Uncial Antiqua", cursive;
         color: $primary-color;
         align-items: center;
         justify-content: center;
-
+        width: 100%;
         .contents {
             margin: 50px;
-
+            max-width: 75%;
+            min-width: 75%;
             h1 {
-                font-size: 3rem;
+                font-size: 2rem;
                 font-family: "Uncial Antiqua", cursive;
             }
 
             h2 {
-                font-size: 2rem;
+                font-size: 1.2rem;
                 font-weight: normal;
+            }
+
+            div {
+                margin-bottom: 0.7rem;
             }
 
             a {
