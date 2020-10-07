@@ -275,11 +275,13 @@
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  width: 100%;
 }
 
 .register .register-sub-container .contents {
   margin: 50px;
   max-width: 75%;
+  min-width: 75%;
 }
 
 .register .register-sub-container .contents h1 {
