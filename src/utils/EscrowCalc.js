@@ -1,3 +1,6 @@
+const BN = require("bignumber.js");
+BN.config({ DECIMAL_PLACES: 18 });
+
 const { MainnetDAI, MainnetWETH } = require("./Constants").contract_addresses;
 
 const EscrowCalc = async (context) => {
@@ -20,7 +23,7 @@ const EscrowCalc = async (context) => {
         .balanceOf(context.address)
         .call();
 
-    let total_milestone_payment = "";
+    let total_milestone_payment = new BN(0);
     let next_milestone = "";
     if (context.confirmed === "1") {
         let event_info;
@@ -39,20 +42,23 @@ const EscrowCalc = async (context) => {
             console.log(err);
         }
 
-        total_milestone_payment =
-            parseInt(event_info[0].args.batch[0]._hex) +
-            parseInt(event_info[0].args.batch[1]._hex);
-        let total_milestones = parseInt(context.cap) / total_milestone_payment;
-        let milestones_left =
-            (parseInt(context.cap) - parseInt(context.released)) /
-            total_milestone_payment;
-        let current_milestone = total_milestones - milestones_left;
+        total_milestone_payment = new BN(event_info[0].args.batch[0]._hex).plus(
+            new BN(event_info[0].args.batch[1]._hex)
+        );
+
+        let total_milestones = new BN(context.cap).div(total_milestone_payment);
+
+        let milestones_left = new BN(context.cap)
+            .minus(new BN(context.released))
+            .div(total_milestone_payment);
+
+        let current_milestone = total_milestones.minus(milestones_left);
         total_milestones = Math.round(total_milestones);
         milestones_left = Math.round(milestones_left);
         next_milestone = Math.round(current_milestone) + 1;
 
         total_milestone_payment = context.web3.utils.fromWei(
-            total_milestone_payment.toString()
+            parseInt(total_milestone_payment).toString()
         );
     }
     return {
