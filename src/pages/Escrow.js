@@ -197,7 +197,7 @@ const Escrow = (props) => {
     ).toFixed(2);
     let total_due_to_escrow_frontend = Number(state.frontend_cap).toFixed(2);
     let total_milestone_payment_frontend = Number(
-        state.total_milestone_payment
+        state.next_milestone_payment
     ).toFixed(2);
 
     return hash !== "" ? (

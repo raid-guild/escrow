@@ -23,7 +23,8 @@ const EscrowCalc = async (context) => {
         .balanceOf(context.address)
         .call();
 
-    let total_milestone_payment = new BN(0);
+    let total_milestone_payment;
+    let next_milestone_payment;
     let next_milestone = "";
     if (context.confirmed === "1") {
         let event_info;
@@ -42,32 +43,45 @@ const EscrowCalc = async (context) => {
             console.log(err);
         }
 
+        // calculating the total per milestone payment
         total_milestone_payment = new BN(event_info[0].args.batch[0]._hex).plus(
             new BN(event_info[0].args.batch[1]._hex)
         );
 
+        // calculating total number of milestones
         let total_milestones = new BN(context.cap).div(total_milestone_payment);
 
+        // calculating number of milestones left
         let milestones_left = new BN(context.cap)
             .minus(new BN(context.released))
             .div(total_milestone_payment);
 
-        let current_milestone = total_milestones.minus(milestones_left);
-        total_milestones = Math.round(total_milestones);
-        milestones_left = Math.round(milestones_left);
-        next_milestone = Math.round(current_milestone) + 1;
+        // calculating the next total per milestone payment
+        next_milestone_payment = new BN(context.cap)
+            .minus(new BN(context.released))
+            .div(milestones_left);
 
-        total_milestone_payment = context.web3.utils.fromWei(
-            parseInt(total_milestone_payment).toString()
-        );
+        // converting BN to human readable format
+        next_milestone_payment = Number(next_milestone_payment) / 10 ** 18;
+
+        // calculating the current milestone
+        let current_milestone = total_milestones.minus(milestones_left);
+
+        // converting BN to human readable format
+        total_milestones = Number(total_milestones);
+        milestones_left = Number(milestones_left);
+
+        // calculating next milestone
+        next_milestone = Number(current_milestone) + 1;
     }
+
     return {
         tokenType,
         DAIBalance,
         wETHBalance,
         frontend_cap,
         frontend_released,
-        total_milestone_payment,
+        next_milestone_payment,
         next_milestone,
     };
 };
