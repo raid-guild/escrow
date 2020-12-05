@@ -14,7 +14,10 @@ const Instructions = ({ escrow_index, locker_address }) => {
           address of the LexGuildLocker contract.
           <br></br>
           <strong>
-            ⚠️ Never send funds (tokens or ETH) directly to the escrow smart
+            <span role='img' aria-label='warning'>
+              ⚠️
+            </span>{' '}
+            Never send funds (tokens or ETH) directly to the escrow smart
             contract. Those funds will not be recovarable.
           </strong>
         </li>
