@@ -1,0 +1,156 @@
+@media only screen and (max-width: 600px) {
+  .home-sub-container,
+  .register-sub-container,
+  .form-sub-container-two {
+    width: 90%;
+    padding: 1rem;
+  }
+  .custom-button {
+    width: 250px;
+    font-size: 0.6rem;
+    padding: 10px;
+  }
+  .home {
+    .home-sub-container {
+      height: 90%;
+      img {
+        width: 80px;
+        margin-bottom: 15px;
+      }
+      h1 {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      input {
+        width: 250px;
+        font-size: 0.6rem;
+      }
+      a {
+        margin-top: 1.5rem;
+        font-size: 0.6rem;
+      }
+    }
+  }
+  .register {
+    .register-sub-container {
+      width: 100%;
+      padding: 1.5rem;
+      .contents {
+        h2 {
+          font-size: 0.6rem;
+        }
+        h1 {
+          font-size: 1rem;
+        }
+        p {
+          font-size: 0.6rem;
+        }
+        a {
+          font-size: 0.6rem;
+        }
+        .timelines {
+          p {
+            font-size: 0.6rem;
+          }
+        }
+        .addresses {
+          a {
+            p {
+              font-size: 0.6rem;
+            }
+          }
+        }
+        .custom-button {
+          margin: auto;
+          margin-top: 50px;
+        }
+      }
+    }
+  }
+  .form {
+    width: 100%;
+    flex-direction: column;
+    overflow-y: scroll;
+    padding: 0.5rem;
+    .form-sub-container-one {
+      width: 90%;
+      p {
+        font-size: 0.6rem;
+      }
+    }
+    .form-sub-container-two {
+      width: 100%;
+      label {
+        font-size: 0.6rem;
+      }
+      form {
+        input {
+          font-size: 0.6rem;
+        }
+        .input-sub-container {
+          div:nth-child(1) {
+            width: 50%;
+          }
+          div:nth-child(2) {
+            width: 50%;
+          }
+        }
+        select {
+          font-size: 0.6rem;
+          height: 30px;
+        }
+      }
+      .custom-button {
+        font-size: 0.6rem;
+      }
+    }
+  }
+  .escrow {
+    flex-direction: column;
+    justify-content: space-evenly;
+    .modal {
+      .modal-content {
+        max-height: 100%;
+        p,
+        ol {
+          font-size: 0.6rem;
+        }
+      }
+    }
+    .escrow-sub-container-one {
+      max-width: 100%;
+      h2 {
+        font-size: 0.6rem;
+      }
+      h1 {
+        font-size: 1rem;
+      }
+      .timelines {
+        p {
+          font-size: 0.8rem;
+        }
+      }
+      .link {
+        font-size: 0.8rem;
+      }
+    }
+    .escrow-sub-container-two {
+      width: 90%;
+      padding: 0.5rem;
+      .card {
+        p {
+          font-size: 0.6rem;
+          padding: 5px;
+          display: flex;
+          flex-direction: column;
+        }
+      }
+      .custom-button,
+      .lock-button,
+      .withdraw-button {
+        font-size: 0.8rem;
+        padding: 10px;
+      }
+    }
+  }
+}
