@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 // import Header from './components/Header';
@@ -11,7 +11,10 @@ import AppContextProvider from './context/AppContext';
 
 import './App.css';
 
-class App extends Component {
+import RaidGuildLogo from './assets/raidguild__logo.png';
+
+const App = () => {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   // componentDidMount() {
   //   const hamburger = document.querySelector('.hamburger');
   //   const navLinks = document.querySelector('.nav-links');
@@ -25,9 +28,25 @@ class App extends Component {
   //   });
   // }
 
-  render() {
-    return (
-      <div className='main'>
+  useEffect(() => {
+    window.addEventListener('resize', (e) => {
+      setWindowWidth(window.innerWidth);
+    });
+  }, []);
+
+  return (
+    <div className='main'>
+      {windowWidth < 1100 && (
+        <div className='window'>
+          <img src={RaidGuildLogo} alt='raidguild' />
+          <h1>Raidguild Escrow Service</h1>
+          <p>
+            Please use your desktop or resize your window to more than 1100px to
+            proceed.
+          </p>
+        </div>
+      )}
+      {windowWidth > 1100 && (
         <AppContextProvider>
           <Router>
             {/* <Header /> */}
@@ -50,9 +69,9 @@ class App extends Component {
             </Switch>
           </Router>
         </AppContextProvider>
-      </div>
-    );
-  }
-}
+      )}
+    </div>
+  );
+};
 
 export default App;
