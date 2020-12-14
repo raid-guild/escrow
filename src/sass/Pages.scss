@@ -1,4 +1,7 @@
 $primary-color: #ff3864;
+$royal-black: #0a0a0af5;
+$royal-grey: #16161a;
+$royal-blue: #7f5af0;
 
 $texturina-font: 'Texturina', serif;
 $jetbrains-font: 'JetBrains Mono', monospace;
@@ -23,6 +26,8 @@ $jetbrains-font: 'JetBrains Mono', monospace;
 .lock-button:hover,
 .withdraw-button:hover {
   cursor: pointer;
+  background-color: $royal-grey;
+  color: $primary-color;
 }
 
 .home-sub-container,
@@ -34,7 +39,7 @@ $jetbrains-font: 'JetBrains Mono', monospace;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #0a0a0af5;
+  background-color: $royal-black;
   box-shadow: 0 2.8px 2.2px -14px rgba(0, 0, 0, 0.02),
     0 6.7px 5.3px -14px rgba(0, 0, 0, 0.028),
     0 12.5px 10px -14px rgba(0, 0, 0, 0.035),
@@ -64,7 +69,7 @@ $jetbrains-font: 'JetBrains Mono', monospace;
   align-items: center;
   justify-content: center;
   text-align: center;
-  background-color: #16161a;
+  background-color: $royal-grey;
   font-family: $texturina-font;
   img {
     margin-bottom: 2rem;
@@ -82,7 +87,7 @@ $jetbrains-font: 'JetBrains Mono', monospace;
 
 .home {
   justify-content: space-evenly;
-  background-color: #16161a;
+  background-color: $royal-grey;
 
   .home-sub-container {
     img {
@@ -110,7 +115,7 @@ $jetbrains-font: 'JetBrains Mono', monospace;
     }
 
     ::placeholder {
-      color: #0a0a0af5;
+      color: $royal-black;
       opacity: 1;
     }
 
@@ -138,7 +143,7 @@ $jetbrains-font: 'JetBrains Mono', monospace;
 
 .escrow {
   justify-content: space-around;
-  background-color: #16161a;
+  background-color: $royal-grey;
 
   .modal {
     .modal-content {
@@ -149,7 +154,7 @@ $jetbrains-font: 'JetBrains Mono', monospace;
       align-items: center;
       font-size: 1.2rem;
       color: $primary-color;
-      background-color: #16161a;
+      background-color: $royal-grey;
       padding: 5rem;
 
       p {
@@ -166,7 +171,7 @@ $jetbrains-font: 'JetBrains Mono', monospace;
           color: #a7a9be;
           span {
             padding: 3px;
-            color: #7f5af0;
+            color: $royal-blue;
             border-radius: 5px;
           }
         }
@@ -205,7 +210,7 @@ $jetbrains-font: 'JetBrains Mono', monospace;
     }
 
     .link {
-      color: #7f5af0;
+      color: $royal-blue;
       margin-bottom: 5px;
     }
   }
@@ -217,7 +222,7 @@ $jetbrains-font: 'JetBrains Mono', monospace;
       flex-direction: column;
       justify-content: space-between;
       border-radius: 4px;
-      background-color: #0a0a0af5;
+      background-color: $royal-black;
       letter-spacing: 1.2px;
 
       p {
@@ -256,13 +261,13 @@ $jetbrains-font: 'JetBrains Mono', monospace;
 .register {
   flex-direction: column;
   justify-content: space-around;
-  background-color: #16161a;
+  background-color: $royal-grey;
 
   .register-sub-container {
     width: 70%;
     height: 100%;
     letter-spacing: 1.5px;
-    background-color: #16161a;
+    background-color: $royal-grey;
     .contents {
       div {
         margin-bottom: 0.7rem;
@@ -294,7 +299,7 @@ $jetbrains-font: 'JetBrains Mono', monospace;
       }
 
       a {
-        color: #7f5af0;
+        color: $royal-blue;
         margin-bottom: 5px;
         text-decoration: underline;
         font-family: $texturina-font;
@@ -333,7 +338,7 @@ $jetbrains-font: 'JetBrains Mono', monospace;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #16161a;
+  background-color: $royal-grey;
   h3 {
     font-size: 3rem;
     font-family: $texturina-font;
@@ -359,7 +364,7 @@ $jetbrains-font: 'JetBrains Mono', monospace;
 .form {
   justify-content: space-around;
   padding: 2rem;
-  background-color: #16161a;
+  background-color: $royal-grey;
   .form-sub-container-one {
     width: 40%;
     display: flex;
@@ -375,7 +380,7 @@ $jetbrains-font: 'JetBrains Mono', monospace;
       font-family: $texturina-font;
     }
     span {
-      color: #7f5af0;
+      color: $royal-blue;
       font-family: $jetbrains-font;
       font-weight: bold;
     }
@@ -416,7 +421,7 @@ $jetbrains-font: 'JetBrains Mono', monospace;
         font-weight: bold;
         color: #fffffe;
         padding: 2px;
-        background-color: #16161a;
+        background-color: $royal-grey;
         border: none;
         border-radius: 4px;
         margin-top: 5px;
