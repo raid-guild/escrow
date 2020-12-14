@@ -6,7 +6,7 @@ const Success = (props) => {
   return (
     <div className='success'>
       <motion.h3
-        initial={{ y: -250 }}
+        initial={{ y: -350 }}
         animate={{ y: -10 }}
         transition={{ delay: 0.5 }}
       >

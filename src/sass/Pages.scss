@@ -347,17 +347,7 @@ $jetbrains-font: 'JetBrains Mono', monospace;
   }
   .custom-button {
     margin-top: 20px;
-    border: none;
-    padding: 5px;
-    background-color: $primary-color;
-    color: #fff;
-    font-family: $texturina-font;
     font-size: 1.5rem;
-    border-radius: 3px;
-  }
-
-  .custom-button:hover {
-    cursor: pointer;
   }
 }
 
