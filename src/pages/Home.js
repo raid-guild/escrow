@@ -92,6 +92,7 @@ const Home = (props) => {
         </motion.a>
         <Footer />
       </motion.div>
+      <span id='version'>v2.0.0</span>
     </div>
   );
 };

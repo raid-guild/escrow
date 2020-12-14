@@ -89,6 +89,14 @@ $jetbrains-font: 'JetBrains Mono', monospace;
   justify-content: space-evenly;
   background-color: $royal-grey;
 
+  #version {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 2rem;
+    color: $primary-color;
+  }
+
   .home-sub-container {
     img {
       margin-bottom: 25px;

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 // import Header from './components/Header';
@@ -36,17 +37,33 @@ const App = () => {
 
   return (
     <div className='main'>
-      {windowWidth < 1100 && (
+      {windowWidth < 1000 && (
         <div className='window'>
-          <img src={RaidGuildLogo} alt='raidguild' />
-          <h1>Raidguild Escrow Service</h1>
-          <p>
-            Please use your desktop or resize your window to more than 1100px to
+          <motion.img
+            src={RaidGuildLogo}
+            alt='raidguild'
+            initial={{ y: -350 }}
+            animate={{ y: -10 }}
+            transition={{ delay: 0.5 }}
+          />
+          <motion.h1
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+          >
+            Raidguild Escrow Service
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7, duration: 0.5 }}
+          >
+            Please use your desktop or resize your window to more than 1000px to
             proceed.
-          </p>
+          </motion.p>
         </div>
       )}
-      {windowWidth > 1100 && (
+      {windowWidth > 1000 && (
         <AppContextProvider>
           <Router>
             {/* <Header /> */}
