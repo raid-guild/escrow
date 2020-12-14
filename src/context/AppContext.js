@@ -85,7 +85,7 @@ class AppContextProvider extends Component {
 
   setAirtableState = async (id) => {
     let result = await fetch(
-      'http://guild-keeper.herokuapp.com/escrow/validate',
+      'https://guild-keeper.herokuapp.com/escrow/validate',
       {
         method: 'POST',
         headers: {
