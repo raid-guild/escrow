@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { motion } from 'framer-motion';
 import { withRouter, useParams } from 'react-router-dom';
 
 import { AppContext } from '../context/AppContext';
@@ -215,32 +216,64 @@ const Escrow = (props) => {
   ) : (
     <div className='escrow'>
       <div className='escrow-sub-container-one'>
-        <h2>{context.client_name}</h2>
-        <h1>{context.project_name}</h1>
+        <motion.h2
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5, duration: 0.5 }}
+        >
+          {context.client_name}
+        </motion.h2>
+        <motion.h1
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6, duration: 0.5 }}
+        >
+          {context.project_name}
+        </motion.h1>
         <br></br>
-        <div className='timelines'>
+        <motion.div
+          className='timelines'
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7, duration: 0.5 }}
+        >
           <p>Start: {context.start_date}</p>
           <p>Planned End: {context.end_date}</p>
-        </div>
+        </motion.div>
         <br></br>
         {context.link_to_details === 'Not Available' ? (
-          <p className='link'>Project document not available</p>
+          <motion.p
+            className='link'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8, duration: 0.5 }}
+          >
+            Project document not available
+          </motion.p>
         ) : (
-          <a
+          <motion.a
             className='link'
             href={context.link_to_details}
             target='_blank'
             rel='noopener noreferrer'
             style={{ textDecoration: 'underline' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.9, duration: 0.5 }}
           >
             Link to details of agreement
-          </a>
+          </motion.a>
         )}
 
         {/* <p>{context.brief_description}</p> */}
       </div>
 
-      <div className='escrow-sub-container-two'>
+      <motion.div
+        className='escrow-sub-container-two'
+        initial={{ x: '100vw' }}
+        animate={{ x: 0 }}
+        transition={{ delay: 1 }}
+      >
         <div className='card'>
           <div>
             <p>
@@ -306,7 +339,7 @@ const Escrow = (props) => {
           </div>
         </div>
         {button_component}
-      </div>
+      </motion.div>
 
       <div className={`modal ${modal ? 'is-active' : null}`}>
         <div className='modal-background'></div>

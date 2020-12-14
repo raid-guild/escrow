@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import Loading from '../components/Loading';
 
 const HomeButtonManager = (
@@ -50,13 +51,16 @@ const HomeButtonManager = (
     }
   } else {
     component = (
-      <button
+      <motion.button
         className='custom-button'
         style={{ margin: 0 }}
         onClick={validateID}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.9, duration: 0.5 }}
       >
         Validate ID
-      </button>
+      </motion.button>
     );
   }
 

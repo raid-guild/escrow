@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import DatePicker from 'react-datepicker';
 import 'bulma';
 
@@ -220,30 +221,47 @@ class Form extends Component {
       <div className='form'>
         <div className='form-sub-container-one'>
           <div>
-            <p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.5 }}
+            >
               Payment per milestone ~{' '}
               <span>
                 {this.state.milestone_payment.toFixed(2)}{' '}
                 {this.state.payment_token}
               </span>
-            </p>
-            <p>
+            </motion.p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+            >
               Guild spoils ({spoils_percent * 100}%) per milestone ~{' '}
               <span>
                 {this.state.milestone_spoils_payment.toFixed(2)}{' '}
                 {this.state.payment_token}
               </span>
-            </p>
-            <p>
+            </motion.p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.7, duration: 0.5 }}
+            >
               Multisig Payment per milestone ~{' '}
               <span>
                 {this.state.milestone_multisig_payment.toFixed(2)}{' '}
                 {this.state.payment_token}
               </span>
-            </p>
+            </motion.p>
           </div>
         </div>
-        <div className='form-sub-container-two'>
+        <motion.div
+          className='form-sub-container-two'
+          initial={{ x: '100vw' }}
+          animate={{ x: 0 }}
+          transition={{ delay: 0.8 }}
+        >
           <form>
             <label>Client Address</label>
             <input type='text' id='client_address' />
@@ -287,7 +305,7 @@ class Form extends Component {
               Register
             </button>
           )}
-        </div>
+        </motion.div>
       </div>
     );
   }
