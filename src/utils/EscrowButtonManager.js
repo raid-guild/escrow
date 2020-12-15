@@ -39,11 +39,15 @@ const EscrowButtonManager = (
         </div>
       );
     }
-  } else {
+  } else if (context.confirmed !== '0') {
     component = (
       <button className='lock-button' onClick={() => setModal(true)}>
         Lock
       </button>
+    );
+  } else {
+    component = (
+      <p style={{ marginTop: '20px' }}>Client has not yet made a deposit</p>
     );
   }
 

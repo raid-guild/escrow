@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import Escrow from './pages/Escrow';
 import Register from './pages/Register';
 import Form from './pages/Form';
+import Footer from './components/Footer';
 
 import AppContextProvider from './context/AppContext';
 
@@ -85,6 +86,7 @@ const App = () => {
               </Route>
             </Switch>
           </Router>
+          <Footer />
         </AppContextProvider>
       )}
     </div>

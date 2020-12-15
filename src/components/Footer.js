@@ -8,9 +8,9 @@ const Footer = () => {
   return (
     <motion.div
       className='custom-footer'
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 1.1, duration: 0.5 }}
+      initial={{ x: '100vw' }}
+      animate={{ x: 0 }}
+      transition={{ delay: 1.4 }}
     >
       <a
         href='https://twitter.com/raidguild'

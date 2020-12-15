@@ -5,7 +5,6 @@ import 'bulma';
 
 import { AppContext } from '../context/AppContext';
 
-import Footer from '../components/Footer';
 import HomeButtonManager from '../utils/HomeButtonManager';
 
 import Logo from '../assets/raidguild__logo.png';
@@ -58,13 +57,20 @@ const Home = (props) => {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5, duration: 0.5 }}
       >
-        <motion.img
-          src={Logo}
-          alt='raidguild'
-          initial={{ y: -250 }}
-          animate={{ y: -10 }}
-          transition={{ delay: 0.6 }}
-        />
+        <motion.a
+          href='https://raidguild.org/'
+          target='_blank'
+          rel='noopener noreferrer'
+          whileHover={{ scale: 1.1 }}
+        >
+          <motion.img
+            src={Logo}
+            alt='raidguild'
+            initial={{ y: -250 }}
+            animate={{ y: -10 }}
+            transition={{ delay: 0.6 }}
+          />
+        </motion.a>
         <motion.h1
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -90,9 +96,15 @@ const Home = (props) => {
           <i className='fas fa-asterisk'></i>
           <p>Terms and Conditions apply</p>
         </motion.a>
-        <Footer />
+        <motion.span
+          id='version'
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.1, duration: 0.5 }}
+        >
+          v2.0.0
+        </motion.span>
       </motion.div>
-      <span id='version'>v2.0.0</span>
     </div>
   );
 };

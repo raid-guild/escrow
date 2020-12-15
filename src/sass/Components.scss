@@ -64,13 +64,17 @@
 }
 
 .custom-footer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
   display: flex;
   flex-direction: row;
   .fa-twitter,
   .fa-book,
   .fa-github {
     color: #ff3864;
-    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
     transition: transform 0.2s;
   }
   .fa-twitter:hover,

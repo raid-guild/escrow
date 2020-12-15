@@ -14,6 +14,8 @@ import EscrowCalc from '../utils/EscrowCalc';
 import '../sass/Pages.scss';
 import '../sass/ResponsivePages.scss';
 
+import raidguild__logo from '../assets/raidguild__logo.png';
+
 const { Locker } = require('../utils/Constants').contract_addresses;
 
 const Escrow = (props) => {
@@ -215,6 +217,9 @@ const Escrow = (props) => {
     </div>
   ) : (
     <div className='escrow'>
+      <a href='https://raidguild.org' target='_blank' rel='noopener noreferrer'>
+        <img src={raidguild__logo} alt='raidguild' id='in-page-logo' />
+      </a>
       <div className='escrow-sub-container-one'>
         <motion.h2
           initial={{ opacity: 0 }}

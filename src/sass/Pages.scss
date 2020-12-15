@@ -6,6 +6,16 @@ $royal-blue: #7f5af0;
 $texturina-font: 'Texturina', serif;
 $jetbrains-font: 'JetBrains Mono', monospace;
 
+#in-page-logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: 20px;
+  margin-top: 20px;
+  width: 50px;
+  height: auto;
+}
+
 .custom-button,
 .lock-button,
 .withdraw-button {
@@ -90,10 +100,7 @@ $jetbrains-font: 'JetBrains Mono', monospace;
   background-color: $royal-grey;
 
   #version {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    margin: 2rem;
+    margin-top: 2rem;
     color: $primary-color;
   }
 

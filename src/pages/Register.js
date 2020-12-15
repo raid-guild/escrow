@@ -5,6 +5,8 @@ import { withRouter } from 'react-router-dom';
 import '../sass/Pages.scss';
 import '../sass/ResponsivePages.scss';
 
+import raidguild__logo from '../assets/raidguild__logo.png';
+
 import { AppContext } from '../context/AppContext';
 
 const Register = (props) => {
@@ -17,6 +19,9 @@ const Register = (props) => {
 
   return (
     <div className='register'>
+      <a href='https://raidguild.org' target='_blank' rel='noopener noreferrer'>
+        <img src={raidguild__logo} alt='raidguild' id='in-page-logo' />
+      </a>
       <div className='register-sub-container'>
         <div className='contents'>
           <motion.h2

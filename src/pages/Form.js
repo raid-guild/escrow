@@ -12,6 +12,8 @@ import Success from '../components/Success';
 import '../sass/Pages.scss';
 import '../sass/ResponsivePages.scss';
 
+import raidguild__logo from '../assets/raidguild__logo.png';
+
 import { AppContext } from '../context/AppContext';
 
 import milestone_payments_calculation from '../utils/BigNumberCalc';
@@ -219,6 +221,13 @@ class Form extends Component {
       <Success hash={this.state.hash} />
     ) : (
       <div className='form'>
+        <a
+          href='https://raidguild.org'
+          target='_blank'
+          rel='noopener noreferrer'
+        >
+          <img src={raidguild__logo} alt='raidguild' id='in-page-logo' />
+        </a>
         <div className='form-sub-container-one'>
           <div>
             <motion.p
