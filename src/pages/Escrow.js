@@ -261,15 +261,24 @@ const Escrow = (props) => {
             href={context.link_to_details}
             target='_blank'
             rel='noopener noreferrer'
-            style={{ textDecoration: 'underline' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.9, duration: 0.5 }}
           >
-            Link to details of agreement
+            <p>Link to details of agreement</p>
+            <i className='fas fa-external-link-square-alt'></i>
           </motion.a>
         )}
-
+        <motion.a
+          className='link'
+          href={`https://etherscan.io/address/${context.resolver_address}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 0.5 }}
+        >
+          <p>Arbitration Provider - LexDAO</p>
+          <i className='fas fa-external-link-square-alt'></i>
+        </motion.a>
         {/* <p>{context.brief_description}</p> */}
       </div>
 

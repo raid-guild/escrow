@@ -225,8 +225,15 @@ $jetbrains-font: 'JetBrains Mono', monospace;
     }
 
     .link {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
       color: $royal-blue;
       margin-bottom: 5px;
+      font-family: $texturina-font;
+      p {
+        margin-right: 5px;
+      }
     }
   }
 

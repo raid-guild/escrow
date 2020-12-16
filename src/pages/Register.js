@@ -80,7 +80,7 @@ const Register = (props) => {
             <a
               href={`https://etherscan.io/address/${context.resolver_address}`}
             >
-              <p>Arbitration Provider</p>
+              <p>Arbitration Provider - LexDAO</p>
               <i className='fas fa-external-link-square-alt'></i>
             </a>
           </motion.div>
