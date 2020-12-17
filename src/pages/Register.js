@@ -73,12 +73,18 @@ const Register = (props) => {
             animate={{ opacity: 1 }}
             transition={{ delay: 1, duration: 0.5 }}
           >
-            <a href={`https://etherscan.io/address/${context.spoils_address}`}>
+            <a
+              href={`https://etherscan.io/address/${context.spoils_address}`}
+              target='_blank'
+              rel='noopener noreferrer'
+            >
               <p>Spoils - {context.spoils_percent * 100}% of payment</p>{' '}
               <i className='fas fa-external-link-square-alt'></i>
             </a>
             <a
               href={`https://etherscan.io/address/${context.resolver_address}`}
+              target='_blank'
+              rel='noopener noreferrer'
             >
               <p>Arbitration Provider - LexDAO</p>
               <i className='fas fa-external-link-square-alt'></i>

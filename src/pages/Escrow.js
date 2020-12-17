@@ -272,6 +272,8 @@ const Escrow = (props) => {
         <motion.a
           className='link'
           href={`https://etherscan.io/address/${context.resolver_address}`}
+          target='_blank'
+          rel='noopener noreferrer'
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1, duration: 0.5 }}
