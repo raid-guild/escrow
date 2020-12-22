@@ -1,0 +1,484 @@
+$primary-color: #ff3864;
+$royal-black: #0a0a0af5;
+$royal-grey: #16161a;
+$royal-blue: #7f5af0;
+
+$texturina-font: 'Texturina', serif;
+$jetbrains-font: 'JetBrains Mono', monospace;
+
+#in-page-logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: 20px;
+  margin-top: 20px;
+  width: 50px;
+  height: auto;
+}
+
+.custom-button,
+.lock-button,
+.withdraw-button {
+  width: 350px;
+  display: block;
+  font-family: $texturina-font;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #fffffe;
+  background-color: $primary-color;
+  border: none;
+  border-radius: 3px;
+  padding: 12px;
+}
+
+.custom-button:hover,
+.lock-button:hover,
+.withdraw-button:hover {
+  cursor: pointer;
+  background-color: $royal-grey;
+  color: $primary-color;
+}
+
+.home-sub-container,
+.register-sub-container,
+.form-sub-container-two,
+.escrow-sub-container-two {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: $royal-black;
+  box-shadow: 0 2.8px 2.2px -14px rgba(0, 0, 0, 0.02),
+    0 6.7px 5.3px -14px rgba(0, 0, 0, 0.028),
+    0 12.5px 10px -14px rgba(0, 0, 0, 0.035),
+    0 22.3px 17.9px -14px rgba(0, 0, 0, 0.042),
+    0 41.8px 33.4px -14px rgba(0, 0, 0, 0.05),
+    0 100px 80px -14px rgba(0, 0, 0, 0.07);
+  border-radius: 5px;
+  padding: 3rem;
+}
+
+.home,
+.escrow,
+.register,
+.form {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.window {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: $royal-grey;
+  font-family: $texturina-font;
+  img {
+    margin-bottom: 2rem;
+  }
+  h1 {
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+  p {
+    width: 80%;
+  }
+}
+
+.home {
+  justify-content: space-evenly;
+  background-color: $royal-grey;
+
+  #version {
+    margin-top: 2rem;
+    color: $primary-color;
+  }
+
+  .home-sub-container {
+    img {
+      margin-bottom: 25px;
+    }
+
+    h1 {
+      font-family: $texturina-font;
+      font-size: 2rem;
+      text-transform: uppercase;
+      margin-bottom: 2.5rem;
+      color: #fffffe;
+    }
+
+    input {
+      width: 350px;
+      outline: none;
+      padding: 12px;
+      border: none;
+      background-color: #2b2c34;
+      color: #fffffe;
+      font-family: $texturina-font;
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+    }
+
+    ::placeholder {
+      color: $royal-black;
+      opacity: 1;
+    }
+
+    #network-error-message {
+      color: $primary-color;
+    }
+
+    a {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      color: #a7a9be;
+      margin-top: 2rem;
+      text-transform: lowercase;
+      p {
+        margin-left: 5px;
+      }
+    }
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
+.escrow {
+  justify-content: space-around;
+  background-color: $royal-grey;
+
+  .modal {
+    .modal-content {
+      width: 80%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.2rem;
+      color: $primary-color;
+      background-color: $royal-grey;
+      padding: 5rem;
+
+      p {
+        max-width: 100%;
+        font-size: 1.3rem;
+        font-weight: bold;
+        text-align: left;
+        margin-bottom: 20px;
+        color: $primary-color;
+      }
+
+      ol {
+        li {
+          color: #a7a9be;
+          span {
+            padding: 3px;
+            color: $royal-blue;
+            border-radius: 5px;
+          }
+        }
+      }
+    }
+  }
+
+  .escrow-sub-container-one {
+    display: flex;
+    flex-direction: column;
+    color: $primary-color;
+    max-width: 40%;
+    letter-spacing: 1.5px;
+
+    h1 {
+      color: #fffffe;
+      font-size: 1.7rem;
+      font-family: $texturina-font;
+    }
+
+    h2 {
+      font-weight: normal;
+      color: #94a1b2;
+    }
+
+    p {
+      color: #94a1b2;
+      font-family: $texturina-font;
+    }
+
+    .timelines {
+      p {
+        color: $primary-color;
+        font-family: $jetbrains-font;
+      }
+    }
+
+    .link {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      color: $royal-blue;
+      margin-bottom: 5px;
+      font-family: $texturina-font;
+      p {
+        margin-right: 5px;
+      }
+    }
+  }
+
+  .escrow-sub-container-two {
+    .card {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-radius: 4px;
+      background-color: $royal-black;
+      letter-spacing: 1.2px;
+
+      p {
+        color: #fff;
+        margin-right: auto;
+        padding: 10px;
+        text-transform: uppercase;
+        font-family: $texturina-font;
+      }
+
+      span {
+        float: right;
+        font-weight: bold;
+        text-transform: initial;
+        font-family: $jetbrains-font;
+      }
+    }
+
+    .custom-button {
+      width: auto;
+      float: right;
+      margin-top: 10px;
+      margin-left: 5px;
+    }
+
+    .lock-button,
+    .withdraw-button {
+      width: auto;
+      float: right;
+      margin-top: 10px;
+      margin-left: 5px;
+    }
+  }
+}
+
+.register {
+  flex-direction: column;
+  justify-content: space-around;
+  background-color: $royal-grey;
+
+  .register-sub-container {
+    width: 70%;
+    height: 100%;
+    letter-spacing: 1.5px;
+    background-color: $royal-grey;
+    .contents {
+      div {
+        margin-bottom: 0.7rem;
+        margin-top: 15px;
+      }
+
+      h1 {
+        font-size: 2rem;
+        font-family: $texturina-font;
+        color: #fffffe;
+      }
+
+      h2 {
+        font-size: 1.2rem;
+        font-weight: normal;
+        color: #a7a9be;
+      }
+
+      p {
+        color: #a7a9be;
+        font-family: $texturina-font;
+      }
+
+      .timelines {
+        p {
+          color: $primary-color;
+          font-family: $jetbrains-font;
+        }
+      }
+
+      a {
+        color: $royal-blue;
+        margin-bottom: 5px;
+        text-decoration: underline;
+        font-family: $texturina-font;
+      }
+
+      .addresses {
+        display: flex;
+        flex-direction: column;
+
+        a {
+          text-decoration: none;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          p {
+            margin-right: 5px;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            font-family: $jetbrains-font;
+          }
+        }
+      }
+
+      .custom-button {
+        width: auto;
+        margin-left: auto;
+      }
+    }
+  }
+}
+
+.success {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: $royal-grey;
+  h3 {
+    font-size: 3rem;
+    font-family: $texturina-font;
+    color: $primary-color;
+    text-transform: uppercase;
+  }
+  .custom-button {
+    margin-top: 20px;
+    font-size: 1.5rem;
+  }
+}
+
+.form {
+  justify-content: space-around;
+  padding: 2rem;
+  background-color: $royal-grey;
+  .form-sub-container-one {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+    p {
+      font-size: 1.2rem;
+      color: #fffffe;
+      letter-spacing: 2px;
+      line-height: 2;
+      font-family: $texturina-font;
+    }
+    span {
+      color: $royal-blue;
+      font-family: $jetbrains-font;
+      font-weight: bold;
+    }
+  }
+
+  .form-sub-container-two {
+    form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+
+      label {
+        color: #fffffe;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+        font-family: $texturina-font;
+      }
+
+      input {
+        outline: none;
+        margin-bottom: 15px;
+        margin-top: 5px;
+        padding: 0.5rem;
+        border: none;
+        border-radius: 4px;
+        background-color: #2b2c34;
+        color: #fffffe;
+        font-family: $jetbrains-font;
+        font-size: 1rem;
+      }
+
+      select {
+        height: 40px;
+        width: 100%;
+        outline: none;
+        font-family: $texturina-font;
+        font-size: 1rem;
+        font-weight: bold;
+        color: #fffffe;
+        padding: 2px;
+        background-color: $royal-grey;
+        border: none;
+        border-radius: 4px;
+        margin-top: 5px;
+      }
+
+      .input-sub-container {
+        display: flex;
+        flex-direction: row;
+
+        div:nth-child(1) {
+          width: 70%;
+          input {
+            width: 90%;
+          }
+        }
+        div:nth-child(2) {
+          width: 30%;
+        }
+      }
+
+      .milestone {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        p {
+          color: #fff;
+          font-weight: bold;
+          font-size: 1.1rem;
+        }
+      }
+
+      #date-picker {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-top: 10px;
+        input {
+          width: 100%;
+        }
+      }
+    }
+
+    .custom-button {
+      width: auto;
+      margin-left: auto;
+    }
+  }
+}
