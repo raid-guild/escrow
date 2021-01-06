@@ -87,7 +87,7 @@ const Home = (props) => {
           transition={{ delay: 0.8, duration: 0.5 }}
         ></motion.input>
         {button_component}
-        <motion.a
+        {/* <motion.a
           href='https://docs.google.com/document/d/1SoHrtoZbvgJg9OluZueZqoUracuEmvccWLo4EPU61R4/edit?usp=sharing'
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -95,7 +95,7 @@ const Home = (props) => {
         >
           <i className='fas fa-asterisk'></i>
           <p>Terms and Conditions apply</p>
-        </motion.a>
+        </motion.a> */}
         <motion.span
           id='version'
           initial={{ opacity: 0 }}
