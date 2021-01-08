@@ -95,6 +95,7 @@ class Form extends Component {
         this.setState({
           milestones: 1
         });
+        return;
       }
       milestones = event.target.value;
       const payments = milestone_payments_calculation(
