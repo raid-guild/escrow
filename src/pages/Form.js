@@ -68,6 +68,7 @@ class Form extends Component {
     });
 
     total_payment_input.addEventListener('change', (event) => {
+      if (event.target.value === '') return;
       total_payment = event.target.value;
       const payments = milestone_payments_calculation(
         total_payment,
@@ -88,6 +89,13 @@ class Form extends Component {
     });
 
     milestones_input.addEventListener('change', (event) => {
+      if (event.target.value === '0') {
+        alert('Milestone cannot be zero!');
+        milestones_input.value = '1';
+        this.setState({
+          milestones: 1
+        });
+      }
       milestones = event.target.value;
       const payments = milestone_payments_calculation(
         this.state.total_payment,
@@ -295,7 +303,7 @@ class Form extends Component {
             </div>
 
             <label>Number of Milestones</label>
-            <input type='number' id='milestones' />
+            <input type='number' id='milestones' min='1' />
 
             <div id='date-picker'>
               <label>Client Safety Valve Withdrawal Date</label>
