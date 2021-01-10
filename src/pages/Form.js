@@ -68,7 +68,18 @@ class Form extends Component {
     });
 
     total_payment_input.addEventListener('change', (event) => {
-      if (event.target.value === '') return;
+      if (
+        event.target.value === '' ||
+        event.target.value === '0' ||
+        Number(event.target.value) < 0
+      ) {
+        alert('Total payment cannot be zero, negative or empty!');
+        total_payment_input.value = '1';
+        this.setState({
+          total_payment: 1
+        });
+        return;
+      }
       total_payment = event.target.value;
       const payments = milestone_payments_calculation(
         total_payment,
@@ -89,8 +100,12 @@ class Form extends Component {
     });
 
     milestones_input.addEventListener('change', (event) => {
-      if (event.target.value === '0') {
-        alert('Milestone cannot be zero!');
+      if (
+        event.target.value === '0' ||
+        event.target.value === '' ||
+        Number(event.target.value) < 0
+      ) {
+        alert('Milestone cannot be zero, negative or empty!');
         milestones_input.value = '1';
         this.setState({
           milestones: 1
@@ -291,7 +306,7 @@ class Form extends Component {
               <div>
                 <label>Total Raid Payment</label>
                 <br />
-                <input type='number' id='total_payment' />
+                <input type='number' id='total_payment' min='1' />
               </div>
               <div>
                 <label>Payment Token</label>
