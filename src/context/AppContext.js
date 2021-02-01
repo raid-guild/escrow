@@ -27,7 +27,7 @@ const providerOptions = {
 
 const web3Modal = new Web3Modal({
   network: 'mainnet',
-  cacheProvider: false,
+  cacheProvider: true,
   providerOptions
 });
 
@@ -149,7 +149,7 @@ class AppContextProvider extends Component {
   connectAccount = async () => {
     try {
       this.updateLoadingState();
-      web3Modal.clearCachedProvider();
+      // web3Modal.clearCachedProvider();
 
       const provider = await web3Modal.connect();
       const web3 = new Web3(provider);

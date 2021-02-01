@@ -171,6 +171,15 @@ const Escrow = (props) => {
   };
 
   useEffect(() => {
+    if (context.chainID !== '') {
+      if (context.chainID !== 1 && context.chainID !== '0x1') {
+        alert('Switch to Mainnet!');
+        return props.history.push('/');
+      }
+    }
+  }, [context.chainID, props.history]);
+
+  useEffect(() => {
     initData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
