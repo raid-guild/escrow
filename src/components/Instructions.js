@@ -23,7 +23,7 @@ const Instructions = ({ escrow_index, locker_address }) => {
         </li>
         <li>
           The ABI from the contract should load into the 'ABI' field. If it
-          doesn't, go copy it from Etherscan and paste it in manually.
+          doesn't, go copy it from blockscout and paste it in manually.
         </li>
         <li>Select the `lock` function from the dropdown menu.</li>
         <li>
@@ -44,13 +44,13 @@ const Instructions = ({ escrow_index, locker_address }) => {
           You can check that the status is now "locked" by looking up index{' '}
           <span>{escrow_index}</span> in the{' '}
           <a
-            href={`https://etherscan.io/address/${locker_address}`}
+            href={`https://blockscout.com/poa/xdai/address/${locker_address}`}
             target='_blank'
             rel='noopener noreferrer'
           >
             LexGuildLocker Contract
           </a>{' '}
-          on Etherscan.
+          on blockscout.
         </li>
       </ol>
     </div>
