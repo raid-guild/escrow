@@ -171,6 +171,14 @@ const Escrow = (props) => {
   };
 
   useEffect(() => {
+    if (context.chainID !== '') {
+      if (context.chainID !== 1 && context.chainID !== '0x1') {
+        alert('Switch to Mainnet!');
+      }
+    }
+  }, [context.chainID, props.history]);
+
+  useEffect(() => {
     initData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -279,6 +287,18 @@ const Escrow = (props) => {
           transition={{ delay: 1, duration: 0.5 }}
         >
           <p>Arbitration Provider - LexDAO</p>
+          <i className='fas fa-external-link-square-alt'></i>
+        </motion.a>
+        <motion.a
+          className='link'
+          href={`https://etherscan.io/address/${state.client_address}`}
+          target='_blank'
+          rel='noopener noreferrer'
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.1, duration: 0.5 }}
+        >
+          <p>Registered Client Address</p>
           <i className='fas fa-external-link-square-alt'></i>
         </motion.a>
         {/* <p>{context.brief_description}</p> */}
