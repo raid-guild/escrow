@@ -74,7 +74,7 @@ const Register = (props) => {
             transition={{ delay: 1, duration: 0.5 }}
           >
             <a
-              href={`https://etherscan.io/address/${context.spoils_address}`}
+              href={`https://blockscout.com/poa/xdai/address/${context.spoils_address}`}
               target='_blank'
               rel='noopener noreferrer'
             >
@@ -82,7 +82,7 @@ const Register = (props) => {
               <i className='fas fa-external-link-square-alt'></i>
             </a>
             <a
-              href={`https://etherscan.io/address/${context.resolver_address}`}
+              href={`https://blockscout.com/poa/xdai/address/${context.resolver_address}`}
               target='_blank'
               rel='noopener noreferrer'
             >

@@ -7,7 +7,7 @@
     z-index: 1;
 
     .fa-bars {
-      color: #ff3864;
+      color: #48a9a6;
       transition: all 1s ease-out;
     }
 
@@ -37,12 +37,12 @@
       transition: all 0.5s ease 0.4s;
       a {
         font-size: 25px;
-        color: #ff3864;
+        color: #48a9a6;
         text-decoration: none;
       }
       a::after {
         transition: all ease-in-out 0.2s;
-        background: none repeat scroll 0 0 #ff3864;
+        background: none repeat scroll 0 0 #48a9a6;
         content: '';
         display: block;
         height: 2px;
@@ -72,7 +72,7 @@
   .fa-twitter,
   .fa-book,
   .fa-github {
-    color: #ff3864;
+    color: #48a9a6;
     margin-right: 20px;
     margin-bottom: 20px;
     transition: transform 0.2s;
@@ -103,7 +103,7 @@
 .spinner > div {
   width: 18px;
   height: 18px;
-  background-color: #ff3864;
+  background-color: #48a9a6;
   border-radius: 100%;
   display: inline-block;
   -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;

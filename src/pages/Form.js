@@ -18,10 +18,7 @@ import { AppContext } from '../context/AppContext';
 
 import milestone_payments_calculation from '../utils/BigNumberCalc';
 
-const {
-  MainnetDAI,
-  MainnetWETH
-} = require('../utils/Constants').contract_addresses;
+const { w_XDAI, w_XETH } = require('../utils/Constants').contract_addresses;
 
 class Form extends Component {
   state = {
@@ -172,10 +169,10 @@ class Form extends Component {
     if (safety_valve_date.getDate() === new Date().getDate())
       return alert('Safety valve date cannot be today.');
 
-    if (payment_token === 'DAI') {
-      payment_token_address = MainnetDAI;
-    } else if (payment_token === 'wETH') {
-      payment_token_address = MainnetWETH;
+    if (payment_token === 'wXDAI') {
+      payment_token_address = w_XDAI;
+    } else if (payment_token === 'wXETH') {
+      payment_token_address = w_XETH;
     }
 
     let index = await locker.methods.lockerCount().call();
@@ -201,7 +198,7 @@ class Form extends Component {
         })
         .once('transactionHash', async (hash) => {
           let result = await fetch(
-            'https://guild-keeper.herokuapp.com/escrow/update',
+            'https://guild-keeper.herokuapp.com/escrow/update-raid',
             {
               method: 'POST',
               headers: {
@@ -312,8 +309,8 @@ class Form extends Component {
                 <label>Payment Token</label>
                 <br />
                 <select id='token'>
-                  <option>DAI</option>
-                  <option>wETH</option>
+                  <option>wXDAI</option>
+                  <option>wXETH</option>
                 </select>
               </div>
             </div>

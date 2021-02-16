@@ -1,7 +1,7 @@
 const BN = require('bignumber.js');
 BN.config({ DECIMAL_PLACES: 18 });
 
-const { MainnetDAI, MainnetWETH } = require('./Constants').contract_addresses;
+const { w_XDAI, w_XETH } = require('./Constants').contract_addresses;
 
 const EscrowCalc = async (context) => {
   let frontend_cap = context.web3.utils.fromWei(context.cap, 'ether');
@@ -9,15 +9,15 @@ const EscrowCalc = async (context) => {
   let client_address = '';
 
   let tokenType = '';
-  if (context.token.toLowerCase() === MainnetDAI.toLowerCase())
-    tokenType = 'DAI';
-  if (context.token.toLowerCase() === MainnetWETH.toLowerCase())
-    tokenType = 'wETH';
+  if (context.token.toLowerCase() === w_XDAI.toLowerCase()) tokenType = 'wXDAI';
+  if (context.token.toLowerCase() === w_XETH.toLowerCase()) tokenType = 'wXETH';
 
-  let wETHBalance = await context.wETH.methods
+  let wXETHBalance = await context.wXETH.methods
     .balanceOf(context.address)
     .call();
-  let DAIBalance = await context.DAI.methods.balanceOf(context.address).call();
+  let wXDAIBalance = await context.wXDAI.methods
+    .balanceOf(context.address)
+    .call();
 
   let total_milestone_payment;
   let next_milestone_payment;
@@ -72,8 +72,8 @@ const EscrowCalc = async (context) => {
   return {
     client_address,
     tokenType,
-    DAIBalance,
-    wETHBalance,
+    wXDAIBalance,
+    wXETHBalance,
     frontend_cap,
     frontend_released,
     next_milestone_payment,

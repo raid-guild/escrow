@@ -102,7 +102,7 @@ const Home = (props) => {
           animate={{ opacity: 1 }}
           transition={{ delay: 1.1, duration: 0.5 }}
         >
-          v2.0.0
+          v2.0.0 - xDai
         </motion.span>
       </motion.div>
     </div>

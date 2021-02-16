@@ -1,0 +1,24 @@
+[
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "payable": false,
+    "outputs": [{ "type": "address", "name": "impl" }],
+    "name": "implementation",
+    "inputs": [],
+    "constant": true
+  },
+  {
+    "type": "constructor",
+    "stateMutability": "nonpayable",
+    "payable": false,
+    "inputs": [
+      { "type": "address", "name": "_tokenImage" },
+      { "type": "string", "name": "_name" },
+      { "type": "string", "name": "_symbol" },
+      { "type": "uint8", "name": "_decimals" },
+      { "type": "uint256", "name": "_chainId" }
+    ]
+  },
+  { "type": "fallback", "stateMutability": "payable", "payable": true }
+]
