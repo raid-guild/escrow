@@ -18,7 +18,7 @@ import { AppContext } from '../context/AppContext';
 
 import milestone_payments_calculation from '../utils/BigNumberCalc';
 
-const { w_XDAI, w_XETH } = require('../utils/Constants').contract_addresses;
+const { w_XDAI, w_ETH } = require('../utils/Constants').contract_addresses;
 
 class Form extends Component {
   state = {
@@ -171,8 +171,8 @@ class Form extends Component {
 
     if (payment_token === 'wXDAI') {
       payment_token_address = w_XDAI;
-    } else if (payment_token === 'wXETH') {
-      payment_token_address = w_XETH;
+    } else if (payment_token === 'wETH') {
+      payment_token_address = w_ETH;
     }
 
     let index = await locker.methods.lockerCount().call();
@@ -310,7 +310,7 @@ class Form extends Component {
                 <br />
                 <select id='token'>
                   <option>wXDAI</option>
-                  <option>wXETH</option>
+                  <option>wETH</option>
                 </select>
               </div>
             </div>

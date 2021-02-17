@@ -1,18 +1,19 @@
 const BN = require('bignumber.js');
 BN.config({ DECIMAL_PLACES: 18 });
 
-const { w_XDAI, w_XETH } = require('./Constants').contract_addresses;
+const { w_XDAI, w_ETH } = require('./Constants').contract_addresses;
 
 const EscrowCalc = async (context) => {
+  console.log(context);
   let frontend_cap = context.web3.utils.fromWei(context.cap, 'ether');
   let frontend_released = context.web3.utils.fromWei(context.released, 'ether');
   let client_address = '';
 
   let tokenType = '';
   if (context.token.toLowerCase() === w_XDAI.toLowerCase()) tokenType = 'wXDAI';
-  if (context.token.toLowerCase() === w_XETH.toLowerCase()) tokenType = 'wXETH';
+  if (context.token.toLowerCase() === w_ETH.toLowerCase()) tokenType = 'wETH';
 
-  let wXETHBalance = await context.wXETH.methods
+  let wETHBalance = await context.wETH.methods
     .balanceOf(context.address)
     .call();
   let wXDAIBalance = await context.wXDAI.methods
@@ -73,7 +74,7 @@ const EscrowCalc = async (context) => {
     client_address,
     tokenType,
     wXDAIBalance,
-    wXETHBalance,
+    wETHBalance,
     frontend_cap,
     frontend_released,
     next_milestone_payment,

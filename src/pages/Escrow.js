@@ -27,7 +27,7 @@ const Escrow = (props) => {
   const { id } = useParams();
 
   const onDepositHandler = async () => {
-    let contract = state.tokenType === 'wXDAI' ? context.wXDAI : context.wXETH;
+    let contract = state.tokenType === 'wXDAI' ? context.wXDAI : context.wETH;
 
     if (
       Number(state.wXDAIBalance) < Number(context.cap) &&
@@ -57,8 +57,8 @@ const Escrow = (props) => {
             context.updateLoadingState();
             setHash(txHash);
           });
-      } else if (state.tokenType === 'wXETH') {
-        if (state.wXETHBalance >= context.cap) {
+      } else if (state.tokenType === 'wETH') {
+        if (state.wETHBalance >= context.cap) {
           if (allowance < context.cap) {
             await contract.methods
               .approve(Locker, context.cap)

@@ -7,12 +7,12 @@ import WalletConnectProvider from '@walletconnect/web3-provider';
 
 const lockerABI = require('../abi/Locker.json');
 const wXDAI_ABI = require('../abi/wXDAI.json');
-const wXETH_ABI = require('../abi/wXETH.json');
+const wETH_ABI = require('../abi/wETH.json');
 
 const {
   Locker,
   w_XDAI,
-  w_XETH,
+  w_ETH,
   RaidGuild,
   LexArbitration
 } = require('../utils/Constants').contract_addresses;
@@ -78,10 +78,10 @@ class AppContextProvider extends Component {
     );
     const locker = new web3.eth.Contract(lockerABI, Locker);
     const wXDAI = new web3.eth.Contract(wXDAI_ABI, w_XDAI);
-    const wXETH = new web3.eth.Contract(wXETH_ABI, w_XETH);
+    const wETH = new web3.eth.Contract(wETH_ABI, w_ETH);
     const chainID = await web3.eth.net.getId();
 
-    this.setState({ web3, locker, wXDAI, wXETH, chainID });
+    this.setState({ web3, locker, wXDAI, wETH, chainID });
   }
 
   setAirtableState = async (id) => {
@@ -157,7 +157,7 @@ class AppContextProvider extends Component {
       const accounts = await web3.eth.getAccounts();
       const locker = new web3.eth.Contract(lockerABI, Locker);
       const wXDAI = new web3.eth.Contract(wXDAI_ABI, w_XDAI);
-      const wXETH = new web3.eth.Contract(wXETH_ABI, w_XETH);
+      const wETH = new web3.eth.Contract(wETH_ABI, w_ETH);
 
       let chainID = await web3.eth.net.getId();
 
@@ -189,7 +189,7 @@ class AppContextProvider extends Component {
           isClient,
           locker,
           wXDAI,
-          wXETH,
+          wETH,
           chainID,
           ethers_locker
         },
