@@ -18,7 +18,7 @@ const Success = (props) => {
         transition={{ delay: 0.6, duration: 0.5 }}
       >
         You can check the progress of your transaction{' '}
-        <a href={`https://etherscan.io/tx/${props.hash}`}>here.</a>
+        <a href={`https://blockscout.com/poa/xdai/tx/${props.hash}`}>here.</a>
       </motion.p>
       <motion.button
         className='custom-button'

@@ -6,12 +6,13 @@ import Web3Modal from 'web3modal';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 
 const lockerABI = require('../abi/Locker.json');
-const DAI_ABI = require('../abi/DaiAbi.json');
-const wETH_ABI = require('../abi/wETHAbi.json');
+const wXDAI_ABI = require('../abi/wXDAI.json');
+const wETH_ABI = require('../abi/wETH.json');
+
 const {
   Locker,
-  MainnetDAI,
-  MainnetWETH,
+  w_XDAI,
+  w_ETH,
   RaidGuild,
   LexArbitration
 } = require('../utils/Constants').contract_addresses;
@@ -20,7 +21,9 @@ const providerOptions = {
   walletconnect: {
     package: WalletConnectProvider,
     options: {
-      infuraId: process.env.REACT_APP_INFURA_ID
+      rpc: {
+        100: 'https://rpc.xdaichain.com/'
+      }
     }
   }
 };
@@ -71,21 +74,19 @@ class AppContextProvider extends Component {
 
   async componentDidMount() {
     const web3 = new Web3(
-      new Web3.providers.HttpProvider(
-        `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_ID}`
-      )
+      new Web3.providers.HttpProvider(`https://rpc.xdaichain.com/`)
     );
     const locker = new web3.eth.Contract(lockerABI, Locker);
-    const DAI = new web3.eth.Contract(DAI_ABI, MainnetDAI);
-    const wETH = new web3.eth.Contract(wETH_ABI, MainnetWETH);
+    const wXDAI = new web3.eth.Contract(wXDAI_ABI, w_XDAI);
+    const wETH = new web3.eth.Contract(wETH_ABI, w_ETH);
     const chainID = await web3.eth.net.getId();
 
-    this.setState({ web3, locker, DAI, wETH, chainID });
+    this.setState({ web3, locker, wXDAI, wETH, chainID });
   }
 
   setAirtableState = async (id) => {
     let result = await fetch(
-      'https://guild-keeper.herokuapp.com/escrow/validate',
+      'https://guild-keeper.herokuapp.com/escrow/validate-raid',
       {
         method: 'POST',
         headers: {
@@ -103,12 +104,12 @@ class AppContextProvider extends Component {
         {
           escrow_index: result['Escrow Index'] || '',
           raid_id: id,
-          project_name: result['Name'] || 'Not Available',
-          client_name: result['Your Name'] || 'Not Available',
+          project_name: result['Project Name'] || 'Not Available',
+          client_name: result['Name'] || 'Not Available',
           start_date: result['Raid Start Date'] || 'Not Available',
-          end_date: result['Desired date of completion'] || 'Not Available',
-          link_to_details: result['Link to Agreement'] || 'Not Available',
-          brief_description: result['Brief Summary'] || 'Not Available'
+          end_date: result['Expected Deadline'] || 'Not Available',
+          link_to_details: result['Specs Link'] || 'Not Available',
+          brief_description: result['Project Description'] || 'Not Available'
         },
         () => this.fetchLockerInfo()
       );
@@ -155,17 +156,15 @@ class AppContextProvider extends Component {
       const web3 = new Web3(provider);
       const accounts = await web3.eth.getAccounts();
       const locker = new web3.eth.Contract(lockerABI, Locker);
-      const DAI = new web3.eth.Contract(DAI_ABI, MainnetDAI);
-      const wETH = new web3.eth.Contract(wETH_ABI, MainnetWETH);
+      const wXDAI = new web3.eth.Contract(wXDAI_ABI, w_XDAI);
+      const wETH = new web3.eth.Contract(wETH_ABI, w_ETH);
+
       let chainID = await web3.eth.net.getId();
 
       let ethers_locker = new ethers.Contract(
         Locker,
         lockerABI,
-        new ethers.providers.InfuraProvider(
-          'homestead',
-          process.env.REACT_APP_INFURA_ID
-        )
+        new ethers.providers.Web3Provider(web3.currentProvider)
       );
 
       let isClient = false;
@@ -189,7 +188,7 @@ class AppContextProvider extends Component {
           web3,
           isClient,
           locker,
-          DAI,
+          wXDAI,
           wETH,
           chainID,
           ethers_locker

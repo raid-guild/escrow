@@ -27,11 +27,11 @@ const Escrow = (props) => {
   const { id } = useParams();
 
   const onDepositHandler = async () => {
-    let contract = state.tokenType === 'DAI' ? context.DAI : context.wETH;
+    let contract = state.tokenType === 'wXDAI' ? context.wXDAI : context.wETH;
 
     if (
-      Number(state.DAIBalance) < Number(context.cap) &&
-      state.tokenType === 'DAI'
+      Number(state.wXDAIBalance) < Number(context.cap) &&
+      state.tokenType === 'wXDAI'
     )
       return alert('Insufficient funds! Please add more DAI to you wallet.');
 
@@ -41,7 +41,7 @@ const Escrow = (props) => {
 
     try {
       context.updateLoadingState();
-      if (state.tokenType === 'DAI') {
+      if (state.tokenType === 'wXDAI') {
         if (allowance < context.cap) {
           await contract.methods
             .approve(Locker, context.cap)
@@ -172,8 +172,8 @@ const Escrow = (props) => {
 
   useEffect(() => {
     if (context.chainID !== '') {
-      if (context.chainID !== 1 && context.chainID !== '0x1') {
-        alert('Switch to Mainnet!');
+      if (context.chainID !== 100 && context.chainID !== '0x64') {
+        alert('Switch to xDai!');
       }
     }
   }, [context.chainID, props.history]);
@@ -279,7 +279,7 @@ const Escrow = (props) => {
         )}
         <motion.a
           className='link'
-          href={`https://etherscan.io/address/${context.resolver_address}`}
+          href={`https://blockscout.com/poa/xdai/address/${context.resolver_address}`}
           target='_blank'
           rel='noopener noreferrer'
           initial={{ opacity: 0 }}
@@ -291,7 +291,7 @@ const Escrow = (props) => {
         </motion.a>
         <motion.a
           className='link'
-          href={`https://etherscan.io/address/${state.client_address}`}
+          href={`https://blockscout.com/poa/xdai/address/${state.client_address}`}
           target='_blank'
           rel='noopener noreferrer'
           initial={{ opacity: 0 }}

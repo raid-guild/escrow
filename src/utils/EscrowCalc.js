@@ -1,7 +1,7 @@
 const BN = require('bignumber.js');
 BN.config({ DECIMAL_PLACES: 18 });
 
-const { MainnetDAI, MainnetWETH } = require('./Constants').contract_addresses;
+const { w_XDAI, w_ETH } = require('./Constants').contract_addresses;
 
 const EscrowCalc = async (context) => {
   let frontend_cap = context.web3.utils.fromWei(context.cap, 'ether');
@@ -9,34 +9,38 @@ const EscrowCalc = async (context) => {
   let client_address = '';
 
   let tokenType = '';
-  if (context.token.toLowerCase() === MainnetDAI.toLowerCase())
-    tokenType = 'DAI';
-  if (context.token.toLowerCase() === MainnetWETH.toLowerCase())
-    tokenType = 'wETH';
+  if (context.token.toLowerCase() === w_XDAI.toLowerCase()) tokenType = 'wXDAI';
+  if (context.token.toLowerCase() === w_ETH.toLowerCase()) tokenType = 'wETH';
 
   let wETHBalance = await context.wETH.methods
     .balanceOf(context.address)
     .call();
-  let DAIBalance = await context.DAI.methods.balanceOf(context.address).call();
+  let wXDAIBalance = await context.wXDAI.methods
+    .balanceOf(context.address)
+    .call();
 
   let total_milestone_payment;
   let next_milestone_payment;
   let next_milestone = '';
+
+  let event_info;
+
+  try {
+    let events = await context.ethers_locker.queryFilter('RegisterLocker');
+
+    event_info = events.filter(
+      (event) =>
+        parseInt(event.args.index._hex) === parseInt(context.escrow_index)
+    );
+  } catch (err) {
+    console.log(err);
+  }
+
+  client_address = event_info[0].args.client;
+
   if (context.confirmed === '1') {
-    let event_info;
-
-    try {
-      let events = await context.ethers_locker.queryFilter('RegisterLocker');
-
-      event_info = events.filter(
-        (event) =>
-          parseInt(event.args.index._hex) === parseInt(context.escrow_index)
-      );
-    } catch (err) {
-      console.log(err);
-    }
-
     client_address = event_info[0].args.client;
+
     // calculating the total per milestone payment
     total_milestone_payment = new BN(event_info[0].args.batch[0]._hex).plus(
       new BN(event_info[0].args.batch[1]._hex)
@@ -72,7 +76,7 @@ const EscrowCalc = async (context) => {
   return {
     client_address,
     tokenType,
-    DAIBalance,
+    wXDAIBalance,
     wETHBalance,
     frontend_cap,
     frontend_released,
