@@ -25,7 +25,7 @@ class Form extends Component {
     client_address: '',
     multisig_address: '',
     total_payment: 1,
-    payment_token: 'DAI',
+    payment_token: 'wXDAI',
     milestone_payment: 0,
     milestones: 1,
     milestone_spoils_payment: 1,

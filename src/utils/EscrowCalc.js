@@ -4,7 +4,6 @@ BN.config({ DECIMAL_PLACES: 18 });
 const { w_XDAI, w_ETH } = require('./Constants').contract_addresses;
 
 const EscrowCalc = async (context) => {
-  console.log(context);
   let frontend_cap = context.web3.utils.fromWei(context.cap, 'ether');
   let frontend_released = context.web3.utils.fromWei(context.released, 'ether');
   let client_address = '';
@@ -23,21 +22,25 @@ const EscrowCalc = async (context) => {
   let total_milestone_payment;
   let next_milestone_payment;
   let next_milestone = '';
+
+  let event_info;
+
+  try {
+    let events = await context.ethers_locker.queryFilter('RegisterLocker');
+
+    event_info = events.filter(
+      (event) =>
+        parseInt(event.args.index._hex) === parseInt(context.escrow_index)
+    );
+  } catch (err) {
+    console.log(err);
+  }
+
+  client_address = event_info[0].args.client;
+
   if (context.confirmed === '1') {
-    let event_info;
-
-    try {
-      let events = await context.ethers_locker.queryFilter('RegisterLocker');
-
-      event_info = events.filter(
-        (event) =>
-          parseInt(event.args.index._hex) === parseInt(context.escrow_index)
-      );
-    } catch (err) {
-      console.log(err);
-    }
-
     client_address = event_info[0].args.client;
+
     // calculating the total per milestone payment
     total_milestone_payment = new BN(event_info[0].args.batch[0]._hex).plus(
       new BN(event_info[0].args.batch[1]._hex)
