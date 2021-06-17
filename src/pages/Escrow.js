@@ -41,7 +41,7 @@ const Escrow = (props) => {
 
     try {
       context.updateLoadingState();
-      if (state.tokenType === 'wXDAI') {
+      if (state.tokenType === 'wETH') {
         if (allowance < context.cap) {
           await contract.methods
             .approve(Locker, context.cap)
@@ -57,8 +57,8 @@ const Escrow = (props) => {
             context.updateLoadingState();
             setHash(txHash);
           });
-      } else if (state.tokenType === 'wETH') {
-        if (state.wETHBalance >= context.cap) {
+      } else if (state.tokenType === 'wXDAI') {
+        if (state.wXDAIBalance >= context.cap) {
           if (allowance < context.cap) {
             await contract.methods
               .approve(Locker, context.cap)
