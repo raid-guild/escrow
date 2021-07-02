@@ -8,13 +8,8 @@ import WalletConnectProvider from '@walletconnect/web3-provider';
 const lockerABI = require('../abi/Locker.json');
 const DAI_ABI = require('../abi/DaiAbi.json');
 const wETH_ABI = require('../abi/wETHAbi.json');
-const {
-  Locker,
-  MainnetDAI,
-  MainnetWETH,
-  RaidGuild,
-  LexArbitration
-} = require('../utils/Constants').contract_addresses;
+const { Locker, MainnetDAI, MainnetWETH, RaidGuild, LexArbitration } =
+  require('../utils/Constants').contract_addresses;
 
 const providerOptions = {
   walletconnect: {
@@ -70,6 +65,7 @@ class AppContextProvider extends Component {
   };
 
   async componentDidMount() {
+    console.log(this.state.spoils_address);
     const web3 = new Web3(
       new Web3.providers.HttpProvider(
         `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_ID}`
@@ -123,17 +119,8 @@ class AppContextProvider extends Component {
 
   fetchLockerInfo = async () => {
     if (this.state.escrow_index !== '' && this.state.locker) {
-      let {
-        cap,
-        confirmed,
-        locked,
-        released,
-        token,
-        termination,
-        client
-      } = await this.state.locker.methods
-        .lockers(this.state.escrow_index)
-        .call();
+      let { cap, confirmed, locked, released, token, termination, client } =
+        await this.state.locker.methods.lockers(this.state.escrow_index).call();
       this.setState({
         cap,
         confirmed,
