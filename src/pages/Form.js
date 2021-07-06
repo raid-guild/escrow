@@ -18,10 +18,8 @@ import { AppContext } from '../context/AppContext';
 
 import milestone_payments_calculation from '../utils/BigNumberCalc';
 
-const {
-  MainnetDAI,
-  MainnetWETH
-} = require('../utils/Constants').contract_addresses;
+const { MainnetDAI, MainnetWETH } =
+  require('../utils/Constants').contract_addresses;
 
 class Form extends Component {
   state = {
@@ -201,7 +199,7 @@ class Form extends Component {
         })
         .once('transactionHash', async (hash) => {
           let result = await fetch(
-            'https://guild-keeper.herokuapp.com/escrow/update',
+            'https://guild-keeper.herokuapp.com/escrow/update-raid',
             {
               method: 'POST',
               headers: {
