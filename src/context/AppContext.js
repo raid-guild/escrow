@@ -99,12 +99,12 @@ class AppContextProvider extends Component {
         {
           escrow_index: result['Escrow Index'] || '',
           raid_id: id,
-          project_name: result['Name'] || 'Not Available',
-          client_name: result['Your Name'] || 'Not Available',
+          project_name: result['Project Name'] || 'Not Available',
+          client_name: result['Name'] || 'Not Available',
           start_date: result['Raid Start Date'] || 'Not Available',
-          end_date: result['Desired date of completion'] || 'Not Available',
-          link_to_details: result['Link to Agreement'] || 'Not Available',
-          brief_description: result['Brief Summary'] || 'Not Available'
+          end_date: result['Expected Deadline'] || 'Not Available',
+          link_to_details: result['Specs Link'] || 'Not Available',
+          brief_description: result['Project Description'] || 'Not Available'
         },
         () => this.fetchLockerInfo()
       );
