@@ -2,7 +2,7 @@ import React, { Component, createContext } from 'react';
 
 import Web3 from 'web3';
 import { ethers } from 'ethers';
-import Web3Modal from 'web3modal';
+import { SafeAppWeb3Modal as Web3Modal } from '@gnosis.pm/safe-apps-web3modal';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 
 const lockerABI = require('../abi/Locker.json');
@@ -133,18 +133,17 @@ class AppContextProvider extends Component {
     }
   };
 
-  connectAccount = async () => {
-    try {
-      this.updateLoadingState();
-      // web3Modal.clearCachedProvider();
-
-      const provider = await web3Modal.connect();
-      const web3 = new Web3(provider);
-      const accounts = await web3.eth.getAccounts();
+  setWeb3Provider = async (prov, initialCall = false) => {
+    if (prov) {
+      const web3Provider = new Web3(prov);
+      const web3 = new Web3(web3Provider);
+      const gotProvider = new ethers.providers.Web3Provider(
+        web3Provider.currentProvider
+      );
+      const gotChainId = Number(prov.chainId);
       const locker = new web3.eth.Contract(lockerABI, Locker);
       const DAI = new web3.eth.Contract(DAI_ABI, MainnetDAI);
       const wETH = new web3.eth.Contract(wETH_ABI, MainnetWETH);
-      let chainID = await web3.eth.net.getId();
 
       let ethers_locker = new ethers.Contract(
         Locker,
@@ -155,37 +154,58 @@ class AppContextProvider extends Component {
         )
       );
 
-      let isClient = false;
+      if (initialCall) {
+        const signer = gotProvider.getSigner();
+        const gotAccount = await signer.getAddress();
+        let isClient = false;
 
-      if (accounts[0] === this.state.client) {
+      if (gotAccount === this.state.client) {
         isClient = true;
       }
+        this.setState({
+          address: gotAccount,
+          chainID: gotChainId,
+          provider: gotProvider,
+          web3: web3Provider,
+          ethers_locker: ethers_locker,
+          locker:locker,
+          DAI:DAI,
+          wETH:wETH,
+          isClient:isClient
+        });
+      } else {
+        this.setState({
+          chainID: gotChainId,
+          provider: gotProvider,
+          web3: web3Provider
+        });
+      }
+    }
+  };
 
-      provider.on('chainChanged', (chainId) => {
-        this.setState({ chainID: chainId });
-      });
+  connectAccount = async () => {
+    try {
+      this.updateLoadingState();
 
-      provider.on('accountsChanged', (accounts) => {
-        window.location.href = '/';
-      });
+      const modalProvider = await web3Modal.requestProvider();
 
-      this.setState(
-        {
-          address: accounts[0],
-          provider,
-          web3,
-          isClient,
-          locker,
-          DAI,
-          wETH,
-          chainID,
-          ethers_locker
-        },
-        () => {
-          this.updateLoadingState();
-        }
-      );
-    } catch (err) {
+      await this.setWeb3Provider(modalProvider, true);
+
+      const isGnosisSafe = !!modalProvider.safe;
+
+      if (!isGnosisSafe) {
+        modalProvider.on('accountsChanged', (accounts) => {
+          this.setState({ account: accounts[0] });
+        });
+        modalProvider.on('chainChanged', (chainID) => {
+          this.setState({ chainID });
+          console.log(chainID);
+        });
+      }
+    } catch (web3ModalError) {
+      console.log(web3ModalError);
+      this.updateLoadingState();
+    } finally {
       this.updateLoadingState();
     }
   };
