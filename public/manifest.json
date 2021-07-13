@@ -1,6 +1,9 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "name": "RaidGuild Escrow",
+  "short_name": "RaidGuild Escrow",
+  "description": "Escrow service from RaidGuild to facilitate payments between clients and the guild.",
+  "iconPath": "logo512.png",
+  "providedBy": { "name": "Raid Guild", "url": "https://raidguild.org" },
   "icons": [
     {
       "src": "favicon.ico",
@@ -18,8 +21,7 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
-  "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#000000",
+  "display": "standalone"
 }
