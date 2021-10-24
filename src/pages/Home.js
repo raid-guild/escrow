@@ -31,11 +31,6 @@ const Home = (props) => {
     if (!result.validRaidId) alert('ID not found!');
   };
 
-  const registerClickHandler = async () => {
-    await validateID();
-    if (validId) props.history.push('/register');
-  };
-
   const escrowClickHandler = async () => {
     await validateID();
     if (validId) props.history.push('/escrow');
@@ -45,7 +40,6 @@ const Home = (props) => {
     context,
     validId,
     escrowClickHandler,
-    registerClickHandler,
     validateID
   );
 
