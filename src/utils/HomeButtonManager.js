@@ -6,10 +6,10 @@ const HomeButtonManager = (
   context,
   validId,
   escrowClickHandler,
-  registerClickHandler,
   validateID
 ) => {
   let component;
+  console.log(context.chainID);
   if (context.isLoading) {
     component = <Loading />;
   } else if (validId) {
@@ -28,13 +28,16 @@ const HomeButtonManager = (
         );
       } else {
         component = (
-          <button
-            className='custom-button'
-            id='register'
-            onClick={registerClickHandler}
-          >
-            Register Escrow
-          </button>
+          <>
+            <p>Escrow not found. To create new, please use</p>
+            <a
+              style={{ marginTop: '0px' }}
+              href='https://smartescrow.raidguild.org/'
+            >
+              {' '}
+              smart escrow
+            </a>
+          </>
         );
       }
     } else {
