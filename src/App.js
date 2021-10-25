@@ -5,8 +5,6 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 // import Header from './components/Header';
 import Home from './pages/Home';
 import Escrow from './pages/Escrow';
-import Register from './pages/Register';
-import Form from './pages/Form';
 import Footer from './components/Footer';
 
 import AppContextProvider from './context/AppContext';
@@ -74,12 +72,6 @@ const App = () => {
               </Route>
               <Route path='/escrow' exact>
                 <Escrow />
-              </Route>
-              <Route path='/register' exact>
-                <Register />
-              </Route>
-              <Route path='/form' exact>
-                <Form />
               </Route>
               <Route path='/escrow/:id' exact>
                 <Escrow />
